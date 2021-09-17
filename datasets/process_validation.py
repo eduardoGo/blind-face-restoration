@@ -118,32 +118,6 @@ for index in range(len(paths)):
 
     # resize to original size
     img_lq = cv2.resize(img_lq, (w, h), interpolation=cv2.INTER_LINEAR)
-
-    # random color jitter (only fihape(or lq)
-    if (np.random.uniform() < 0.3):
-        img_lq = color_jitter(img_lq, 20)
-
-    # random to gray (only for lq)
-    if np.random.uniform() < 0.01:
-        img_lq = cv2.cvtColor(img_lq, cv2.COLOR_BGR2GRAY)
-        img_lq = np.tile(img_lq[:, :, None], [1, 1, 3])
-        #if self.opt.get('gt_gray'):
-        img_gt = cv2.cvtColor(img_gt, cv2.COLOR_BGR2GRAY)
-        img_gt = np.tile(img_gt[:, :, None], [1, 1, 3])
-
-    # BGR to RGB, HWC to CHW, numpy to tensor
-    img_gt, img_lq = img2tensor([img_gt, img_lq], bgr2rgb=True, float32=True)
-
-    # random color jitter (pytorch version) (only for lq)
-    if (np.random.uniform() < 0.3):
-        brightness =  (0.5, 1.5)
-        contrast = (0.5, 1.5)
-        saturation = (0, 1.5)
-        hue = (-0.1, 0.1)
-        img_lq = color_jitter_pt(img_lq, brightness, contrast, saturation, hue)
-
-    # round and clip
-    img_lq = torch.clamp((img_lq * 255.0).round(), 0, 255) / 255.
     
     # ======================== Textures ===============================
 
@@ -175,6 +149,32 @@ for index in range(len(paths)):
 
     # ======================== Textures ===============================
 
+    # random color jitter (only fihape(or lq)
+    if (np.random.uniform() < 0.3):
+        img_lq = color_jitter(img_lq, 20)
+
+    # random to gray (only for lq)
+    if np.random.uniform() < 0.01:
+        img_lq = cv2.cvtColor(img_lq, cv2.COLOR_BGR2GRAY)
+        img_lq = np.tile(img_lq[:, :, None], [1, 1, 3])
+        #if self.opt.get('gt_gray'):
+        img_gt = cv2.cvtColor(img_gt, cv2.COLOR_BGR2GRAY)
+        img_gt = np.tile(img_gt[:, :, None], [1, 1, 3])
+
+    # BGR to RGB, HWC to CHW, numpy to tensor
+    img_gt, img_lq = img2tensor([img_gt, img_lq], bgr2rgb=True, float32=True)
+
+    # random color jitter (pytorch version) (only for lq)
+    if (np.random.uniform() < 0.3):
+        brightness =  (0.5, 1.5)
+        contrast = (0.5, 1.5)
+        saturation = (0, 1.5)
+        hue = (-0.1, 0.1)
+        img_lq = color_jitter_pt(img_lq, brightness, contrast, saturation, hue)
+
+    # round and clip
+    img_lq = torch.clamp((img_lq * 255.0).round(), 0, 255) / 255.
+    
     # normalize
     normalize(img_gt,[0.5, 0.5, 0.5], [0.5, 0.5, 0.5], inplace=True)
     normalize(img_lq, [0.5, 0.5, 0.5], [0.5, 0.5, 0.5], inplace=True)
