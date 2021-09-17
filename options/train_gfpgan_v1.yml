@@ -1,7 +1,7 @@
 # general settings
 name: train_GFPGANv1_512
 model_type: GFPGANModel
-num_gpu: 4
+num_gpu: 2
 manual_seed: 0
 
 # dataset and data loader settings
@@ -10,7 +10,7 @@ datasets:
     name: FFHQ
     type: FFHQDegradationDataset
     # dataroot_gt: datasets/ffhq/ffhq_512.lmdb
-    dataroot_gt: datasets/ffhq/ffhq_512
+    dataroot_gt: datasets/ffhq/00000/
     io_backend:
       # type: lmdb
       type: disk
@@ -46,23 +46,23 @@ datasets:
 
     # data loader
     use_shuffle: true
-    num_worker_per_gpu: 6
-    batch_size_per_gpu: 3
+    num_worker_per_gpu: 1
+    batch_size_per_gpu: 1
     dataset_enlarge_ratio: 1
     prefetch_mode: ~
 
-  val:
+   val:
     # Please modify accordingly to use your own validation
     # Or comment the val block if do not need validation during training
     name: validation
     type: PairedImageDataset
-    dataroot_lq: datasets/faces/validation/input
-    dataroot_gt: datasets/faces/validation/reference
+    dataroot_lq: datasets/ffhq/validation_input
+    dataroot_gt: datasets/ffhq/validation_output
     io_backend:
       type: disk
     mean: [0.5, 0.5, 0.5]
     std: [0.5, 0.5, 0.5]
-    scale: 1
+  #  scale: 1
 
 # network structures
 network_g:
@@ -103,7 +103,7 @@ network_identity:
 
 # path
 path:
-  pretrain_network_g: ~
+  pretrain_network_g: experiments/pretrained_models/GFPGANv1.pth  
   param_key_g: params_ema
   strict_load_g: ~
   pretrain_network_d: ~

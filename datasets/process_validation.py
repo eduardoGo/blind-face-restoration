@@ -1,6 +1,6 @@
 import os, cv2
 from basicsr.data.transforms import augment
-from basicsr.utils import FileClient, get_root_logger, imfrombytes, img2tensor
+from basicsr.utils import FileClient, get_root_logger, imfrombytes, img2tensor, tensor2img
 from basicsr.data import degradations as degradations
 import math
 import numpy as np
@@ -8,7 +8,7 @@ import torch
 from torchvision.transforms.functional import (adjust_brightness, adjust_contrast, adjust_hue, adjust_saturation,
                                                normalize)
 ## Loading Textures
-path_textures = "C:\\Users\\eduardo\\Documents\\9 periodo\\image processing\\projeto\\ab2-final\\blind-face-restoration\\gfpgan\\data\\textures"
+path_textures = "/home/egs1@laccan.net/dip/blind-face-restoration/gfpgan/data/textures"
 
 textures = []
 for filename in os.listdir(path_textures):
@@ -19,12 +19,12 @@ for filename in os.listdir(path_textures):
 num_textures = len(textures)
 
 #Loading images
-path_imgs = "C:\\Users\\eduardo\\Documents\\9 periodo\\image processing\\projeto\\ab2-final\\blind-face-restoration\\datasets\\ffhq\\ffhq_512\\validation"
+path_imgs = "/home/egs1@laccan.net/dip/blind-face-restoration/datasets/ffhq/validation"
 paths = []
 for filename in os.listdir(path_imgs):
     img = cv2.imread(os.path.join(path_imgs,filename))
     if img is not None:
-        paths.append(img)
+        paths.append(os.path.join(path_imgs,filename))
 
 
 ####################################### Process
@@ -77,12 +77,13 @@ def color_jitter_pt(img, brightness, contrast, saturation, hue):
                 img = adjust_hue(img, hue_factor)
         return img
 
-file_client = FileClient('disk', **{'type':'disk'})
+file_client = FileClient('disk')
 
 for index in range(len(paths)):
 
     # load gt image
     gt_path = paths[index]
+    print("GT PATH:", gt_path)
     img_bytes = file_client.get(gt_path)
     img_gt = imfrombytes(img_bytes, float32=True)
 
@@ -142,13 +143,13 @@ for index in range(len(paths)):
 
     #alpha ~ U(-1, 1)
     alpha = 2 * np.random.rand() - 1 
-
+    
     # img_lq = img_lq + alpha * texture
-    img_lq = cv2.addWeighted(img_lq, 1, texture, alpha, 0)
+    img_lq = cv2.addWeighted(img_lq, 1, texture, alpha, 0, dtype=cv2.CV_32F)
 
     # ======================== Textures ===============================
 
-    # random color jitter (only for lq)
+    # random color jitter (only fihape(or lq)
     if (np.random.uniform() < 0.3):
         img_lq = color_jitter(img_lq, 20)
 
@@ -189,4 +190,14 @@ for index in range(len(paths)):
     #     }
     #     return return_dict
     # else:
+
+    img_lq = tensor2img(img_lq)
+    img_gt = tensor2img(img_gt)
+
+    path_validation_input = gt_path.replace('validation','validation_input')
+    path_validation_output = gt_path.replace('validation','validation_output')
+    cv2.imwrite(path_validation_output,img_lq)
+    cv2.imwrite(path_validation_input,img_gt)
+    #img_lq = tensor2img(img_lq)
+    #img_gt = tensor2img(img_gt)
     print({'lq': img_lq, 'gt': img_gt, 'gt_path': gt_path})
