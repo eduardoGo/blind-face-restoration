@@ -1,0 +1,1106 @@
+/home/egs1@laccan.net/anaconda3/envs/3dip/lib/python3.7/site-packages/torch/distributed/launch.py:164: DeprecationWarning: The 'warn' method is deprecated, use 'warning' instead
+  "The module torch.distributed.launch is deprecated "
+The module torch.distributed.launch is deprecated and going to be removed in future.Migrate to torch.distributed.run
+WARNING:torch.distributed.run:--use_env is deprecated and will be removed in future releases.
+ Please read local_rank from `os.environ('LOCAL_RANK')` instead.
+INFO:torch.distributed.launcher.api:Starting elastic_operator with launch configs:
+  entrypoint       : gfpgan/train.py
+  min_nodes        : 1
+  max_nodes        : 1
+  nproc_per_node   : 1
+  run_id           : none
+  rdzv_backend     : static
+  rdzv_endpoint    : 127.0.0.1:22022
+  rdzv_configs     : {'rank': 0, 'timeout': 900}
+  max_restarts     : 3
+  monitor_interval : 5
+  log_dir          : None
+  metrics_cfg      : {}
+
+INFO:torch.distributed.elastic.agent.server.local_elastic_agent:log directory set to: /tmp/torchelastic_g_p243tn/none_pt25r22z
+INFO:torch.distributed.elastic.agent.server.api:[default] starting workers for entrypoint: python3
+INFO:torch.distributed.elastic.agent.server.api:[default] Rendezvous'ing worker group
+/home/egs1@laccan.net/anaconda3/envs/3dip/lib/python3.7/site-packages/torch/distributed/elastic/utils/store.py:53: FutureWarning: This is an experimental API and will be changed in future.
+  "This is an experimental API and will be changed in future.", FutureWarning
+INFO:torch.distributed.elastic.agent.server.api:[default] Rendezvous complete for workers. Result:
+  restart_count=0
+  master_addr=127.0.0.1
+  master_port=22022
+  group_rank=0
+  group_world_size=1
+  local_ranks=[0]
+  role_ranks=[0]
+  global_ranks=[0]
+  role_world_sizes=[1]
+  global_world_sizes=[1]
+
+INFO:torch.distributed.elastic.agent.server.api:[default] Starting worker group
+INFO:torch.distributed.elastic.multiprocessing:Setting worker0 reply file to: /tmp/torchelastic_g_p243tn/none_pt25r22z/attempt_0/0/error.json
+Path already exists. Rename it to /home/egs1@laccan.net/dip/blind-face-restoration/experiments/train_GFPGANv1_512_archived_20210917_130638
+Path already exists. Rename it to /home/egs1@laccan.net/dip/blind-face-restoration/tb_logger/train_GFPGANv1_512_archived_20210917_130638
+2021-09-17 13:06:38,528 INFO: 
+                ____                _       _____  ____
+               / __ ) ____ _ _____ (_)_____/ ___/ / __ \
+              / __  |/ __ `// ___// // ___/\__ \ / /_/ /
+             / /_/ // /_/ /(__  )/ // /__ ___/ // _, _/
+            /_____/ \__,_//____//_/ \___//____//_/ |_|
+     ______                   __   __                 __      __
+    / ____/____   ____   ____/ /  / /   __  __ _____ / /__   / /
+   / / __ / __ \ / __ \ / __  /  / /   / / / // ___// //_/  / /
+  / /_/ // /_/ // /_/ // /_/ /  / /___/ /_/ // /__ / /<    /_/
+  \____/ \____/ \____/ \____/  /_____/\____/ \___//_/|_|  (_)
+    
+Version Information: 
+	BasicSR: 1.3.4.2
+	PyTorch: 1.9.0+cu102
+	TorchVision: 0.10.0+cu102
+2021-09-17 13:06:38,528 INFO: 
+  name: train_GFPGANv1_512
+  model_type: GFPGANModel
+  num_gpu: 2
+  manual_seed: 0
+  datasets:[
+    train:[
+      name: FFHQ
+      type: FFHQDegradationDataset
+      dataroot_gt: datasets/ffhq/00000/
+      io_backend:[
+        type: disk
+      ]
+      use_hflip: True
+      mean: [0.5, 0.5, 0.5]
+      std: [0.5, 0.5, 0.5]
+      out_size: 512
+      blur_kernel_size: 41
+      kernel_list: ['iso', 'aniso']
+      kernel_prob: [0.5, 0.5]
+      blur_sigma: [0.1, 10]
+      downsample_range: [0.8, 8]
+      noise_range: [0, 20]
+      jpeg_range: [60, 100]
+      color_jitter_prob: 0.3
+      color_jitter_shift: 20
+      color_jitter_pt_prob: 0.3
+      gray_prob: 0.01
+      crop_components: True
+      component_path: experiments/pretrained_models/FFHQ_eye_mouth_landmarks_512.pth
+      eye_enlarge_ratio: 1.4
+      use_shuffle: True
+      num_worker_per_gpu: 1
+      batch_size_per_gpu: 1
+      dataset_enlarge_ratio: 1
+      prefetch_mode: None
+      phase: train
+    ]
+    val:[
+      name: validation
+      type: PairedImageDataset
+      dataroot_lq: datasets/ffhq/validation_input
+      dataroot_gt: datasets/ffhq/validation_output
+      io_backend:[
+        type: disk
+      ]
+      mean: [0.5, 0.5, 0.5]
+      std: [0.5, 0.5, 0.5]
+      scale: 1
+      phase: val
+    ]
+  ]
+  network_g:[
+    type: GFPGANv1
+    out_size: 512
+    num_style_feat: 512
+    channel_multiplier: 1
+    resample_kernel: [1, 3, 3, 1]
+    decoder_load_path: experiments/pretrained_models/StyleGAN2_512_Cmul1_FFHQ_B12G4_scratch_800k.pth
+    fix_decoder: True
+    num_mlp: 8
+    lr_mlp: 0.01
+    input_is_latent: True
+    different_w: True
+    narrow: 1
+    sft_half: True
+  ]
+  network_d:[
+    type: StyleGAN2Discriminator
+    out_size: 512
+    channel_multiplier: 1
+    resample_kernel: [1, 3, 3, 1]
+  ]
+  network_d_left_eye:[
+    type: FacialComponentDiscriminator
+  ]
+  network_d_right_eye:[
+    type: FacialComponentDiscriminator
+  ]
+  network_d_mouth:[
+    type: FacialComponentDiscriminator
+  ]
+  network_identity:[
+    type: ResNetArcFace
+    block: IRBlock
+    layers: [2, 2, 2, 2]
+    use_se: False
+  ]
+  path:[
+    pretrain_network_g: experiments/pretrained_models/GFPGANv1.pth
+    param_key_g: params_ema
+    strict_load_g: None
+    pretrain_network_d: None
+    pretrain_network_d_left_eye: None
+    pretrain_network_d_right_eye: None
+    pretrain_network_d_mouth: None
+    pretrain_network_identity: experiments/pretrained_models/arcface_resnet18.pth
+    resume_state: None
+    ignore_resume_networks: ['network_identity']
+    experiments_root: /home/egs1@laccan.net/dip/blind-face-restoration/experiments/train_GFPGANv1_512
+    models: /home/egs1@laccan.net/dip/blind-face-restoration/experiments/train_GFPGANv1_512/models
+    training_states: /home/egs1@laccan.net/dip/blind-face-restoration/experiments/train_GFPGANv1_512/training_states
+    log: /home/egs1@laccan.net/dip/blind-face-restoration/experiments/train_GFPGANv1_512
+    visualization: /home/egs1@laccan.net/dip/blind-face-restoration/experiments/train_GFPGANv1_512/visualization
+  ]
+  train:[
+    optim_g:[
+      type: Adam
+      lr: 0.002
+    ]
+    optim_d:[
+      type: Adam
+      lr: 0.002
+    ]
+    optim_component:[
+      type: Adam
+      lr: 0.002
+    ]
+    scheduler:[
+      type: MultiStepLR
+      milestones: [600000, 700000]
+      gamma: 0.5
+    ]
+    total_iter: 8000
+    warmup_iter: -1
+    pixel_opt:[
+      type: L1Loss
+      loss_weight: 0.1
+      reduction: mean
+    ]
+    L1_opt:[
+      type: L1Loss
+      loss_weight: 1
+      reduction: mean
+    ]
+    pyramid_loss_weight: 1
+    remove_pyramid_loss: 50000
+    perceptual_opt:[
+      type: PerceptualLoss
+      layer_weights:[
+        conv1_2: 0.1
+        conv2_2: 0.1
+        conv3_4: 1
+        conv4_4: 1
+        conv5_4: 1
+      ]
+      vgg_type: vgg19
+      use_input_norm: True
+      perceptual_weight: 1.0
+      style_weight: 50
+      range_norm: True
+      criterion: l1
+    ]
+    gan_opt:[
+      type: GANLoss
+      gan_type: wgan_softplus
+      loss_weight: 0.1
+    ]
+    r1_reg_weight: 10
+    gan_component_opt:[
+      type: GANLoss
+      gan_type: vanilla
+      real_label_val: 1.0
+      fake_label_val: 0.0
+      loss_weight: 1.0
+    ]
+    comp_style_weight: 200
+    identity_weight: 10
+    net_d_iters: 1
+    net_d_init_iters: 0
+    net_d_reg_every: 16
+  ]
+  val:[
+    val_freq: 5000.0
+    save_img: True
+    metrics:[
+      psnr:[
+        type: calculate_psnr
+        crop_border: 0
+        test_y_channel: False
+      ]
+    ]
+  ]
+  logger:[
+    print_freq: 100
+    save_checkpoint_freq: 5000.0
+    use_tb_logger: True
+    wandb:[
+      project: None
+      resume_id: None
+    ]
+  ]
+  dist_params:[
+    backend: nccl
+    port: 29500
+  ]
+  find_unused_parameters: True
+  is_train: True
+  auto_resume: False
+  dist: True
+  rank: 0
+  world_size: 1
+  root_path: /home/egs1@laccan.net/dip/blind-face-restoration
+
+2021-09-17 13:06:39,595 INFO: Blur: blur_kernel_size 41, sigma: [0.1, 10]
+2021-09-17 13:06:39,595 INFO: Downsample: downsample_range [0.8, 8]
+2021-09-17 13:06:39,595 INFO: Noise: [0, 20]
+2021-09-17 13:06:39,595 INFO: JPEG compression: [60, 100]
+2021-09-17 13:06:39,595 INFO: Use random color jitter. Prob: 0.3, shift: 20
+2021-09-17 13:06:39,595 INFO: Use random gray. Prob: 0.01
+2021-09-17 13:06:39,595 INFO: Dataset [FFHQDegradationDataset] - FFHQ is built.
+2021-09-17 13:06:39,596 INFO: Training statistics:
+	Number of train images: 1000
+	Dataset enlarge ratio: 1
+	Batch size per gpu: 1
+	World size (gpu number): 1
+	Require iter number per epoch: 1000
+	Total epochs: 8; iters: 8000.
+2021-09-17 13:06:39,611 INFO: Dataset [PairedImageDataset] - validation is built.
+2021-09-17 13:06:39,611 INFO: Number of val images/folders in validation: 512
+2021-09-17 13:06:40,105 INFO: Network [GFPGANv1] is created.
+2021-09-17 13:06:41,703 INFO: Network: DistributedDataParallel - GFPGANv1, with parameters: 76,207,244
+2021-09-17 13:06:41,703 INFO: GFPGANv1(
+  (conv_body_first): ConvLayer(
+    (0): EqualConv2d(in_channels=3, out_channels=16, kernel_size=1, stride=1, padding=0, bias=False)
+    (1): FusedLeakyReLU()
+  )
+  (conv_body_down): ModuleList(
+    (0): ResBlock(
+      (conv1): ConvLayer(
+        (0): EqualConv2d(in_channels=16, out_channels=16, kernel_size=3, stride=1, padding=1, bias=False)
+        (1): FusedLeakyReLU()
+      )
+      (conv2): ConvLayer(
+        (0): UpFirDnSmooth(upsample_factor=1, downsample_factor=2)
+        (1): EqualConv2d(in_channels=16, out_channels=32, kernel_size=3, stride=2, padding=0, bias=False)
+        (2): FusedLeakyReLU()
+      )
+      (skip): ConvLayer(
+        (0): UpFirDnSmooth(upsample_factor=1, downsample_factor=2)
+        (1): EqualConv2d(in_channels=16, out_channels=32, kernel_size=1, stride=2, padding=0, bias=False)
+      )
+    )
+    (1): ResBlock(
+      (conv1): ConvLayer(
+        (0): EqualConv2d(in_channels=32, out_channels=32, kernel_size=3, stride=1, padding=1, bias=False)
+        (1): FusedLeakyReLU()
+      )
+      (conv2): ConvLayer(
+        (0): UpFirDnSmooth(upsample_factor=1, downsample_factor=2)
+        (1): EqualConv2d(in_channels=32, out_channels=64, kernel_size=3, stride=2, padding=0, bias=False)
+        (2): FusedLeakyReLU()
+      )
+      (skip): ConvLayer(
+        (0): UpFirDnSmooth(upsample_factor=1, downsample_factor=2)
+        (1): EqualConv2d(in_channels=32, out_channels=64, kernel_size=1, stride=2, padding=0, bias=False)
+      )
+    )
+    (2): ResBlock(
+      (conv1): ConvLayer(
+        (0): EqualConv2d(in_channels=64, out_channels=64, kernel_size=3, stride=1, padding=1, bias=False)
+        (1): FusedLeakyReLU()
+      )
+      (conv2): ConvLayer(
+        (0): UpFirDnSmooth(upsample_factor=1, downsample_factor=2)
+        (1): EqualConv2d(in_channels=64, out_channels=128, kernel_size=3, stride=2, padding=0, bias=False)
+        (2): FusedLeakyReLU()
+      )
+      (skip): ConvLayer(
+        (0): UpFirDnSmooth(upsample_factor=1, downsample_factor=2)
+        (1): EqualConv2d(in_channels=64, out_channels=128, kernel_size=1, stride=2, padding=0, bias=False)
+      )
+    )
+    (3): ResBlock(
+      (conv1): ConvLayer(
+        (0): EqualConv2d(in_channels=128, out_channels=128, kernel_size=3, stride=1, padding=1, bias=False)
+        (1): FusedLeakyReLU()
+      )
+      (conv2): ConvLayer(
+        (0): UpFirDnSmooth(upsample_factor=1, downsample_factor=2)
+        (1): EqualConv2d(in_channels=128, out_channels=256, kernel_size=3, stride=2, padding=0, bias=False)
+        (2): FusedLeakyReLU()
+      )
+      (skip): ConvLayer(
+        (0): UpFirDnSmooth(upsample_factor=1, downsample_factor=2)
+        (1): EqualConv2d(in_channels=128, out_channels=256, kernel_size=1, stride=2, padding=0, bias=False)
+      )
+    )
+    (4): ResBlock(
+      (conv1): ConvLayer(
+        (0): EqualConv2d(in_channels=256, out_channels=256, kernel_size=3, stride=1, padding=1, bias=False)
+        (1): FusedLeakyReLU()
+      )
+      (conv2): ConvLayer(
+        (0): UpFirDnSmooth(upsample_factor=1, downsample_factor=2)
+        (1): EqualConv2d(in_channels=256, out_channels=256, kernel_size=3, stride=2, padding=0, bias=False)
+        (2): FusedLeakyReLU()
+      )
+      (skip): ConvLayer(
+        (0): UpFirDnSmooth(upsample_factor=1, downsample_factor=2)
+        (1): EqualConv2d(in_channels=256, out_channels=256, kernel_size=1, stride=2, padding=0, bias=False)
+      )
+    )
+    (5): ResBlock(
+      (conv1): ConvLayer(
+        (0): EqualConv2d(in_channels=256, out_channels=256, kernel_size=3, stride=1, padding=1, bias=False)
+        (1): FusedLeakyReLU()
+      )
+      (conv2): ConvLayer(
+        (0): UpFirDnSmooth(upsample_factor=1, downsample_factor=2)
+        (1): EqualConv2d(in_channels=256, out_channels=256, kernel_size=3, stride=2, padding=0, bias=False)
+        (2): FusedLeakyReLU()
+      )
+      (skip): ConvLayer(
+        (0): UpFirDnSmooth(upsample_factor=1, downsample_factor=2)
+        (1): EqualConv2d(in_channels=256, out_channels=256, kernel_size=1, stride=2, padding=0, bias=False)
+      )
+    )
+    (6): ResBlock(
+      (conv1): ConvLayer(
+        (0): EqualConv2d(in_channels=256, out_channels=256, kernel_size=3, stride=1, padding=1, bias=False)
+        (1): FusedLeakyReLU()
+      )
+      (conv2): ConvLayer(
+        (0): UpFirDnSmooth(upsample_factor=1, downsample_factor=2)
+        (1): EqualConv2d(in_channels=256, out_channels=256, kernel_size=3, stride=2, padding=0, bias=False)
+        (2): FusedLeakyReLU()
+      )
+      (skip): ConvLayer(
+        (0): UpFirDnSmooth(upsample_factor=1, downsample_factor=2)
+        (1): EqualConv2d(in_channels=256, out_channels=256, kernel_size=1, stride=2, padding=0, bias=False)
+      )
+    )
+  )
+  (final_conv): ConvLayer(
+    (0): EqualConv2d(in_channels=256, out_channels=256, kernel_size=3, stride=1, padding=1, bias=False)
+    (1): FusedLeakyReLU()
+  )
+  (conv_body_up): ModuleList(
+    (0): ResUpBlock(
+      (conv1): ConvLayer(
+        (0): EqualConv2d(in_channels=256, out_channels=256, kernel_size=3, stride=1, padding=1, bias=False)
+        (1): FusedLeakyReLU()
+      )
+      (conv2): ConvUpLayer(
+        (activation): FusedLeakyReLU()
+      )
+      (skip): ConvUpLayer()
+    )
+    (1): ResUpBlock(
+      (conv1): ConvLayer(
+        (0): EqualConv2d(in_channels=256, out_channels=256, kernel_size=3, stride=1, padding=1, bias=False)
+        (1): FusedLeakyReLU()
+      )
+      (conv2): ConvUpLayer(
+        (activation): FusedLeakyReLU()
+      )
+      (skip): ConvUpLayer()
+    )
+    (2): ResUpBlock(
+      (conv1): ConvLayer(
+        (0): EqualConv2d(in_channels=256, out_channels=256, kernel_size=3, stride=1, padding=1, bias=False)
+        (1): FusedLeakyReLU()
+      )
+      (conv2): ConvUpLayer(
+        (activation): FusedLeakyReLU()
+      )
+      (skip): ConvUpLayer()
+    )
+    (3): ResUpBlock(
+      (conv1): ConvLayer(
+        (0): EqualConv2d(in_channels=256, out_channels=256, kernel_size=3, stride=1, padding=1, bias=False)
+        (1): FusedLeakyReLU()
+      )
+      (conv2): ConvUpLayer(
+        (activation): FusedLeakyReLU()
+      )
+      (skip): ConvUpLayer()
+    )
+    (4): ResUpBlock(
+      (conv1): ConvLayer(
+        (0): EqualConv2d(in_channels=128, out_channels=128, kernel_size=3, stride=1, padding=1, bias=False)
+        (1): FusedLeakyReLU()
+      )
+      (conv2): ConvUpLayer(
+        (activation): FusedLeakyReLU()
+      )
+      (skip): ConvUpLayer()
+    )
+    (5): ResUpBlock(
+      (conv1): ConvLayer(
+        (0): EqualConv2d(in_channels=64, out_channels=64, kernel_size=3, stride=1, padding=1, bias=False)
+        (1): FusedLeakyReLU()
+      )
+      (conv2): ConvUpLayer(
+        (activation): FusedLeakyReLU()
+      )
+      (skip): ConvUpLayer()
+    )
+    (6): ResUpBlock(
+      (conv1): ConvLayer(
+        (0): EqualConv2d(in_channels=32, out_channels=32, kernel_size=3, stride=1, padding=1, bias=False)
+        (1): FusedLeakyReLU()
+      )
+      (conv2): ConvUpLayer(
+        (activation): FusedLeakyReLU()
+      )
+      (skip): ConvUpLayer()
+    )
+  )
+  (toRGB): ModuleList(
+    (0): EqualConv2d(in_channels=256, out_channels=3, kernel_size=1, stride=1, padding=0, bias=True)
+    (1): EqualConv2d(in_channels=256, out_channels=3, kernel_size=1, stride=1, padding=0, bias=True)
+    (2): EqualConv2d(in_channels=256, out_channels=3, kernel_size=1, stride=1, padding=0, bias=True)
+    (3): EqualConv2d(in_channels=128, out_channels=3, kernel_size=1, stride=1, padding=0, bias=True)
+    (4): EqualConv2d(in_channels=64, out_channels=3, kernel_size=1, stride=1, padding=0, bias=True)
+    (5): EqualConv2d(in_channels=32, out_channels=3, kernel_size=1, stride=1, padding=0, bias=True)
+    (6): EqualConv2d(in_channels=16, out_channels=3, kernel_size=1, stride=1, padding=0, bias=True)
+  )
+  (final_linear): EqualLinear(in_channels=4096, out_channels=8192, bias=True)
+  (stylegan_decoder): StyleGAN2GeneratorSFT(
+    (style_mlp): Sequential(
+      (0): NormStyleCode()
+      (1): EqualLinear(in_channels=512, out_channels=512, bias=True)
+      (2): EqualLinear(in_channels=512, out_channels=512, bias=True)
+      (3): EqualLinear(in_channels=512, out_channels=512, bias=True)
+      (4): EqualLinear(in_channels=512, out_channels=512, bias=True)
+      (5): EqualLinear(in_channels=512, out_channels=512, bias=True)
+      (6): EqualLinear(in_channels=512, out_channels=512, bias=True)
+      (7): EqualLinear(in_channels=512, out_channels=512, bias=True)
+      (8): EqualLinear(in_channels=512, out_channels=512, bias=True)
+    )
+    (constant_input): ConstantInput()
+    (style_conv1): StyleConv(
+      (modulated_conv): ModulatedConv2d(in_channels=512, out_channels=512, kernel_size=3, demodulate=True, sample_mode=None)
+      (activate): FusedLeakyReLU()
+    )
+    (to_rgb1): ToRGB(
+      (modulated_conv): ModulatedConv2d(in_channels=512, out_channels=3, kernel_size=1, demodulate=False, sample_mode=None)
+    )
+    (style_convs): ModuleList(
+      (0): StyleConv(
+        (modulated_conv): ModulatedConv2d(in_channels=512, out_channels=512, kernel_size=3, demodulate=True, sample_mode=upsample)
+        (activate): FusedLeakyReLU()
+      )
+      (1): StyleConv(
+        (modulated_conv): ModulatedConv2d(in_channels=512, out_channels=512, kernel_size=3, demodulate=True, sample_mode=None)
+        (activate): FusedLeakyReLU()
+      )
+      (2): StyleConv(
+        (modulated_conv): ModulatedConv2d(in_channels=512, out_channels=512, kernel_size=3, demodulate=True, sample_mode=upsample)
+        (activate): FusedLeakyReLU()
+      )
+      (3): StyleConv(
+        (modulated_conv): ModulatedConv2d(in_channels=512, out_channels=512, kernel_size=3, demodulate=True, sample_mode=None)
+        (activate): FusedLeakyReLU()
+      )
+      (4): StyleConv(
+        (modulated_conv): ModulatedConv2d(in_channels=512, out_channels=512, kernel_size=3, demodulate=True, sample_mode=upsample)
+        (activate): FusedLeakyReLU()
+      )
+      (5): StyleConv(
+        (modulated_conv): ModulatedConv2d(in_channels=512, out_channels=512, kernel_size=3, demodulate=True, sample_mode=None)
+        (activate): FusedLeakyReLU()
+      )
+      (6): StyleConv(
+        (modulated_conv): ModulatedConv2d(in_channels=512, out_channels=256, kernel_size=3, demodulate=True, sample_mode=upsample)
+        (activate): FusedLeakyReLU()
+      )
+      (7): StyleConv(
+        (modulated_conv): ModulatedConv2d(in_channels=256, out_channels=256, kernel_size=3, demodulate=True, sample_mode=None)
+        (activate): FusedLeakyReLU()
+      )
+      (8): StyleConv(
+        (modulated_conv): ModulatedConv2d(in_channels=256, out_channels=128, kernel_size=3, demodulate=True, sample_mode=upsample)
+        (activate): FusedLeakyReLU()
+      )
+      (9): StyleConv(
+        (modulated_conv): ModulatedConv2d(in_channels=128, out_channels=128, kernel_size=3, demodulate=True, sample_mode=None)
+        (activate): FusedLeakyReLU()
+      )
+      (10): StyleConv(
+        (modulated_conv): ModulatedConv2d(in_channels=128, out_channels=64, kernel_size=3, demodulate=True, sample_mode=upsample)
+        (activate): FusedLeakyReLU()
+      )
+      (11): StyleConv(
+        (modulated_conv): ModulatedConv2d(in_channels=64, out_channels=64, kernel_size=3, demodulate=True, sample_mode=None)
+        (activate): FusedLeakyReLU()
+      )
+      (12): StyleConv(
+        (modulated_conv): ModulatedConv2d(in_channels=64, out_channels=32, kernel_size=3, demodulate=True, sample_mode=upsample)
+        (activate): FusedLeakyReLU()
+      )
+      (13): StyleConv(
+        (modulated_conv): ModulatedConv2d(in_channels=32, out_channels=32, kernel_size=3, demodulate=True, sample_mode=None)
+        (activate): FusedLeakyReLU()
+      )
+    )
+    (to_rgbs): ModuleList(
+      (0): ToRGB(
+        (upsample): UpFirDnUpsample(factor=2)
+        (modulated_conv): ModulatedConv2d(in_channels=512, out_channels=3, kernel_size=1, demodulate=False, sample_mode=None)
+      )
+      (1): ToRGB(
+        (upsample): UpFirDnUpsample(factor=2)
+        (modulated_conv): ModulatedConv2d(in_channels=512, out_channels=3, kernel_size=1, demodulate=False, sample_mode=None)
+      )
+      (2): ToRGB(
+        (upsample): UpFirDnUpsample(factor=2)
+        (modulated_conv): ModulatedConv2d(in_channels=512, out_channels=3, kernel_size=1, demodulate=False, sample_mode=None)
+      )
+      (3): ToRGB(
+        (upsample): UpFirDnUpsample(factor=2)
+        (modulated_conv): ModulatedConv2d(in_channels=256, out_channels=3, kernel_size=1, demodulate=False, sample_mode=None)
+      )
+      (4): ToRGB(
+        (upsample): UpFirDnUpsample(factor=2)
+        (modulated_conv): ModulatedConv2d(in_channels=128, out_channels=3, kernel_size=1, demodulate=False, sample_mode=None)
+      )
+      (5): ToRGB(
+        (upsample): UpFirDnUpsample(factor=2)
+        (modulated_conv): ModulatedConv2d(in_channels=64, out_channels=3, kernel_size=1, demodulate=False, sample_mode=None)
+      )
+      (6): ToRGB(
+        (upsample): UpFirDnUpsample(factor=2)
+        (modulated_conv): ModulatedConv2d(in_channels=32, out_channels=3, kernel_size=1, demodulate=False, sample_mode=None)
+      )
+    )
+    (noises): Module()
+  )
+  (condition_scale): ModuleList(
+    (0): Sequential(
+      (0): EqualConv2d(in_channels=256, out_channels=256, kernel_size=3, stride=1, padding=1, bias=True)
+      (1): ScaledLeakyReLU()
+      (2): EqualConv2d(in_channels=256, out_channels=256, kernel_size=3, stride=1, padding=1, bias=True)
+    )
+    (1): Sequential(
+      (0): EqualConv2d(in_channels=256, out_channels=256, kernel_size=3, stride=1, padding=1, bias=True)
+      (1): ScaledLeakyReLU()
+      (2): EqualConv2d(in_channels=256, out_channels=256, kernel_size=3, stride=1, padding=1, bias=True)
+    )
+    (2): Sequential(
+      (0): EqualConv2d(in_channels=256, out_channels=256, kernel_size=3, stride=1, padding=1, bias=True)
+      (1): ScaledLeakyReLU()
+      (2): EqualConv2d(in_channels=256, out_channels=256, kernel_size=3, stride=1, padding=1, bias=True)
+    )
+    (3): Sequential(
+      (0): EqualConv2d(in_channels=128, out_channels=128, kernel_size=3, stride=1, padding=1, bias=True)
+      (1): ScaledLeakyReLU()
+      (2): EqualConv2d(in_channels=128, out_channels=128, kernel_size=3, stride=1, padding=1, bias=True)
+    )
+    (4): Sequential(
+      (0): EqualConv2d(in_channels=64, out_channels=64, kernel_size=3, stride=1, padding=1, bias=True)
+      (1): ScaledLeakyReLU()
+      (2): EqualConv2d(in_channels=64, out_channels=64, kernel_size=3, stride=1, padding=1, bias=True)
+    )
+    (5): Sequential(
+      (0): EqualConv2d(in_channels=32, out_channels=32, kernel_size=3, stride=1, padding=1, bias=True)
+      (1): ScaledLeakyReLU()
+      (2): EqualConv2d(in_channels=32, out_channels=32, kernel_size=3, stride=1, padding=1, bias=True)
+    )
+    (6): Sequential(
+      (0): EqualConv2d(in_channels=16, out_channels=16, kernel_size=3, stride=1, padding=1, bias=True)
+      (1): ScaledLeakyReLU()
+      (2): EqualConv2d(in_channels=16, out_channels=16, kernel_size=3, stride=1, padding=1, bias=True)
+    )
+  )
+  (condition_shift): ModuleList(
+    (0): Sequential(
+      (0): EqualConv2d(in_channels=256, out_channels=256, kernel_size=3, stride=1, padding=1, bias=True)
+      (1): ScaledLeakyReLU()
+      (2): EqualConv2d(in_channels=256, out_channels=256, kernel_size=3, stride=1, padding=1, bias=True)
+    )
+    (1): Sequential(
+      (0): EqualConv2d(in_channels=256, out_channels=256, kernel_size=3, stride=1, padding=1, bias=True)
+      (1): ScaledLeakyReLU()
+      (2): EqualConv2d(in_channels=256, out_channels=256, kernel_size=3, stride=1, padding=1, bias=True)
+    )
+    (2): Sequential(
+      (0): EqualConv2d(in_channels=256, out_channels=256, kernel_size=3, stride=1, padding=1, bias=True)
+      (1): ScaledLeakyReLU()
+      (2): EqualConv2d(in_channels=256, out_channels=256, kernel_size=3, stride=1, padding=1, bias=True)
+    )
+    (3): Sequential(
+      (0): EqualConv2d(in_channels=128, out_channels=128, kernel_size=3, stride=1, padding=1, bias=True)
+      (1): ScaledLeakyReLU()
+      (2): EqualConv2d(in_channels=128, out_channels=128, kernel_size=3, stride=1, padding=1, bias=True)
+    )
+    (4): Sequential(
+      (0): EqualConv2d(in_channels=64, out_channels=64, kernel_size=3, stride=1, padding=1, bias=True)
+      (1): ScaledLeakyReLU()
+      (2): EqualConv2d(in_channels=64, out_channels=64, kernel_size=3, stride=1, padding=1, bias=True)
+    )
+    (5): Sequential(
+      (0): EqualConv2d(in_channels=32, out_channels=32, kernel_size=3, stride=1, padding=1, bias=True)
+      (1): ScaledLeakyReLU()
+      (2): EqualConv2d(in_channels=32, out_channels=32, kernel_size=3, stride=1, padding=1, bias=True)
+    )
+    (6): Sequential(
+      (0): EqualConv2d(in_channels=16, out_channels=16, kernel_size=3, stride=1, padding=1, bias=True)
+      (1): ScaledLeakyReLU()
+      (2): EqualConv2d(in_channels=16, out_channels=16, kernel_size=3, stride=1, padding=1, bias=True)
+    )
+  )
+)
+2021-09-17 13:06:41,866 INFO: Loading GFPGANv1 model from experiments/pretrained_models/GFPGANv1.pth, with param key: [params_ema].
+2021-09-17 13:06:42,135 INFO: Network [StyleGAN2Discriminator] is created.
+2021-09-17 13:06:42,157 INFO: Network: DistributedDataParallel - StyleGAN2Discriminator, with parameters: 24,030,753
+2021-09-17 13:06:42,157 INFO: StyleGAN2Discriminator(
+  (conv_body): Sequential(
+    (0): ConvLayer(
+      (0): EqualConv2d(in_channels=3, out_channels=32, kernel_size=1, stride=1, padding=0, bias=False)
+      (1): FusedLeakyReLU()
+    )
+    (1): ResBlock(
+      (conv1): ConvLayer(
+        (0): EqualConv2d(in_channels=32, out_channels=32, kernel_size=3, stride=1, padding=1, bias=False)
+        (1): FusedLeakyReLU()
+      )
+      (conv2): ConvLayer(
+        (0): UpFirDnSmooth(upsample_factor=1, downsample_factor=2)
+        (1): EqualConv2d(in_channels=32, out_channels=64, kernel_size=3, stride=2, padding=0, bias=False)
+        (2): FusedLeakyReLU()
+      )
+      (skip): ConvLayer(
+        (0): UpFirDnSmooth(upsample_factor=1, downsample_factor=2)
+        (1): EqualConv2d(in_channels=32, out_channels=64, kernel_size=1, stride=2, padding=0, bias=False)
+      )
+    )
+    (2): ResBlock(
+      (conv1): ConvLayer(
+        (0): EqualConv2d(in_channels=64, out_channels=64, kernel_size=3, stride=1, padding=1, bias=False)
+        (1): FusedLeakyReLU()
+      )
+      (conv2): ConvLayer(
+        (0): UpFirDnSmooth(upsample_factor=1, downsample_factor=2)
+        (1): EqualConv2d(in_channels=64, out_channels=128, kernel_size=3, stride=2, padding=0, bias=False)
+        (2): FusedLeakyReLU()
+      )
+      (skip): ConvLayer(
+        (0): UpFirDnSmooth(upsample_factor=1, downsample_factor=2)
+        (1): EqualConv2d(in_channels=64, out_channels=128, kernel_size=1, stride=2, padding=0, bias=False)
+      )
+    )
+    (3): ResBlock(
+      (conv1): ConvLayer(
+        (0): EqualConv2d(in_channels=128, out_channels=128, kernel_size=3, stride=1, padding=1, bias=False)
+        (1): FusedLeakyReLU()
+      )
+      (conv2): ConvLayer(
+        (0): UpFirDnSmooth(upsample_factor=1, downsample_factor=2)
+        (1): EqualConv2d(in_channels=128, out_channels=256, kernel_size=3, stride=2, padding=0, bias=False)
+        (2): FusedLeakyReLU()
+      )
+      (skip): ConvLayer(
+        (0): UpFirDnSmooth(upsample_factor=1, downsample_factor=2)
+        (1): EqualConv2d(in_channels=128, out_channels=256, kernel_size=1, stride=2, padding=0, bias=False)
+      )
+    )
+    (4): ResBlock(
+      (conv1): ConvLayer(
+        (0): EqualConv2d(in_channels=256, out_channels=256, kernel_size=3, stride=1, padding=1, bias=False)
+        (1): FusedLeakyReLU()
+      )
+      (conv2): ConvLayer(
+        (0): UpFirDnSmooth(upsample_factor=1, downsample_factor=2)
+        (1): EqualConv2d(in_channels=256, out_channels=512, kernel_size=3, stride=2, padding=0, bias=False)
+        (2): FusedLeakyReLU()
+      )
+      (skip): ConvLayer(
+        (0): UpFirDnSmooth(upsample_factor=1, downsample_factor=2)
+        (1): EqualConv2d(in_channels=256, out_channels=512, kernel_size=1, stride=2, padding=0, bias=False)
+      )
+    )
+    (5): ResBlock(
+      (conv1): ConvLayer(
+        (0): EqualConv2d(in_channels=512, out_channels=512, kernel_size=3, stride=1, padding=1, bias=False)
+        (1): FusedLeakyReLU()
+      )
+      (conv2): ConvLayer(
+        (0): UpFirDnSmooth(upsample_factor=1, downsample_factor=2)
+        (1): EqualConv2d(in_channels=512, out_channels=512, kernel_size=3, stride=2, padding=0, bias=False)
+        (2): FusedLeakyReLU()
+      )
+      (skip): ConvLayer(
+        (0): UpFirDnSmooth(upsample_factor=1, downsample_factor=2)
+        (1): EqualConv2d(in_channels=512, out_channels=512, kernel_size=1, stride=2, padding=0, bias=False)
+      )
+    )
+    (6): ResBlock(
+      (conv1): ConvLayer(
+        (0): EqualConv2d(in_channels=512, out_channels=512, kernel_size=3, stride=1, padding=1, bias=False)
+        (1): FusedLeakyReLU()
+      )
+      (conv2): ConvLayer(
+        (0): UpFirDnSmooth(upsample_factor=1, downsample_factor=2)
+        (1): EqualConv2d(in_channels=512, out_channels=512, kernel_size=3, stride=2, padding=0, bias=False)
+        (2): FusedLeakyReLU()
+      )
+      (skip): ConvLayer(
+        (0): UpFirDnSmooth(upsample_factor=1, downsample_factor=2)
+        (1): EqualConv2d(in_channels=512, out_channels=512, kernel_size=1, stride=2, padding=0, bias=False)
+      )
+    )
+    (7): ResBlock(
+      (conv1): ConvLayer(
+        (0): EqualConv2d(in_channels=512, out_channels=512, kernel_size=3, stride=1, padding=1, bias=False)
+        (1): FusedLeakyReLU()
+      )
+      (conv2): ConvLayer(
+        (0): UpFirDnSmooth(upsample_factor=1, downsample_factor=2)
+        (1): EqualConv2d(in_channels=512, out_channels=512, kernel_size=3, stride=2, padding=0, bias=False)
+        (2): FusedLeakyReLU()
+      )
+      (skip): ConvLayer(
+        (0): UpFirDnSmooth(upsample_factor=1, downsample_factor=2)
+        (1): EqualConv2d(in_channels=512, out_channels=512, kernel_size=1, stride=2, padding=0, bias=False)
+      )
+    )
+  )
+  (final_conv): ConvLayer(
+    (0): EqualConv2d(in_channels=513, out_channels=512, kernel_size=3, stride=1, padding=1, bias=False)
+    (1): FusedLeakyReLU()
+  )
+  (final_linear): Sequential(
+    (0): EqualLinear(in_channels=8192, out_channels=512, bias=True)
+    (1): EqualLinear(in_channels=512, out_channels=1, bias=True)
+  )
+)
+2021-09-17 13:06:42,594 INFO: Network [GFPGANv1] is created.
+2021-09-17 13:06:42,814 INFO: Loading GFPGANv1 model from experiments/pretrained_models/GFPGANv1.pth, with param key: [params_ema].
+2021-09-17 13:06:42,970 INFO: Network [FacialComponentDiscriminator] is created.
+2021-09-17 13:06:42,973 INFO: Network: DistributedDataParallel - FacialComponentDiscriminator, with parameters: 1,110,785
+2021-09-17 13:06:42,973 INFO: FacialComponentDiscriminator(
+  (conv1): ConvLayer(
+    (0): EqualConv2d(in_channels=3, out_channels=64, kernel_size=3, stride=1, padding=1, bias=False)
+    (1): FusedLeakyReLU()
+  )
+  (conv2): ConvLayer(
+    (0): UpFirDnSmooth(upsample_factor=1, downsample_factor=2)
+    (1): EqualConv2d(in_channels=64, out_channels=128, kernel_size=3, stride=2, padding=0, bias=False)
+    (2): FusedLeakyReLU()
+  )
+  (conv3): ConvLayer(
+    (0): EqualConv2d(in_channels=128, out_channels=128, kernel_size=3, stride=1, padding=1, bias=False)
+    (1): FusedLeakyReLU()
+  )
+  (conv4): ConvLayer(
+    (0): UpFirDnSmooth(upsample_factor=1, downsample_factor=2)
+    (1): EqualConv2d(in_channels=128, out_channels=256, kernel_size=3, stride=2, padding=0, bias=False)
+    (2): FusedLeakyReLU()
+  )
+  (conv5): ConvLayer(
+    (0): EqualConv2d(in_channels=256, out_channels=256, kernel_size=3, stride=1, padding=1, bias=False)
+    (1): FusedLeakyReLU()
+  )
+  (final_conv): ConvLayer(
+    (0): EqualConv2d(in_channels=256, out_channels=1, kernel_size=3, stride=1, padding=1, bias=True)
+  )
+)
+2021-09-17 13:06:42,978 INFO: Network [FacialComponentDiscriminator] is created.
+2021-09-17 13:06:42,980 INFO: Network: DistributedDataParallel - FacialComponentDiscriminator, with parameters: 1,110,785
+2021-09-17 13:06:42,980 INFO: FacialComponentDiscriminator(
+  (conv1): ConvLayer(
+    (0): EqualConv2d(in_channels=3, out_channels=64, kernel_size=3, stride=1, padding=1, bias=False)
+    (1): FusedLeakyReLU()
+  )
+  (conv2): ConvLayer(
+    (0): UpFirDnSmooth(upsample_factor=1, downsample_factor=2)
+    (1): EqualConv2d(in_channels=64, out_channels=128, kernel_size=3, stride=2, padding=0, bias=False)
+    (2): FusedLeakyReLU()
+  )
+  (conv3): ConvLayer(
+    (0): EqualConv2d(in_channels=128, out_channels=128, kernel_size=3, stride=1, padding=1, bias=False)
+    (1): FusedLeakyReLU()
+  )
+  (conv4): ConvLayer(
+    (0): UpFirDnSmooth(upsample_factor=1, downsample_factor=2)
+    (1): EqualConv2d(in_channels=128, out_channels=256, kernel_size=3, stride=2, padding=0, bias=False)
+    (2): FusedLeakyReLU()
+  )
+  (conv5): ConvLayer(
+    (0): EqualConv2d(in_channels=256, out_channels=256, kernel_size=3, stride=1, padding=1, bias=False)
+    (1): FusedLeakyReLU()
+  )
+  (final_conv): ConvLayer(
+    (0): EqualConv2d(in_channels=256, out_channels=1, kernel_size=3, stride=1, padding=1, bias=True)
+  )
+)
+2021-09-17 13:06:42,985 INFO: Network [FacialComponentDiscriminator] is created.
+2021-09-17 13:06:42,987 INFO: Network: DistributedDataParallel - FacialComponentDiscriminator, with parameters: 1,110,785
+2021-09-17 13:06:42,987 INFO: FacialComponentDiscriminator(
+  (conv1): ConvLayer(
+    (0): EqualConv2d(in_channels=3, out_channels=64, kernel_size=3, stride=1, padding=1, bias=False)
+    (1): FusedLeakyReLU()
+  )
+  (conv2): ConvLayer(
+    (0): UpFirDnSmooth(upsample_factor=1, downsample_factor=2)
+    (1): EqualConv2d(in_channels=64, out_channels=128, kernel_size=3, stride=2, padding=0, bias=False)
+    (2): FusedLeakyReLU()
+  )
+  (conv3): ConvLayer(
+    (0): EqualConv2d(in_channels=128, out_channels=128, kernel_size=3, stride=1, padding=1, bias=False)
+    (1): FusedLeakyReLU()
+  )
+  (conv4): ConvLayer(
+    (0): UpFirDnSmooth(upsample_factor=1, downsample_factor=2)
+    (1): EqualConv2d(in_channels=128, out_channels=256, kernel_size=3, stride=2, padding=0, bias=False)
+    (2): FusedLeakyReLU()
+  )
+  (conv5): ConvLayer(
+    (0): EqualConv2d(in_channels=256, out_channels=256, kernel_size=3, stride=1, padding=1, bias=False)
+    (1): FusedLeakyReLU()
+  )
+  (final_conv): ConvLayer(
+    (0): EqualConv2d(in_channels=256, out_channels=1, kernel_size=3, stride=1, padding=1, bias=True)
+  )
+)
+2021-09-17 13:06:42,988 INFO: Loss [GANLoss] is created.
+2021-09-17 13:06:42,988 INFO: Loss [L1Loss] is created.
+2021-09-17 13:06:43,881 INFO: Loss [PerceptualLoss] is created.
+2021-09-17 13:06:43,897 INFO: Loss [L1Loss] is created.
+2021-09-17 13:06:43,897 INFO: Loss [GANLoss] is created.
+2021-09-17 13:06:44,112 INFO: Network [ResNetArcFace] is created.
+2021-09-17 13:06:44,139 INFO: Network: DistributedDataParallel - ResNetArcFace, with parameters: 25,627,081
+2021-09-17 13:06:44,139 INFO: ResNetArcFace(
+  (conv1): Conv2d(1, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+  (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  (prelu): PReLU(num_parameters=1)
+  (maxpool): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  (layer1): Sequential(
+    (0): IRBlock(
+      (bn0): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (prelu): PReLU(num_parameters=1)
+      (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+    (1): IRBlock(
+      (bn0): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (prelu): PReLU(num_parameters=1)
+      (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+  )
+  (layer2): Sequential(
+    (0): IRBlock(
+      (bn0): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (prelu): PReLU(num_parameters=1)
+      (conv2): Conv2d(64, 128, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (downsample): Sequential(
+        (0): Conv2d(64, 128, kernel_size=(1, 1), stride=(2, 2), bias=False)
+        (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (1): IRBlock(
+      (bn0): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (conv1): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (prelu): PReLU(num_parameters=1)
+      (conv2): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+  )
+  (layer3): Sequential(
+    (0): IRBlock(
+      (bn0): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (conv1): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (prelu): PReLU(num_parameters=1)
+      (conv2): Conv2d(128, 256, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (downsample): Sequential(
+        (0): Conv2d(128, 256, kernel_size=(1, 1), stride=(2, 2), bias=False)
+        (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (1): IRBlock(
+      (bn0): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (conv1): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (prelu): PReLU(num_parameters=1)
+      (conv2): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+  )
+  (layer4): Sequential(
+    (0): IRBlock(
+      (bn0): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (conv1): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (prelu): PReLU(num_parameters=1)
+      (conv2): Conv2d(256, 512, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (downsample): Sequential(
+        (0): Conv2d(256, 512, kernel_size=(1, 1), stride=(2, 2), bias=False)
+        (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (1): IRBlock(
+      (bn0): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (conv1): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (prelu): PReLU(num_parameters=1)
+      (conv2): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+  )
+  (bn4): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  (dropout): Dropout(p=0.5, inplace=False)
+  (fc5): Linear(in_features=32768, out_features=512, bias=True)
+  (bn5): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+)
+2021-09-17 13:06:44,165 INFO: Loading ResNetArcFace model from experiments/pretrained_models/arcface_resnet18.pth, with param key: [None].
+2021-09-17 13:06:44,200 WARNING: Current net - loaded net:
+2021-09-17 13:06:44,200 WARNING:   bn1.num_batches_tracked
+2021-09-17 13:06:44,200 WARNING:   bn4.num_batches_tracked
+2021-09-17 13:06:44,200 WARNING:   bn5.num_batches_tracked
+2021-09-17 13:06:44,200 WARNING:   layer1.0.bn0.num_batches_tracked
+2021-09-17 13:06:44,200 WARNING:   layer1.0.bn1.num_batches_tracked
+2021-09-17 13:06:44,200 WARNING:   layer1.0.bn2.num_batches_tracked
+2021-09-17 13:06:44,200 WARNING:   layer1.1.bn0.num_batches_tracked
+2021-09-17 13:06:44,200 WARNING:   layer1.1.bn1.num_batches_tracked
+2021-09-17 13:06:44,200 WARNING:   layer1.1.bn2.num_batches_tracked
+2021-09-17 13:06:44,200 WARNING:   layer2.0.bn0.num_batches_tracked
+2021-09-17 13:06:44,200 WARNING:   layer2.0.bn1.num_batches_tracked
+2021-09-17 13:06:44,200 WARNING:   layer2.0.bn2.num_batches_tracked
+2021-09-17 13:06:44,200 WARNING:   layer2.0.downsample.1.num_batches_tracked
+2021-09-17 13:06:44,200 WARNING:   layer2.1.bn0.num_batches_tracked
+2021-09-17 13:06:44,200 WARNING:   layer2.1.bn1.num_batches_tracked
+2021-09-17 13:06:44,201 WARNING:   layer2.1.bn2.num_batches_tracked
+2021-09-17 13:06:44,201 WARNING:   layer3.0.bn0.num_batches_tracked
+2021-09-17 13:06:44,201 WARNING:   layer3.0.bn1.num_batches_tracked
+2021-09-17 13:06:44,201 WARNING:   layer3.0.bn2.num_batches_tracked
+2021-09-17 13:06:44,201 WARNING:   layer3.0.downsample.1.num_batches_tracked
+2021-09-17 13:06:44,201 WARNING:   layer3.1.bn0.num_batches_tracked
+2021-09-17 13:06:44,201 WARNING:   layer3.1.bn1.num_batches_tracked
+2021-09-17 13:06:44,201 WARNING:   layer3.1.bn2.num_batches_tracked
+2021-09-17 13:06:44,201 WARNING:   layer4.0.bn0.num_batches_tracked
+2021-09-17 13:06:44,201 WARNING:   layer4.0.bn1.num_batches_tracked
+2021-09-17 13:06:44,201 WARNING:   layer4.0.bn2.num_batches_tracked
+2021-09-17 13:06:44,201 WARNING:   layer4.0.downsample.1.num_batches_tracked
+2021-09-17 13:06:44,201 WARNING:   layer4.1.bn0.num_batches_tracked
+2021-09-17 13:06:44,201 WARNING:   layer4.1.bn1.num_batches_tracked
+2021-09-17 13:06:44,201 WARNING:   layer4.1.bn2.num_batches_tracked
+2021-09-17 13:06:44,201 WARNING: Loaded net - current net:
+2021-09-17 13:06:44,226 INFO: Model [GFPGANModel] is created.
+2021-09-17 13:06:47,049 INFO: Start training from epoch: 0, iter: 0
+[W reducer.cpp:1158] Warning: find_unused_parameters=True was specified in DDP constructor, but did not find any unused parameters in the forward pass. This flag results in an extra traversal of the autograd graph every iteration,  which can adversely affect performance. If your model indeed never has any unused parameters in the forward pass, consider turning this flag off. Note that this warning may be a false positive if your model has flow control causing later iterations to have unused parameters. (function operator())
+/home/egs1@laccan.net/anaconda3/envs/3dip/lib/python3.7/site-packages/torch/nn/functional.py:3658: UserWarning: The default behavior for interpolate/upsample with float scale_factor changed in 1.6.0 to align with other frameworks/libraries, and now uses scale_factor directly, instead of relying on the computed output size. If you wish to restore the old behavior, please set recompute_scale_factor=True. See the documentation of nn.Upsample for details. 
+  "The default behavior for interpolate/upsample with float scale_factor changed "
+/home/egs1@laccan.net/anaconda3/envs/3dip/lib/python3.7/site-packages/torch/nn/functional.py:718: UserWarning: Named tensors and all their associated APIs are an experimental feature and subject to change. Please do not use them for anything important until they are released as stable. (Triggered internally at  /pytorch/c10/core/TensorImpl.h:1156.)
+  return torch.max_pool2d(input, kernel_size, stride, padding, dilation, ceil_mode)
+2021-09-17 13:07:27,830 INFO: [train..][epoch:  0, iter:     100, lr:(2.000e-03,)] [eta: 0:43:09, time (data): 0.408 (0.035)] l_g_pix: 4.0113e-02 l_p_8: 3.8263e-01 l_p_16: 3.9873e-01 l_p_32: 3.7941e-01 l_p_64: 4.3596e-01 l_p_128: 3.6897e-01 l_p_256: 3.7031e-01 l_p_512: 3.6960e-01 l_g_percep: 1.4609e+01 l_g_style: 6.7264e+00 l_g_gan: 1.0232e-01 l_g_gan_left_eye: 5.9351e-01 l_g_gan_right_eye: 5.7898e-01 l_g_gan_mouth: 6.3914e-01 l_g_comp_style_loss: 9.6171e-02 l_identity: 9.5984e-01 l_d: 1.3797e+00 real_score: -4.3532e-01 fake_score: -5.7783e-01 l_d_left_eye: 1.4150e+00 l_d_right_eye: 1.5867e+00 l_d_mouth: 1.3280e+00 
+2021-09-17 13:08:01,057 INFO: [train..][epoch:  0, iter:     200, lr:(2.000e-03,)] [eta: 0:42:53, time (data): 0.370 (0.018)] l_g_pix: 6.9174e-02 l_p_8: 3.5409e-01 l_p_16: 4.7536e-01 l_p_32: 4.7130e-01 l_p_64: 5.2666e-01 l_p_128: 5.8466e-01 l_p_256: 6.6522e-01 l_p_512: 6.4563e-01 l_g_percep: 1.3282e+01 l_g_style: 6.6790e+00 l_g_gan: 6.0295e-02 l_g_gan_left_eye: 5.3131e-01 l_g_gan_right_eye: 4.3875e-01 l_g_gan_mouth: 6.7102e-01 l_g_comp_style_loss: 7.7769e-02 l_identity: 9.8249e-01 l_d: 1.6092e+00 real_score: -2.3382e-01 fake_score: 1.8935e-01 l_d_left_eye: 1.4782e+00 l_d_right_eye: 1.7806e+00 l_d_mouth: 1.4079e+00 
+2021-09-17 13:08:34,885 INFO: [train..][epoch:  0, iter:     300, lr:(2.000e-03,)] [eta: 0:42:42, time (data): 0.338 (0.002)] l_g_pix: 6.0056e-02 l_p_8: 3.3530e-01 l_p_16: 3.6369e-01 l_p_32: 3.6806e-01 l_p_64: 3.9656e-01 l_p_128: 4.7313e-01 l_p_256: 5.6537e-01 l_p_512: 5.5798e-01 l_g_percep: 1.1056e+01 l_g_style: 4.1918e+00 l_g_gan: 8.3513e-02 l_g_gan_left_eye: 7.1136e-01 l_g_gan_right_eye: 6.1183e-01 l_g_gan_mouth: 6.4832e-01 l_g_comp_style_loss: 2.2351e-02 l_identity: 1.1126e+00 l_d: 1.6120e+00 real_score: -6.0871e-01 fake_score: -2.6629e-01 l_d_left_eye: 1.4128e+00 l_d_right_eye: 1.3448e+00 l_d_mouth: 1.4901e+00 
+2021-09-17 13:09:08,755 INFO: [train..][epoch:  0, iter:     400, lr:(2.000e-03,)] [eta: 0:42:20, time (data): 0.339 (0.002)] l_g_pix: 6.4357e-02 l_p_8: 5.0847e-01 l_p_16: 5.8675e-01 l_p_32: 5.7189e-01 l_p_64: 5.6100e-01 l_p_128: 5.8361e-01 l_p_256: 6.0497e-01 l_p_512: 6.2929e-01 l_g_percep: 1.2023e+01 l_g_style: 2.7753e+00 l_g_gan: 1.7861e-01 l_g_gan_left_eye: 6.7406e-01 l_g_gan_right_eye: 7.0412e-01 l_g_gan_mouth: 6.8247e-01 l_g_comp_style_loss: 2.0757e-02 l_identity: 9.6339e-01 l_d: 1.0581e+00 real_score: -3.3515e-01 fake_score: -1.6027e+00 l_d_r1: 1.8341e-01 l_d_left_eye: 1.3855e+00 l_d_right_eye: 1.3790e+00 l_d_mouth: 1.4563e+00 
+2021-09-17 13:09:42,512 INFO: [train..][epoch:  0, iter:     500, lr:(2.000e-03,)] [eta: 0:41:51, time (data): 0.338 (0.002)] l_g_pix: 2.6897e-02 l_p_8: 1.7970e-01 l_p_16: 2.2468e-01 l_p_32: 2.0913e-01 l_p_64: 2.3615e-01 l_p_128: 2.3539e-01 l_p_256: 2.2021e-01 l_p_512: 2.4534e-01 l_g_percep: 1.1268e+01 l_g_style: 2.3266e+00 l_g_gan: 5.3049e-02 l_g_gan_left_eye: 6.1450e-01 l_g_gan_right_eye: 6.4168e-01 l_g_gan_mouth: 6.7504e-01 l_g_comp_style_loss: 3.0266e-02 l_identity: 1.0652e+00 l_d: 1.1076e+00 real_score: 1.4018e+00 fake_score: 3.5702e-01 l_d_left_eye: 1.4230e+00 l_d_right_eye: 1.4562e+00 l_d_mouth: 1.4217e+00 
+2021-09-17 13:10:16,489 INFO: [train..][epoch:  0, iter:     600, lr:(2.000e-03,)] [eta: 0:41:24, time (data): 0.339 (0.002)] l_g_pix: 6.0407e-02 l_p_8: 3.8744e-01 l_p_16: 4.6474e-01 l_p_32: 4.7414e-01 l_p_64: 4.8320e-01 l_p_128: 4.9911e-01 l_p_256: 5.0173e-01 l_p_512: 5.1313e-01 l_g_percep: 1.5194e+01 l_g_style: 4.9834e+00 l_g_gan: 2.1238e-01 l_g_gan_left_eye: 5.1492e-01 l_g_gan_right_eye: 5.9879e-01 l_g_gan_mouth: 7.4238e-01 l_g_comp_style_loss: 4.2513e-02 l_identity: 8.5379e-01 l_d: 2.9318e-01 real_score: 1.7127e+00 fake_score: -1.9965e+00 l_d_left_eye: 1.6901e+00 l_d_right_eye: 1.5462e+00 l_d_mouth: 1.4050e+00 
+2021-09-17 13:10:50,220 INFO: [train..][epoch:  0, iter:     700, lr:(2.000e-03,)] [eta: 0:40:52, time (data): 0.338 (0.002)] l_g_pix: 5.9743e-02 l_p_8: 4.5070e-01 l_p_16: 4.4590e-01 l_p_32: 4.9721e-01 l_p_64: 4.6879e-01 l_p_128: 4.6772e-01 l_p_256: 4.6763e-01 l_p_512: 4.7075e-01 l_g_percep: 1.3113e+01 l_g_style: 2.4297e+00 l_g_gan: 1.8748e-01 l_g_gan_left_eye: 7.1155e-01 l_g_gan_right_eye: 7.2970e-01 l_g_gan_mouth: 7.6915e-01 l_g_comp_style_loss: 1.7412e-02 l_identity: 1.1434e+00 l_d: 4.8140e-01 real_score: 9.9395e-01 fake_score: -1.7083e+00 l_d_left_eye: 1.3634e+00 l_d_right_eye: 1.3459e+00 l_d_mouth: 1.2693e+00 
+2021-09-17 13:11:24,261 INFO: [train..][epoch:  0, iter:     800, lr:(2.000e-03,)] [eta: 0:40:22, time (data): 0.339 (0.002)] l_g_pix: 4.7141e-02 l_p_8: 3.1218e-01 l_p_16: 3.3516e-01 l_p_32: 3.6421e-01 l_p_64: 3.6861e-01 l_p_128: 3.7494e-01 l_p_256: 3.8994e-01 l_p_512: 3.9263e-01 l_g_percep: 1.0789e+01 l_g_style: 2.4327e+00 l_g_gan: 1.1582e-01 l_g_gan_left_eye: 6.9850e-01 l_g_gan_right_eye: 6.8268e-01 l_g_gan_mouth: 7.0050e-01 l_g_comp_style_loss: 1.0173e-02 l_identity: 9.6908e-01 l_d: 1.3044e+00 real_score: -4.2404e-01 fake_score: -7.8125e-01 l_d_r1: 1.3362e-01 l_d_left_eye: 1.4211e+00 l_d_right_eye: 1.3935e+00 l_d_mouth: 1.4052e+00 
+2021-09-17 13:11:58,232 INFO: [train..][epoch:  0, iter:     900, lr:(2.000e-03,)] [eta: 0:39:51, time (data): 0.340 (0.002)] l_g_pix: 5.6505e-02 l_p_8: 4.7727e-01 l_p_16: 5.1837e-01 l_p_32: 5.0476e-01 l_p_64: 5.1642e-01 l_p_128: 5.2848e-01 l_p_256: 5.4919e-01 l_p_512: 5.4859e-01 l_g_percep: 1.2526e+01 l_g_style: 5.0230e+00 l_g_gan: 1.5970e-01 l_g_gan_left_eye: 7.4969e-01 l_g_gan_right_eye: 7.3147e-01 l_g_gan_mouth: 7.3056e-01 l_g_comp_style_loss: 1.2057e-02 l_identity: 1.1421e+00 l_d: 4.5322e-01 real_score: 1.3674e+00 fake_score: -1.3707e+00 l_d_left_eye: 1.3635e+00 l_d_right_eye: 1.3830e+00 l_d_mouth: 1.4357e+00 
+2021-09-17 13:12:32,143 INFO: [train..][epoch:  0, iter:   1,000, lr:(2.000e-03,)] [eta: 0:39:19, time (data): 0.339 (0.002)] l_g_pix: 3.3726e-02 l_p_8: 2.2396e-01 l_p_16: 2.6674e-01 l_p_32: 3.1594e-01 l_p_64: 3.1129e-01 l_p_128: 3.1611e-01 l_p_256: 3.0894e-01 l_p_512: 3.0238e-01 l_g_percep: 1.2814e+01 l_g_style: 3.4304e+00 l_g_gan: 5.9874e-02 l_g_gan_left_eye: 6.9423e-01 l_g_gan_right_eye: 7.1457e-01 l_g_gan_mouth: 6.5161e-01 l_g_comp_style_loss: 5.0821e-03 l_identity: 1.0760e+00 l_d: 1.5200e+00 real_score: -5.8155e-02 fake_score: 1.9866e-01 l_d_left_eye: 1.3858e+00 l_d_right_eye: 1.3794e+00 l_d_mouth: 1.3848e+00 
+2021-09-17 13:13:09,279 INFO: [train..][epoch:  1, iter:   1,100, lr:(2.000e-03,)] [eta: 0:39:07, time (data): 0.338 (0.002)] l_g_pix: 4.6779e-02 l_p_8: 5.4720e-01 l_p_16: 5.7308e-01 l_p_32: 6.1504e-01 l_p_64: 6.0057e-01 l_p_128: 5.9654e-01 l_p_256: 5.9727e-01 l_p_512: 5.9097e-01 l_g_percep: 1.0289e+01 l_g_style: 2.4775e+00 l_g_gan: 1.2232e-01 l_g_gan_left_eye: 6.9138e-01 l_g_gan_right_eye: 7.0277e-01 l_g_gan_mouth: 7.1901e-01 l_g_comp_style_loss: 7.0730e-03 l_identity: 1.0118e+00 l_d: 1.0356e+00 real_score: 1.2158e-02 fake_score: -8.7468e-01 l_d_left_eye: 1.3667e+00 l_d_right_eye: 1.3564e+00 l_d_mouth: 1.3707e+00 
+2021-09-17 13:13:43,447 INFO: [train..][epoch:  1, iter:   1,200, lr:(2.000e-03,)] [eta: 0:38:33, time (data): 0.340 (0.002)] l_g_pix: 6.5964e-02 l_p_8: 5.0166e-01 l_p_16: 5.4592e-01 l_p_32: 5.5971e-01 l_p_64: 5.5733e-01 l_p_128: 5.5345e-01 l_p_256: 5.5846e-01 l_p_512: 5.6127e-01 l_g_percep: 1.2964e+01 l_g_style: 4.2057e+00 l_g_gan: 1.2078e-01 l_g_gan_left_eye: 7.3360e-01 l_g_gan_right_eye: 6.9185e-01 l_g_gan_mouth: 7.0145e-01 l_g_comp_style_loss: 1.1950e-02 l_identity: 9.7510e-01 l_d: 9.0497e-01 real_score: 3.1044e-01 fake_score: -8.5273e-01 l_d_r1: 7.1782e-03 l_d_left_eye: 1.4459e+00 l_d_right_eye: 1.3679e+00 l_d_mouth: 1.3933e+00 
+2021-09-17 13:14:17,676 INFO: [train..][epoch:  1, iter:   1,300, lr:(2.000e-03,)] [eta: 0:38:00, time (data): 0.343 (0.002)] l_g_pix: 2.8956e-02 l_p_8: 3.0464e-01 l_p_16: 3.7630e-01 l_p_32: 2.8625e-01 l_p_64: 3.2321e-01 l_p_128: 3.2859e-01 l_p_256: 3.1436e-01 l_p_512: 3.4302e-01 l_g_percep: 1.0767e+01 l_g_style: 1.9508e+00 l_g_gan: 6.2617e-02 l_g_gan_left_eye: 6.9081e-01 l_g_gan_right_eye: 7.1060e-01 l_g_gan_mouth: 1.0002e+00 l_g_comp_style_loss: 1.8781e-02 l_identity: 1.2530e+00 l_d: 1.3825e+00 real_score: 1.5734e-01 fake_score: 1.3876e-01 l_d_left_eye: 1.4400e+00 l_d_right_eye: 1.3616e+00 l_d_mouth: 1.5097e+00 
+2021-09-17 13:14:51,826 INFO: [train..][epoch:  1, iter:   1,400, lr:(2.000e-03,)] [eta: 0:37:27, time (data): 0.342 (0.002)] l_g_pix: 3.9899e-02 l_p_8: 2.4375e-01 l_p_16: 2.8920e-01 l_p_32: 3.2386e-01 l_p_64: 3.4420e-01 l_p_128: 3.5363e-01 l_p_256: 3.5006e-01 l_p_512: 3.6464e-01 l_g_percep: 1.2809e+01 l_g_style: 5.1191e+00 l_g_gan: 4.3667e-01 l_g_gan_left_eye: 6.8569e-01 l_g_gan_right_eye: 7.1203e-01 l_g_gan_mouth: 7.1054e-01 l_g_comp_style_loss: 4.5178e-03 l_identity: 1.0207e+00 l_d: 2.7570e-01 real_score: 1.2016e+00 fake_score: -4.3539e+00 l_d_left_eye: 1.3779e+00 l_d_right_eye: 1.3828e+00 l_d_mouth: 1.3556e+00 
+2021-09-17 13:15:25,885 INFO: [train..][epoch:  1, iter:   1,500, lr:(2.000e-03,)] [eta: 0:36:53, time (data): 0.342 (0.002)] l_g_pix: 3.3250e-02 l_p_8: 2.5878e-01 l_p_16: 2.5755e-01 l_p_32: 2.4754e-01 l_p_64: 2.6944e-01 l_p_128: 2.8519e-01 l_p_256: 3.0943e-01 l_p_512: 3.1649e-01 l_g_percep: 1.3613e+01 l_g_style: 5.4706e+00 l_g_gan: 8.6728e-02 l_g_gan_left_eye: 6.7519e-01 l_g_gan_right_eye: 6.5667e-01 l_g_gan_mouth: 7.1659e-01 l_g_comp_style_loss: 2.3667e-02 l_identity: 9.6908e-01 l_d: 1.1892e+00 real_score: 1.0015e-01 fake_score: -3.2239e-01 l_d_left_eye: 1.4184e+00 l_d_right_eye: 1.4340e+00 l_d_mouth: 1.3743e+00 
+2021-09-17 13:16:00,104 INFO: [train..][epoch:  1, iter:   1,600, lr:(2.000e-03,)] [eta: 0:36:19, time (data): 0.342 (0.002)] l_g_pix: 4.3992e-02 l_p_8: 3.0186e-01 l_p_16: 3.5828e-01 l_p_32: 3.7414e-01 l_p_64: 3.8830e-01 l_p_128: 3.9626e-01 l_p_256: 3.9999e-01 l_p_512: 4.0554e-01 l_g_percep: 1.3757e+01 l_g_style: 6.5751e+00 l_g_gan: 1.0693e-01 l_g_gan_left_eye: 7.6800e-01 l_g_gan_right_eye: 7.6564e-01 l_g_gan_mouth: 7.2052e-01 l_g_comp_style_loss: 9.3310e-03 l_identity: 9.9378e-01 l_d: 9.3705e-01 real_score: 3.9111e-01 fake_score: -6.4882e-01 l_d_r1: 7.2952e-02 l_d_left_eye: 1.3978e+00 l_d_right_eye: 1.4048e+00 l_d_mouth: 1.4233e+00 
+2021-09-17 13:16:34,401 INFO: [train..][epoch:  1, iter:   1,700, lr:(2.000e-03,)] [eta: 0:35:46, time (data): 0.344 (0.002)] l_g_pix: 6.0359e-02 l_p_8: 3.9841e-01 l_p_16: 4.0722e-01 l_p_32: 4.4939e-01 l_p_64: 4.4273e-01 l_p_128: 4.6220e-01 l_p_256: 4.8701e-01 l_p_512: 4.7755e-01 l_g_percep: 1.1616e+01 l_g_style: 2.6804e+00 l_g_gan: 1.3451e-01 l_g_gan_left_eye: 7.0706e-01 l_g_gan_right_eye: 6.7259e-01 l_g_gan_mouth: 6.6980e-01 l_g_comp_style_loss: 2.2937e-02 l_identity: 9.9270e-01 l_d: 1.2897e+00 real_score: -5.2213e-01 fake_score: -1.0434e+00 l_d_left_eye: 1.3808e+00 l_d_right_eye: 1.4462e+00 l_d_mouth: 1.4768e+00 
+2021-09-17 13:17:08,525 INFO: [train..][epoch:  1, iter:   1,800, lr:(2.000e-03,)] [eta: 0:35:12, time (data): 0.343 (0.002)] l_g_pix: 4.8699e-02 l_p_8: 4.3502e-01 l_p_16: 3.9168e-01 l_p_32: 4.1737e-01 l_p_64: 4.1091e-01 l_p_128: 3.9854e-01 l_p_256: 3.7159e-01 l_p_512: 3.9325e-01 l_g_percep: 1.0907e+01 l_g_style: 2.0017e+00 l_g_gan: 2.4654e-01 l_g_gan_left_eye: 7.0084e-01 l_g_gan_right_eye: 6.5626e-01 l_g_gan_mouth: 7.4911e-01 l_g_comp_style_loss: 1.5096e-02 l_identity: 9.4801e-01 l_d: 3.1973e-01 real_score: 1.3480e+00 fake_score: -2.3766e+00 l_d_left_eye: 1.3847e+00 l_d_right_eye: 1.3656e+00 l_d_mouth: 1.3638e+00 
+2021-09-17 13:17:42,601 INFO: [train..][epoch:  1, iter:   1,900, lr:(2.000e-03,)] [eta: 0:34:38, time (data): 0.341 (0.002)] l_g_pix: 4.6105e-02 l_p_8: 4.5766e-01 l_p_16: 4.4915e-01 l_p_32: 4.5643e-01 l_p_64: 4.5940e-01 l_p_128: 4.6026e-01 l_p_256: 4.5581e-01 l_p_512: 4.6775e-01 l_g_percep: 1.2381e+01 l_g_style: 3.7543e+00 l_g_gan: 2.7892e-01 l_g_gan_left_eye: 5.8550e-01 l_g_gan_right_eye: 6.9245e-01 l_g_gan_mouth: 7.0559e-01 l_g_comp_style_loss: 3.0022e-02 l_identity: 9.8416e-01 l_d: 5.2060e-01 real_score: 5.4545e-01 fake_score: -2.7258e+00 l_d_left_eye: 1.6120e+00 l_d_right_eye: 1.4553e+00 l_d_mouth: 1.3934e+00 
+2021-09-17 13:18:16,806 INFO: [train..][epoch:  1, iter:   2,000, lr:(2.000e-03,)] [eta: 0:34:04, time (data): 0.341 (0.002)] l_g_pix: 3.1582e-02 l_p_8: 1.9483e-01 l_p_16: 2.2243e-01 l_p_32: 2.5047e-01 l_p_64: 2.6606e-01 l_p_128: 2.7652e-01 l_p_256: 2.8317e-01 l_p_512: 3.0216e-01 l_g_percep: 1.1335e+01 l_g_style: 3.2610e+00 l_g_gan: 6.8763e-02 l_g_gan_left_eye: 6.6586e-01 l_g_gan_right_eye: 6.5189e-01 l_g_gan_mouth: 6.9266e-01 l_g_comp_style_loss: 1.3279e-02 l_identity: 9.5515e-01 l_d: 1.0682e+00 real_score: 8.0516e-01 fake_score: 1.1058e-02 l_d_r1: 1.3828e-01 l_d_left_eye: 1.4175e+00 l_d_right_eye: 1.3635e+00 l_d_mouth: 1.3806e+00 
+2021-09-17 13:18:54,243 INFO: [train..][epoch:  2, iter:   2,100, lr:(2.000e-03,)] [eta: 0:33:40, time (data): 0.342 (0.002)] l_g_pix: 3.9615e-02 l_p_8: 2.2734e-01 l_p_16: 2.2120e-01 l_p_32: 2.4520e-01 l_p_64: 2.6163e-01 l_p_128: 2.6873e-01 l_p_256: 2.7185e-01 l_p_512: 2.7545e-01 l_g_percep: 1.2899e+01 l_g_style: 2.9140e+00 l_g_gan: 6.2766e-02 l_g_gan_left_eye: 6.8619e-01 l_g_gan_right_eye: 6.4983e-01 l_g_gan_mouth: 6.7305e-01 l_g_comp_style_loss: 1.6996e-02 l_identity: 1.0121e+00 l_d: 1.3414e+00 real_score: 2.4489e-01 fake_score: 1.3557e-01 l_d_left_eye: 1.3968e+00 l_d_right_eye: 1.4606e+00 l_d_mouth: 1.4009e+00 
+2021-09-17 13:19:28,301 INFO: [train..][epoch:  2, iter:   2,200, lr:(2.000e-03,)] [eta: 0:33:05, time (data): 0.341 (0.002)] l_g_pix: 5.1404e-02 l_p_8: 3.0921e-01 l_p_16: 3.3525e-01 l_p_32: 3.5698e-01 l_p_64: 3.9360e-01 l_p_128: 4.0599e-01 l_p_256: 4.2011e-01 l_p_512: 4.3267e-01 l_g_percep: 1.4612e+01 l_g_style: 6.8152e+00 l_g_gan: 2.5388e-01 l_g_gan_left_eye: 7.3138e-01 l_g_gan_right_eye: 7.8097e-01 l_g_gan_mouth: 6.3999e-01 l_g_comp_style_loss: 2.9888e-02 l_identity: 1.0173e+00 l_d: 4.4679e-01 real_score: 8.2133e-01 fake_score: -2.4565e+00 l_d_left_eye: 1.3637e+00 l_d_right_eye: 1.3538e+00 l_d_mouth: 1.4789e+00 
+2021-09-17 13:20:02,267 INFO: [train..][epoch:  2, iter:   2,300, lr:(2.000e-03,)] [eta: 0:32:30, time (data): 0.339 (0.002)] l_g_pix: 3.8905e-02 l_p_8: 4.4375e-01 l_p_16: 4.8416e-01 l_p_32: 4.6469e-01 l_p_64: 4.7639e-01 l_p_128: 4.6724e-01 l_p_256: 4.6487e-01 l_p_512: 4.8027e-01 l_g_percep: 1.1695e+01 l_g_style: 3.6479e+00 l_g_gan: 1.2981e-01 l_g_gan_left_eye: 6.8421e-01 l_g_gan_right_eye: 6.9198e-01 l_g_gan_mouth: 7.0754e-01 l_g_comp_style_loss: 1.2077e-02 l_identity: 8.5049e-01 l_d: 7.0823e-01 real_score: 7.4234e-01 fake_score: -9.7921e-01 l_d_left_eye: 1.3712e+00 l_d_right_eye: 1.4163e+00 l_d_mouth: 1.3883e+00 
+2021-09-17 13:20:36,374 INFO: [train..][epoch:  2, iter:   2,400, lr:(2.000e-03,)] [eta: 0:31:56, time (data): 0.340 (0.002)] l_g_pix: 3.9171e-02 l_p_8: 2.3824e-01 l_p_16: 2.8905e-01 l_p_32: 3.1307e-01 l_p_64: 3.2512e-01 l_p_128: 3.2987e-01 l_p_256: 3.3175e-01 l_p_512: 3.3180e-01 l_g_percep: 1.2987e+01 l_g_style: 3.2564e+00 l_g_gan: 2.4052e-01 l_g_gan_left_eye: 7.0952e-01 l_g_gan_right_eye: 7.2932e-01 l_g_gan_mouth: 7.5757e-01 l_g_comp_style_loss: 6.5112e-03 l_identity: 1.0187e+00 l_d: 5.6487e-01 real_score: 5.1008e-01 fake_score: -2.3106e+00 l_d_r1: 3.2828e-01 l_d_left_eye: 1.4098e+00 l_d_right_eye: 1.3820e+00 l_d_mouth: 1.3656e+00 
+2021-09-17 13:21:10,361 INFO: [train..][epoch:  2, iter:   2,500, lr:(2.000e-03,)] [eta: 0:31:21, time (data): 0.342 (0.002)] l_g_pix: 2.9041e-02 l_p_8: 1.9962e-01 l_p_16: 2.2862e-01 l_p_32: 2.0542e-01 l_p_64: 2.1699e-01 l_p_128: 2.2389e-01 l_p_256: 2.3245e-01 l_p_512: 2.3740e-01 l_g_percep: 1.0255e+01 l_g_style: 2.8100e+00 l_g_gan: 2.3135e-02 l_g_gan_left_eye: 7.5557e-01 l_g_gan_right_eye: 6.8412e-01 l_g_gan_mouth: 6.8868e-01 l_g_comp_style_loss: 1.3806e-02 l_identity: 9.8659e-01 l_d: 1.7737e+00 real_score: 1.5278e+00 fake_score: 1.3459e+00 l_d_left_eye: 1.3211e+00 l_d_right_eye: 1.4121e+00 l_d_mouth: 1.3847e+00 
+2021-09-17 13:21:44,554 INFO: [train..][epoch:  2, iter:   2,600, lr:(2.000e-03,)] [eta: 0:30:47, time (data): 0.342 (0.002)] l_g_pix: 7.3372e-02 l_p_8: 4.9846e-01 l_p_16: 4.8587e-01 l_p_32: 5.0812e-01 l_p_64: 5.4044e-01 l_p_128: 5.8165e-01 l_p_256: 6.0427e-01 l_p_512: 5.8528e-01 l_g_percep: 1.0857e+01 l_g_style: 2.2353e+00 l_g_gan: 3.3085e-02 l_g_gan_left_eye: 7.3369e-01 l_g_gan_right_eye: 6.8909e-01 l_g_gan_mouth: 8.1660e-01 l_g_comp_style_loss: 2.9106e-02 l_identity: 9.0784e-01 l_d: 2.4462e+00 real_score: -8.1175e-01 fake_score: 9.3609e-01 l_d_left_eye: 1.3851e+00 l_d_right_eye: 1.4147e+00 l_d_mouth: 1.3837e+00 
+2021-09-17 13:22:18,509 INFO: [train..][epoch:  2, iter:   2,700, lr:(2.000e-03,)] [eta: 0:30:12, time (data): 0.340 (0.002)] l_g_pix: 5.1929e-02 l_p_8: 3.8871e-01 l_p_16: 4.2716e-01 l_p_32: 4.6720e-01 l_p_64: 4.6793e-01 l_p_128: 4.7342e-01 l_p_256: 4.7628e-01 l_p_512: 4.8385e-01 l_g_percep: 1.2145e+01 l_g_style: 2.6484e+00 l_g_gan: 1.3323e-01 l_g_gan_left_eye: 7.1820e-01 l_g_gan_right_eye: 6.5765e-01 l_g_gan_mouth: 7.2239e-01 l_g_comp_style_loss: 1.7502e-02 l_identity: 9.2703e-01 l_d: 8.2020e-01 real_score: 3.9790e-01 fake_score: -1.0260e+00 l_d_left_eye: 1.3655e+00 l_d_right_eye: 1.3842e+00 l_d_mouth: 1.3698e+00 
+2021-09-17 13:22:52,773 INFO: [train..][epoch:  2, iter:   2,800, lr:(2.000e-03,)] [eta: 0:29:38, time (data): 0.341 (0.002)] l_g_pix: 4.4439e-02 l_p_8: 3.1847e-01 l_p_16: 3.7877e-01 l_p_32: 4.0301e-01 l_p_64: 4.1267e-01 l_p_128: 4.1906e-01 l_p_256: 4.2208e-01 l_p_512: 4.2764e-01 l_g_percep: 1.3766e+01 l_g_style: 6.8195e+00 l_g_gan: 7.6394e-02 l_g_gan_left_eye: 7.4769e-01 l_g_gan_right_eye: 8.5725e-01 l_g_gan_mouth: 7.2768e-01 l_g_comp_style_loss: 2.9928e-02 l_identity: 1.0904e+00 l_d: 9.3554e-01 real_score: 1.0178e+00 fake_score: -1.3690e-01 l_d_r1: 4.1052e-02 l_d_left_eye: 1.4177e+00 l_d_right_eye: 1.3833e+00 l_d_mouth: 1.3523e+00 
+2021-09-17 13:23:26,752 INFO: [train..][epoch:  2, iter:   2,900, lr:(2.000e-03,)] [eta: 0:29:03, time (data): 0.341 (0.002)] l_g_pix: 7.5876e-02 l_p_8: 4.4745e-01 l_p_16: 5.2888e-01 l_p_32: 5.3687e-01 l_p_64: 5.8762e-01 l_p_128: 5.7984e-01 l_p_256: 5.7584e-01 l_p_512: 5.7424e-01 l_g_percep: 1.2098e+01 l_g_style: 2.7528e+00 l_g_gan: 2.5055e-01 l_g_gan_left_eye: 7.1022e-01 l_g_gan_right_eye: 8.2504e-01 l_g_gan_mouth: 7.1336e-01 l_g_comp_style_loss: 2.5588e-02 l_identity: 8.6436e-01 l_d: 5.8486e-01 real_score: 4.3353e-01 fake_score: -2.4203e+00 l_d_left_eye: 1.2964e+00 l_d_right_eye: 1.3026e+00 l_d_mouth: 1.4129e+00 
+2021-09-17 13:24:00,933 INFO: [train..][epoch:  2, iter:   3,000, lr:(2.000e-03,)] [eta: 0:28:29, time (data): 0.342 (0.002)] l_g_pix: 5.5719e-02 l_p_8: 3.4474e-01 l_p_16: 3.5423e-01 l_p_32: 3.8878e-01 l_p_64: 3.5879e-01 l_p_128: 3.7598e-01 l_p_256: 3.7455e-01 l_p_512: 3.8786e-01 l_g_percep: 1.1024e+01 l_g_style: 2.5508e+00 l_g_gan: 3.2354e-01 l_g_gan_left_eye: 6.8208e-01 l_g_gan_right_eye: 6.6877e-01 l_g_gan_mouth: 6.8596e-01 l_g_comp_style_loss: 3.5615e-02 l_identity: 1.0410e+00 l_d: 1.0987e+00 real_score: -6.3240e-01 fake_score: -3.1953e+00 l_d_left_eye: 1.3750e+00 l_d_right_eye: 1.3961e+00 l_d_mouth: 1.2808e+00 
+2021-09-17 13:24:38,058 INFO: [train..][epoch:  3, iter:   3,100, lr:(2.000e-03,)] [eta: 0:27:59, time (data): 0.339 (0.002)] l_g_pix: 4.3267e-02 l_p_8: 2.2589e-01 l_p_16: 2.8174e-01 l_p_32: 3.0827e-01 l_p_64: 3.3058e-01 l_p_128: 3.4253e-01 l_p_256: 3.4930e-01 l_p_512: 3.5468e-01 l_g_percep: 1.5110e+01 l_g_style: 7.7483e+00 l_g_gan: 1.3024e-01 l_g_gan_left_eye: 6.9731e-01 l_g_gan_right_eye: 6.6368e-01 l_g_gan_mouth: 7.2997e-01 l_g_comp_style_loss: 1.2673e-02 l_identity: 1.0098e+00 l_d: 6.2233e-01 real_score: 1.0308e+00 fake_score: -9.8516e-01 l_d_left_eye: 1.3922e+00 l_d_right_eye: 1.3944e+00 l_d_mouth: 1.3638e+00 
+2021-09-17 13:25:12,433 INFO: [train..][epoch:  3, iter:   3,200, lr:(2.000e-03,)] [eta: 0:27:25, time (data): 0.341 (0.002)] l_g_pix: 4.8858e-02 l_p_8: 4.1856e-01 l_p_16: 4.1841e-01 l_p_32: 4.3662e-01 l_p_64: 4.4513e-01 l_p_128: 4.5452e-01 l_p_256: 4.5681e-01 l_p_512: 4.6014e-01 l_g_percep: 1.2259e+01 l_g_style: 3.1660e+00 l_g_gan: 1.3958e-01 l_g_gan_left_eye: 7.2540e-01 l_g_gan_right_eye: 8.0753e-01 l_g_gan_mouth: 7.0498e-01 l_g_comp_style_loss: 2.7513e-02 l_identity: 8.4022e-01 l_d: 5.4952e-01 real_score: 1.1926e+00 fake_score: -1.1113e+00 l_d_r1: 1.1534e-01 l_d_left_eye: 1.4290e+00 l_d_right_eye: 1.4088e+00 l_d_mouth: 1.3561e+00 
+2021-09-17 13:25:46,411 INFO: [train..][epoch:  3, iter:   3,300, lr:(2.000e-03,)] [eta: 0:26:50, time (data): 0.341 (0.002)] l_g_pix: 2.9651e-02 l_p_8: 1.8788e-01 l_p_16: 1.8808e-01 l_p_32: 2.1268e-01 l_p_64: 2.2651e-01 l_p_128: 2.3627e-01 l_p_256: 2.4960e-01 l_p_512: 2.5285e-01 l_g_percep: 1.2516e+01 l_g_style: 5.0279e+00 l_g_gan: 6.6258e-02 l_g_gan_left_eye: 7.0870e-01 l_g_gan_right_eye: 7.9113e-01 l_g_gan_mouth: 6.8380e-01 l_g_comp_style_loss: 2.4899e-02 l_identity: 1.1209e+00 l_d: 1.4752e+00 real_score: -1.1155e-01 fake_score: 6.2104e-02 l_d_left_eye: 1.3748e+00 l_d_right_eye: 1.3404e+00 l_d_mouth: 1.3690e+00 
+2021-09-17 13:26:20,414 INFO: [train..][epoch:  3, iter:   3,400, lr:(2.000e-03,)] [eta: 0:26:16, time (data): 0.340 (0.002)] l_g_pix: 5.1216e-02 l_p_8: 3.5274e-01 l_p_16: 3.9901e-01 l_p_32: 4.2666e-01 l_p_64: 4.3261e-01 l_p_128: 4.3681e-01 l_p_256: 4.4207e-01 l_p_512: 4.4479e-01 l_g_percep: 1.2519e+01 l_g_style: 2.4738e+00 l_g_gan: 1.7299e-01 l_g_gan_left_eye: 6.8667e-01 l_g_gan_right_eye: 7.5704e-01 l_g_gan_mouth: 7.1485e-01 l_g_comp_style_loss: 4.3630e-02 l_identity: 9.7845e-01 l_d: 5.7557e-01 real_score: 7.7031e-01 fake_score: -1.5347e+00 l_d_left_eye: 1.3915e+00 l_d_right_eye: 1.2137e+00 l_d_mouth: 1.3767e+00 
+2021-09-17 13:26:54,584 INFO: [train..][epoch:  3, iter:   3,500, lr:(2.000e-03,)] [eta: 0:25:41, time (data): 0.342 (0.002)] l_g_pix: 2.4883e-02 l_p_8: 2.8991e-01 l_p_16: 3.0907e-01 l_p_32: 2.8568e-01 l_p_64: 3.0709e-01 l_p_128: 3.2084e-01 l_p_256: 3.2141e-01 l_p_512: 3.2814e-01 l_g_percep: 1.1266e+01 l_g_style: 2.2285e+00 l_g_gan: 3.8470e-02 l_g_gan_left_eye: 6.4923e-01 l_g_gan_right_eye: 7.7006e-01 l_g_gan_mouth: 6.9745e-01 l_g_comp_style_loss: 1.8687e-02 l_identity: 1.0322e+00 l_d: 1.2876e+00 real_score: 1.8494e+00 fake_score: 7.5680e-01 l_d_left_eye: 1.3857e+00 l_d_right_eye: 1.3539e+00 l_d_mouth: 1.3960e+00 
+2021-09-17 13:27:28,392 INFO: [train..][epoch:  3, iter:   3,600, lr:(2.000e-03,)] [eta: 0:25:07, time (data): 0.340 (0.002)] l_g_pix: 3.4542e-02 l_p_8: 2.4977e-01 l_p_16: 3.0419e-01 l_p_32: 3.2530e-01 l_p_64: 3.4056e-01 l_p_128: 3.4374e-01 l_p_256: 3.4514e-01 l_p_512: 3.5243e-01 l_g_percep: 1.2323e+01 l_g_style: 4.4186e+00 l_g_gan: 1.9823e-01 l_g_gan_left_eye: 7.1319e-01 l_g_gan_right_eye: 7.5892e-01 l_g_gan_mouth: 6.9392e-01 l_g_comp_style_loss: 1.5224e-02 l_identity: 1.0728e+00 l_d: 1.0355e+00 real_score: -3.5662e-01 fake_score: -1.8341e+00 l_d_r1: 5.4701e-01 l_d_left_eye: 1.3701e+00 l_d_right_eye: 1.3735e+00 l_d_mouth: 1.3777e+00 
+2021-09-17 13:28:02,271 INFO: [train..][epoch:  3, iter:   3,700, lr:(2.000e-03,)] [eta: 0:24:32, time (data): 0.338 (0.002)] l_g_pix: 4.3652e-02 l_p_8: 3.0922e-01 l_p_16: 3.2380e-01 l_p_32: 3.5575e-01 l_p_64: 3.6460e-01 l_p_128: 3.8831e-01 l_p_256: 3.9905e-01 l_p_512: 3.9305e-01 l_g_percep: 1.3648e+01 l_g_style: 8.8456e+00 l_g_gan: 1.4490e-01 l_g_gan_left_eye: 7.2543e-01 l_g_gan_right_eye: 7.2399e-01 l_g_gan_mouth: 6.4884e-01 l_g_comp_style_loss: 4.4357e-02 l_identity: 8.9713e-01 l_d: 4.0063e-01 real_score: 1.9502e+00 fake_score: -1.1814e+00 l_d_left_eye: 1.4040e+00 l_d_right_eye: 1.3128e+00 l_d_mouth: 1.3370e+00 
+2021-09-17 13:28:36,478 INFO: [train..][epoch:  3, iter:   3,800, lr:(2.000e-03,)] [eta: 0:23:58, time (data): 0.340 (0.002)] l_g_pix: 4.7323e-02 l_p_8: 3.4956e-01 l_p_16: 3.8129e-01 l_p_32: 3.9274e-01 l_p_64: 3.9049e-01 l_p_128: 3.9381e-01 l_p_256: 3.9714e-01 l_p_512: 4.0016e-01 l_g_percep: 1.2190e+01 l_g_style: 2.9862e+00 l_g_gan: 6.4422e-02 l_g_gan_left_eye: 7.1009e-01 l_g_gan_right_eye: 7.5131e-01 l_g_gan_mouth: 7.4434e-01 l_g_comp_style_loss: 3.2476e-02 l_identity: 7.8578e-01 l_d: 1.1460e+00 real_score: 7.0539e-01 fake_score: 1.0037e-01 l_d_left_eye: 1.4078e+00 l_d_right_eye: 1.3360e+00 l_d_mouth: 1.3299e+00 
+2021-09-17 13:29:10,174 INFO: [train..][epoch:  3, iter:   3,900, lr:(2.000e-03,)] [eta: 0:23:23, time (data): 0.337 (0.002)] l_g_pix: 4.8991e-02 l_p_8: 3.4957e-01 l_p_16: 3.8472e-01 l_p_32: 3.9133e-01 l_p_64: 3.9672e-01 l_p_128: 3.9809e-01 l_p_256: 4.0187e-01 l_p_512: 4.0371e-01 l_g_percep: 1.2804e+01 l_g_style: 4.6758e+00 l_g_gan: 2.0420e-01 l_g_gan_left_eye: 6.9385e-01 l_g_gan_right_eye: 7.5408e-01 l_g_gan_mouth: 7.3650e-01 l_g_comp_style_loss: 1.4326e-02 l_identity: 9.6988e-01 l_d: 1.0778e+00 real_score: -4.4274e-01 fake_score: -1.9030e+00 l_d_left_eye: 1.3712e+00 l_d_right_eye: 1.3073e+00 l_d_mouth: 1.3443e+00 
+2021-09-17 13:29:44,030 INFO: [train..][epoch:  3, iter:   4,000, lr:(2.000e-03,)] [eta: 0:22:48, time (data): 0.338 (0.002)] l_g_pix: 3.8365e-02 l_p_8: 1.9071e-01 l_p_16: 2.2476e-01 l_p_32: 2.3866e-01 l_p_64: 2.5278e-01 l_p_128: 2.6425e-01 l_p_256: 2.7629e-01 l_p_512: 2.8405e-01 l_g_percep: 1.1905e+01 l_g_style: 2.1414e+00 l_g_gan: 3.6498e-01 l_g_gan_left_eye: 7.3713e-01 l_g_gan_right_eye: 7.4921e-01 l_g_gan_mouth: 6.0874e-01 l_g_comp_style_loss: 3.5900e-02 l_identity: 1.0173e+00 l_d: 1.5901e-01 real_score: 1.9529e+00 fake_score: -3.6234e+00 l_d_r1: 3.6983e-01 l_d_left_eye: 1.3714e+00 l_d_right_eye: 1.3244e+00 l_d_mouth: 1.4731e+00 
+2021-09-17 13:30:21,240 INFO: [train..][epoch:  4, iter:   4,100, lr:(2.000e-03,)] [eta: 0:22:17, time (data): 0.339 (0.002)] l_g_pix: 4.8142e-02 l_p_8: 3.0775e-01 l_p_16: 3.2468e-01 l_p_32: 3.2729e-01 l_p_64: 3.3809e-01 l_p_128: 3.5261e-01 l_p_256: 3.6859e-01 l_p_512: 3.7587e-01 l_g_percep: 1.1957e+01 l_g_style: 3.1840e+00 l_g_gan: 2.5383e-01 l_g_gan_left_eye: 7.6796e-01 l_g_gan_right_eye: 7.7089e-01 l_g_gan_mouth: 7.3243e-01 l_g_comp_style_loss: 3.5243e-02 l_identity: 1.0928e+00 l_d: 1.2433e+00 real_score: -7.8530e-01 fake_score: -2.4560e+00 l_d_left_eye: 1.3626e+00 l_d_right_eye: 1.3065e+00 l_d_mouth: 1.3075e+00 
+2021-09-17 13:30:55,384 INFO: [train..][epoch:  4, iter:   4,200, lr:(2.000e-03,)] [eta: 0:21:42, time (data): 0.340 (0.002)] l_g_pix: 4.0968e-02 l_p_8: 3.5171e-01 l_p_16: 3.7667e-01 l_p_32: 3.9256e-01 l_p_64: 3.9096e-01 l_p_128: 3.8958e-01 l_p_256: 3.8980e-01 l_p_512: 3.8726e-01 l_g_percep: 1.1507e+01 l_g_style: 2.2659e+00 l_g_gan: 1.7165e-01 l_g_gan_left_eye: 6.7393e-01 l_g_gan_right_eye: 7.4996e-01 l_g_gan_mouth: 6.8868e-01 l_g_comp_style_loss: 2.1792e-02 l_identity: 9.8445e-01 l_d: 1.2485e+00 real_score: -6.1991e-01 fake_score: -1.5184e+00 l_d_left_eye: 1.3694e+00 l_d_right_eye: 1.3311e+00 l_d_mouth: 1.3568e+00 
+2021-09-17 13:31:29,340 INFO: [train..][epoch:  4, iter:   4,300, lr:(2.000e-03,)] [eta: 0:21:08, time (data): 0.340 (0.002)] l_g_pix: 3.8867e-02 l_p_8: 2.5975e-01 l_p_16: 2.6164e-01 l_p_32: 2.8018e-01 l_p_64: 2.7559e-01 l_p_128: 2.7996e-01 l_p_256: 2.8807e-01 l_p_512: 2.8683e-01 l_g_percep: 1.2740e+01 l_g_style: 3.7549e+00 l_g_gan: 4.3185e-02 l_g_gan_left_eye: 7.5268e-01 l_g_gan_right_eye: 7.4356e-01 l_g_gan_mouth: 7.8902e-01 l_g_comp_style_loss: 3.4204e-02 l_identity: 9.5629e-01 l_d: 1.3331e+00 real_score: 1.1082e+00 fake_score: 6.1600e-01 l_d_left_eye: 1.3824e+00 l_d_right_eye: 1.3772e+00 l_d_mouth: 1.3724e+00 
+2021-09-17 13:32:03,726 INFO: [train..][epoch:  4, iter:   4,400, lr:(2.000e-03,)] [eta: 0:20:34, time (data): 0.342 (0.002)] l_g_pix: 4.7388e-02 l_p_8: 4.3946e-01 l_p_16: 4.5458e-01 l_p_32: 4.9114e-01 l_p_64: 4.7282e-01 l_p_128: 4.6598e-01 l_p_256: 4.6318e-01 l_p_512: 4.6132e-01 l_g_percep: 1.2416e+01 l_g_style: 5.0628e+00 l_g_gan: 1.3802e-01 l_g_gan_left_eye: 7.1043e-01 l_g_gan_right_eye: 7.3387e-01 l_g_gan_mouth: 7.5054e-01 l_g_comp_style_loss: 2.1714e-02 l_identity: 9.3260e-01 l_d: 7.0518e-01 real_score: 6.6347e-01 fake_score: -1.0905e+00 l_d_r1: 5.9899e-02 l_d_left_eye: 1.3838e+00 l_d_right_eye: 1.3470e+00 l_d_mouth: 1.3401e+00 
+2021-09-17 13:32:37,785 INFO: [train..][epoch:  4, iter:   4,500, lr:(2.000e-03,)] [eta: 0:19:59, time (data): 0.341 (0.002)] l_g_pix: 3.2267e-02 l_p_8: 3.5045e-01 l_p_16: 3.8060e-01 l_p_32: 3.5597e-01 l_p_64: 3.8078e-01 l_p_128: 3.8293e-01 l_p_256: 3.8002e-01 l_p_512: 3.9598e-01 l_g_percep: 1.1301e+01 l_g_style: 2.3120e+00 l_g_gan: 7.7056e-02 l_g_gan_left_eye: 6.9086e-01 l_g_gan_right_eye: 7.2072e-01 l_g_gan_mouth: 7.5397e-01 l_g_comp_style_loss: 5.1052e-02 l_identity: 1.0518e+00 l_d: 1.1127e+00 real_score: 4.5473e-01 fake_score: -1.4925e-01 l_d_left_eye: 1.3733e+00 l_d_right_eye: 1.3146e+00 l_d_mouth: 1.3739e+00 
+2021-09-17 13:33:12,007 INFO: [train..][epoch:  4, iter:   4,600, lr:(2.000e-03,)] [eta: 0:19:25, time (data): 0.342 (0.002)] l_g_pix: 3.7600e-02 l_p_8: 3.7726e-01 l_p_16: 3.8001e-01 l_p_32: 3.7806e-01 l_p_64: 3.9217e-01 l_p_128: 3.9972e-01 l_p_256: 4.0458e-01 l_p_512: 4.1812e-01 l_g_percep: 1.0969e+01 l_g_style: 2.5772e+00 l_g_gan: 2.6297e-01 l_g_gan_left_eye: 7.4093e-01 l_g_gan_right_eye: 7.5174e-01 l_g_gan_mouth: 7.2950e-01 l_g_comp_style_loss: 2.1772e-02 l_identity: 9.8787e-01 l_d: 1.0668e+00 real_score: -5.2862e-01 fake_score: -2.5549e+00 l_d_left_eye: 1.3883e+00 l_d_right_eye: 1.3441e+00 l_d_mouth: 1.4259e+00 
+2021-09-17 13:33:46,215 INFO: [train..][epoch:  4, iter:   4,700, lr:(2.000e-03,)] [eta: 0:18:50, time (data): 0.343 (0.002)] l_g_pix: 6.9554e-02 l_p_8: 4.9790e-01 l_p_16: 4.9881e-01 l_p_32: 5.3606e-01 l_p_64: 5.3377e-01 l_p_128: 5.4357e-01 l_p_256: 5.5254e-01 l_p_512: 5.5517e-01 l_g_percep: 1.0212e+01 l_g_style: 2.2510e+00 l_g_gan: 6.0241e-02 l_g_gan_left_eye: 7.9204e-01 l_g_gan_right_eye: 8.3398e-01 l_g_gan_mouth: 7.3826e-01 l_g_comp_style_loss: 2.1367e-02 l_identity: 1.0289e+00 l_d: 1.8134e+00 real_score: -5.7351e-01 fake_score: 1.9053e-01 l_d_left_eye: 1.3482e+00 l_d_right_eye: 1.2803e+00 l_d_mouth: 1.3483e+00 
+2021-09-17 13:34:20,420 INFO: [train..][epoch:  4, iter:   4,800, lr:(2.000e-03,)] [eta: 0:18:16, time (data): 0.342 (0.002)] l_g_pix: 3.5963e-02 l_p_8: 4.1159e-01 l_p_16: 4.4188e-01 l_p_32: 4.4528e-01 l_p_64: 4.4453e-01 l_p_128: 4.2280e-01 l_p_256: 4.0673e-01 l_p_512: 4.0745e-01 l_g_percep: 9.7747e+00 l_g_style: 2.0957e+00 l_g_gan: 3.0983e-01 l_g_gan_left_eye: 7.7886e-01 l_g_gan_right_eye: 7.6124e-01 l_g_gan_mouth: 7.7899e-01 l_g_comp_style_loss: 1.9989e-02 l_identity: 1.0195e+00 l_d: 6.9477e-01 real_score: 9.1184e-02 fake_score: -3.0521e+00 l_d_r1: 9.2449e-02 l_d_left_eye: 1.3521e+00 l_d_right_eye: 1.3663e+00 l_d_mouth: 1.4154e+00 
+2021-09-17 13:34:54,277 INFO: [train..][epoch:  4, iter:   4,900, lr:(2.000e-03,)] [eta: 0:17:42, time (data): 0.340 (0.002)] l_g_pix: 4.9492e-02 l_p_8: 5.1409e-01 l_p_16: 5.4777e-01 l_p_32: 5.6114e-01 l_p_64: 5.7992e-01 l_p_128: 5.6784e-01 l_p_256: 5.6456e-01 l_p_512: 5.6657e-01 l_g_percep: 1.1405e+01 l_g_style: 2.5930e+00 l_g_gan: 6.0089e-02 l_g_gan_left_eye: 6.8192e-01 l_g_gan_right_eye: 7.2283e-01 l_g_gan_mouth: 7.1706e-01 l_g_comp_style_loss: 3.4789e-02 l_identity: 1.1080e+00 l_d: 9.4791e-01 real_score: 1.7990e+00 fake_score: 1.9389e-01 l_d_left_eye: 1.4096e+00 l_d_right_eye: 1.2873e+00 l_d_mouth: 1.3886e+00 
+2021-09-17 13:35:28,274 INFO: [train..][epoch:  4, iter:   5,000, lr:(2.000e-03,)] [eta: 0:17:07, time (data): 0.340 (0.002)] l_g_pix: 4.0487e-02 l_p_8: 2.8916e-01 l_p_16: 3.2953e-01 l_p_32: 3.5180e-01 l_p_64: 3.5970e-01 l_p_128: 3.6858e-01 l_p_256: 3.7519e-01 l_p_512: 3.7381e-01 l_g_percep: 1.2406e+01 l_g_style: 3.9055e+00 l_g_gan: 3.8448e-02 l_g_gan_left_eye: 6.7530e-01 l_g_gan_right_eye: 6.4356e-01 l_g_gan_mouth: 6.3898e-01 l_g_comp_style_loss: 5.6511e-02 l_identity: 1.0016e+00 l_d: 1.2813e+00 real_score: 1.9002e+00 fake_score: 7.5748e-01 l_d_left_eye: 1.3656e+00 l_d_right_eye: 1.4048e+00 l_d_mouth: 1.3318e+00 
+2021-09-17 13:35:28,274 INFO: Saving models and training states.
+  0%|          | 0/512 [00:00<?, ?image/s]  0%|          | 1/512 [00:00<00:54,  9.38image/s]Test 01206:   0%|          | 1/512 [00:00<00:54,  9.38image/s]Test 01454:   0%|          | 2/512 [00:00<00:54,  9.38image/s]Test 01454:   1%|          | 3/512 [00:00<00:41, 12.32image/s]Test 01245:   1%|          | 3/512 [00:00<00:41, 12.32image/s]Test 01455:   1%|          | 4/512 [00:00<00:41, 12.32image/s]Test 01455:   1%|          | 5/512 [00:00<00:39, 12.90image/s]Test 01252:   1%|          | 5/512 [00:00<00:39, 12.90image/s]Test 01306:   1%|          | 6/512 [00:00<00:39, 12.90image/s]Test 01306:   1%|▏         | 7/512 [00:00<00:37, 13.42image/s]Test 01030:   1%|▏         | 7/512 [00:00<00:37, 13.42image/s]Test 01082:   2%|▏         | 8/512 [00:00<00:37, 13.42image/s]Test 01082:   2%|▏         | 9/512 [00:00<00:36, 13.78image/s]Test 01108:   2%|▏         | 9/512 [00:00<00:36, 13.78image/s]Test 01473:   2%|▏         | 10/512 [00:00<00:36, 13.78image/s]Test 01473:   2%|▏         | 11/512 [00:00<00:35, 13.92image/s]Test 01231:   2%|▏         | 11/512 [00:00<00:35, 13.92image/s]Test 01060:   2%|▏         | 12/512 [00:00<00:35, 13.92image/s]Test 01060:   3%|▎         | 13/512 [00:00<00:35, 14.14image/s]Test 01378:   3%|▎         | 13/512 [00:00<00:35, 14.14image/s]Test 01145:   3%|▎         | 14/512 [00:01<00:35, 14.14image/s]Test 01145:   3%|▎         | 15/512 [00:01<00:34, 14.20image/s]Test 01220:   3%|▎         | 15/512 [00:01<00:34, 14.20image/s]Test 01267:   3%|▎         | 16/512 [00:01<00:34, 14.20image/s]Test 01267:   3%|▎         | 17/512 [00:01<00:34, 14.22image/s]Test 01485:   3%|▎         | 17/512 [00:01<00:34, 14.22image/s]Test 01189:   4%|▎         | 18/512 [00:01<00:34, 14.22image/s]Test 01189:   4%|▎         | 19/512 [00:01<00:35, 14.03image/s]Test 01149:   4%|▎         | 19/512 [00:01<00:35, 14.03image/s]Test 01240:   4%|▍         | 20/512 [00:01<00:35, 14.03image/s]Test 01240:   4%|▍         | 21/512 [00:01<00:34, 14.06image/s]Test 01299:   4%|▍         | 21/512 [00:01<00:34, 14.06image/s]Test 01168:   4%|▍         | 22/512 [00:01<00:34, 14.06image/s]Test 01168:   4%|▍         | 23/512 [00:01<00:34, 14.05image/s]Test 01272:   4%|▍         | 23/512 [00:01<00:34, 14.05image/s]Test 01257:   5%|▍         | 24/512 [00:01<00:34, 14.05image/s]Test 01257:   5%|▍         | 25/512 [00:01<00:34, 14.07image/s]Test 01418:   5%|▍         | 25/512 [00:01<00:34, 14.07image/s]Test 01300:   5%|▌         | 26/512 [00:01<00:34, 14.07image/s]Test 01300:   5%|▌         | 27/512 [00:01<00:34, 14.25image/s]Test 01097:   5%|▌         | 27/512 [00:01<00:34, 14.25image/s]Test 01451:   5%|▌         | 28/512 [00:02<00:33, 14.25image/s]Test 01451:   6%|▌         | 29/512 [00:02<00:33, 14.26image/s]Test 01050:   6%|▌         | 29/512 [00:02<00:33, 14.26image/s]Test 01160:   6%|▌         | 30/512 [00:02<00:33, 14.26image/s]Test 01160:   6%|▌         | 31/512 [00:02<00:33, 14.31image/s]Test 01497:   6%|▌         | 31/512 [00:02<00:33, 14.31image/s]Test 01241:   6%|▋         | 32/512 [00:02<00:33, 14.31image/s]Test 01241:   6%|▋         | 33/512 [00:02<00:33, 14.35image/s]Test 01492:   6%|▋         | 33/512 [00:02<00:33, 14.35image/s]Test 01157:   7%|▋         | 34/512 [00:02<00:33, 14.35image/s]Test 01157:   7%|▋         | 35/512 [00:02<00:33, 14.24image/s]Test 01113:   7%|▋         | 35/512 [00:02<00:33, 14.24image/s]Test 01414:   7%|▋         | 36/512 [00:02<00:33, 14.24image/s]Test 01414:   7%|▋         | 37/512 [00:02<00:33, 14.33image/s]Test 01478:   7%|▋         | 37/512 [00:02<00:33, 14.33image/s]Test 01095:   7%|▋         | 38/512 [00:02<00:33, 14.33image/s]Test 01095:   8%|▊         | 39/512 [00:02<00:33, 14.31image/s]Test 01011:   8%|▊         | 39/512 [00:02<00:33, 14.31image/s]Test 01225:   8%|▊         | 40/512 [00:02<00:32, 14.31image/s]Test 01225:   8%|▊         | 41/512 [00:02<00:33, 14.25image/s]Test 01026:   8%|▊         | 41/512 [00:02<00:33, 14.25image/s]Test 01144:   8%|▊         | 42/512 [00:02<00:32, 14.25image/s]Test 01144:   8%|▊         | 43/512 [00:03<00:32, 14.30image/s]Test 01363:   8%|▊         | 43/512 [00:03<00:32, 14.30image/s]Test 01286:   9%|▊         | 44/512 [00:03<00:32, 14.30image/s]Test 01286:   9%|▉         | 45/512 [00:03<00:32, 14.15image/s]Test 01399:   9%|▉         | 45/512 [00:03<00:32, 14.15image/s]Test 01140:   9%|▉         | 46/512 [00:03<00:32, 14.15image/s]Test 01140:   9%|▉         | 47/512 [00:03<00:32, 14.21image/s]Test 01505:   9%|▉         | 47/512 [00:03<00:32, 14.21image/s]Test 01452:   9%|▉         | 48/512 [00:03<00:32, 14.21image/s]Test 01452:  10%|▉         | 49/512 [00:03<00:32, 14.16image/s]Test 01152:  10%|▉         | 49/512 [00:03<00:32, 14.16image/s]Test 01190:  10%|▉         | 50/512 [00:03<00:32, 14.16image/s]Test 01190:  10%|▉         | 51/512 [00:03<00:32, 14.14image/s]Test 01389:  10%|▉         | 51/512 [00:03<00:32, 14.14image/s]Test 01366:  10%|█         | 52/512 [00:03<00:32, 14.14image/s]Test 01366:  10%|█         | 53/512 [00:03<00:32, 14.21image/s]Test 01027:  10%|█         | 53/512 [00:03<00:32, 14.21image/s]Test 01312:  11%|█         | 54/512 [00:03<00:32, 14.21image/s]Test 01312:  11%|█         | 55/512 [00:03<00:32, 14.27image/s]Test 01331:  11%|█         | 55/512 [00:03<00:32, 14.27image/s]Test 01329:  11%|█         | 56/512 [00:03<00:31, 14.27image/s]Test 01329:  11%|█         | 57/512 [00:04<00:31, 14.36image/s]Test 01342:  11%|█         | 57/512 [00:04<00:31, 14.36image/s]Test 01239:  11%|█▏        | 58/512 [00:04<00:31, 14.36image/s]Test 01239:  12%|█▏        | 59/512 [00:04<00:31, 14.37image/s]Test 01098:  12%|█▏        | 59/512 [00:04<00:31, 14.37image/s]Test 01321:  12%|█▏        | 60/512 [00:04<00:31, 14.37image/s]Test 01321:  12%|█▏        | 61/512 [00:04<00:31, 14.43image/s]Test 01224:  12%|█▏        | 61/512 [00:04<00:31, 14.43image/s]Test 01049:  12%|█▏        | 62/512 [00:04<00:31, 14.43image/s]Test 01049:  12%|█▏        | 63/512 [00:04<00:31, 14.35image/s]Test 01219:  12%|█▏        | 63/512 [00:04<00:31, 14.35image/s]Test 01404:  12%|█▎        | 64/512 [00:04<00:31, 14.35image/s]Test 01404:  13%|█▎        | 65/512 [00:04<00:31, 14.37image/s]Test 01290:  13%|█▎        | 65/512 [00:04<00:31, 14.37image/s]Test 01016:  13%|█▎        | 66/512 [00:04<00:31, 14.37image/s]Test 01016:  13%|█▎        | 67/512 [00:04<00:30, 14.39image/s]Test 01296:  13%|█▎        | 67/512 [00:04<00:30, 14.39image/s]Test 01396:  13%|█▎        | 68/512 [00:04<00:30, 14.39image/s]Test 01396:  13%|█▎        | 69/512 [00:04<00:30, 14.41image/s]Test 01067:  13%|█▎        | 69/512 [00:04<00:30, 14.41image/s]Test 01462:  14%|█▎        | 70/512 [00:04<00:30, 14.41image/s]Test 01462:  14%|█▍        | 71/512 [00:05<00:30, 14.39image/s]Test 01120:  14%|█▍        | 71/512 [00:05<00:30, 14.39image/s]Test 01416:  14%|█▍        | 72/512 [00:05<00:30, 14.39image/s]Test 01416:  14%|█▍        | 73/512 [00:05<00:30, 14.36image/s]Test 01003:  14%|█▍        | 73/512 [00:05<00:30, 14.36image/s]Test 01118:  14%|█▍        | 74/512 [00:05<00:30, 14.36image/s]Test 01118:  15%|█▍        | 75/512 [00:05<00:30, 14.42image/s]Test 01061:  15%|█▍        | 75/512 [00:05<00:30, 14.42image/s]Test 01198:  15%|█▍        | 76/512 [00:05<00:30, 14.42image/s]Test 01198:  15%|█▌        | 77/512 [00:05<00:30, 14.39image/s]Test 01024:  15%|█▌        | 77/512 [00:05<00:30, 14.39image/s]Test 01070:  15%|█▌        | 78/512 [00:05<00:30, 14.39image/s]Test 01070:  15%|█▌        | 79/512 [00:05<00:30, 14.33image/s]Test 01129:  15%|█▌        | 79/512 [00:05<00:30, 14.33image/s]Test 01352:  16%|█▌        | 80/512 [00:05<00:30, 14.33image/s]Test 01352:  16%|█▌        | 81/512 [00:05<00:30, 14.16image/s]Test 01117:  16%|█▌        | 81/512 [00:05<00:30, 14.16image/s]Test 01134:  16%|█▌        | 82/512 [00:05<00:30, 14.16image/s]Test 01134:  16%|█▌        | 83/512 [00:05<00:30, 14.23image/s]Test 01384:  16%|█▌        | 83/512 [00:05<00:30, 14.23image/s]Test 01161:  16%|█▋        | 84/512 [00:05<00:30, 14.23image/s]Test 01161:  17%|█▋        | 85/512 [00:05<00:29, 14.35image/s]Test 01319:  17%|█▋        | 85/512 [00:05<00:29, 14.35image/s]Test 01437:  17%|█▋        | 86/512 [00:06<00:29, 14.35image/s]Test 01437:  17%|█▋        | 87/512 [00:06<00:29, 14.39image/s]Test 01227:  17%|█▋        | 87/512 [00:06<00:29, 14.39image/s]Test 01137:  17%|█▋        | 88/512 [00:06<00:29, 14.39image/s]Test 01137:  17%|█▋        | 89/512 [00:06<00:29, 14.37image/s]Test 01081:  17%|█▋        | 89/512 [00:06<00:29, 14.37image/s]Test 01408:  18%|█▊        | 90/512 [00:06<00:29, 14.37image/s]Test 01408:  18%|█▊        | 91/512 [00:06<00:29, 14.37image/s]Test 01287:  18%|█▊        | 91/512 [00:06<00:29, 14.37image/s]Test 01370:  18%|█▊        | 92/512 [00:06<00:29, 14.37image/s]Test 01370:  18%|█▊        | 93/512 [00:06<00:29, 14.40image/s]Test 01383:  18%|█▊        | 93/512 [00:06<00:29, 14.40image/s]Test 01096:  18%|█▊        | 94/512 [00:06<00:29, 14.40image/s]Test 01096:  19%|█▊        | 95/512 [00:06<00:28, 14.44image/s]Test 01153:  19%|█▊        | 95/512 [00:06<00:28, 14.44image/s]Test 01436:  19%|█▉        | 96/512 [00:06<00:28, 14.44image/s]Test 01436:  19%|█▉        | 97/512 [00:06<00:28, 14.40image/s]Test 01392:  19%|█▉        | 97/512 [00:06<00:28, 14.40image/s]Test 01398:  19%|█▉        | 98/512 [00:06<00:28, 14.40image/s]Test 01398:  19%|█▉        | 99/512 [00:06<00:28, 14.38image/s]Test 01218:  19%|█▉        | 99/512 [00:06<00:28, 14.38image/s]Test 01305:  20%|█▉        | 100/512 [00:07<00:28, 14.38image/s]Test 01305:  20%|█▉        | 101/512 [00:07<00:28, 14.34image/s]Test 01410:  20%|█▉        | 101/512 [00:07<00:28, 14.34image/s]Test 01202:  20%|█▉        | 102/512 [00:07<00:28, 14.34image/s]Test 01202:  20%|██        | 103/512 [00:07<00:28, 14.30image/s]Test 01006:  20%|██        | 103/512 [00:07<00:28, 14.30image/s]Test 01230:  20%|██        | 104/512 [00:07<00:28, 14.30image/s]Test 01230:  21%|██        | 105/512 [00:07<00:28, 14.36image/s]Test 01330:  21%|██        | 105/512 [00:07<00:28, 14.36image/s]Test 01174:  21%|██        | 106/512 [00:07<00:28, 14.36image/s]Test 01174:  21%|██        | 107/512 [00:07<00:28, 14.34image/s]Test 01055:  21%|██        | 107/512 [00:07<00:28, 14.34image/s]Test 01502:  21%|██        | 108/512 [00:07<00:28, 14.34image/s]Test 01502:  21%|██▏       | 109/512 [00:07<00:28, 14.30image/s]Test 01415:  21%|██▏       | 109/512 [00:07<00:28, 14.30image/s]Test 01294:  21%|██▏       | 110/512 [00:07<00:28, 14.30image/s]Test 01294:  22%|██▏       | 111/512 [00:07<00:28, 14.27image/s]Test 01112:  22%|██▏       | 111/512 [00:07<00:28, 14.27image/s]Test 01217:  22%|██▏       | 112/512 [00:07<00:28, 14.27image/s]Test 01217:  22%|██▏       | 113/512 [00:07<00:27, 14.30image/s]Test 01167:  22%|██▏       | 113/512 [00:07<00:27, 14.30image/s]Test 01490:  22%|██▏       | 114/512 [00:08<00:27, 14.30image/s]Test 01490:  22%|██▏       | 115/512 [00:08<00:27, 14.35image/s]Test 01359:  22%|██▏       | 115/512 [00:08<00:27, 14.35image/s]Test 01044:  23%|██▎       | 116/512 [00:08<00:27, 14.35image/s]Test 01044:  23%|██▎       | 117/512 [00:08<00:27, 14.30image/s]Test 01092:  23%|██▎       | 117/512 [00:08<00:27, 14.30image/s]Test 01005:  23%|██▎       | 118/512 [00:08<00:27, 14.30image/s]Test 01005:  23%|██▎       | 119/512 [00:08<00:27, 14.26image/s]Test 01355:  23%|██▎       | 119/512 [00:08<00:27, 14.26image/s]Test 01258:  23%|██▎       | 120/512 [00:08<00:27, 14.26image/s]Test 01258:  24%|██▎       | 121/512 [00:08<00:27, 14.30image/s]Test 01344:  24%|██▎       | 121/512 [00:08<00:27, 14.30image/s]Test 01350:  24%|██▍       | 122/512 [00:08<00:27, 14.30image/s]Test 01350:  24%|██▍       | 123/512 [00:08<00:27, 14.19image/s]Test 01053:  24%|██▍       | 123/512 [00:08<00:27, 14.19image/s]Test 01233:  24%|██▍       | 124/512 [00:08<00:27, 14.19image/s]Test 01233:  24%|██▍       | 125/512 [00:08<00:27, 14.06image/s]Test 01254:  24%|██▍       | 125/512 [00:08<00:27, 14.06image/s]Test 01291:  25%|██▍       | 126/512 [00:08<00:27, 14.06image/s]Test 01291:  25%|██▍       | 127/512 [00:08<00:27, 14.10image/s]Test 01407:  25%|██▍       | 127/512 [00:08<00:27, 14.10image/s]Test 01151:  25%|██▌       | 128/512 [00:09<00:27, 14.10image/s]Test 01151:  25%|██▌       | 129/512 [00:09<00:27, 14.04image/s]Test 01445:  25%|██▌       | 129/512 [00:09<00:27, 14.04image/s]Test 01402:  25%|██▌       | 130/512 [00:09<00:27, 14.04image/s]Test 01402:  26%|██▌       | 131/512 [00:09<00:26, 14.16image/s]Test 01226:  26%|██▌       | 131/512 [00:09<00:26, 14.16image/s]Test 01375:  26%|██▌       | 132/512 [00:09<00:26, 14.16image/s]Test 01375:  26%|██▌       | 133/512 [00:09<00:26, 14.28image/s]Test 01121:  26%|██▌       | 133/512 [00:09<00:26, 14.28image/s]Test 01139:  26%|██▌       | 134/512 [00:09<00:26, 14.28image/s]Test 01139:  26%|██▋       | 135/512 [00:09<00:26, 14.41image/s]Test 01002:  26%|██▋       | 135/512 [00:09<00:26, 14.41image/s]Test 01073:  27%|██▋       | 136/512 [00:09<00:26, 14.41image/s]Test 01073:  27%|██▋       | 137/512 [00:09<00:25, 14.44image/s]Test 01159:  27%|██▋       | 137/512 [00:09<00:25, 14.44image/s]Test 01371:  27%|██▋       | 138/512 [00:09<00:25, 14.44image/s]Test 01371:  27%|██▋       | 139/512 [00:09<00:26, 14.29image/s]Test 01025:  27%|██▋       | 139/512 [00:09<00:26, 14.29image/s]Test 01119:  27%|██▋       | 140/512 [00:09<00:26, 14.29image/s]Test 01119:  28%|██▊       | 141/512 [00:09<00:25, 14.28image/s]Test 01334:  28%|██▊       | 141/512 [00:09<00:25, 14.28image/s]Test 01373:  28%|██▊       | 142/512 [00:09<00:25, 14.28image/s]Test 01373:  28%|██▊       | 143/512 [00:10<00:25, 14.21image/s]Test 01483:  28%|██▊       | 143/512 [00:10<00:25, 14.21image/s]Test 01285:  28%|██▊       | 144/512 [00:10<00:25, 14.21image/s]Test 01285:  28%|██▊       | 145/512 [00:10<00:25, 14.28image/s]Test 01271:  28%|██▊       | 145/512 [00:10<00:25, 14.28image/s]Test 01428:  29%|██▊       | 146/512 [00:10<00:25, 14.28image/s]Test 01428:  29%|██▊       | 147/512 [00:10<00:25, 14.32image/s]Test 01260:  29%|██▊       | 147/512 [00:10<00:25, 14.32image/s]Test 01116:  29%|██▉       | 148/512 [00:10<00:25, 14.32image/s]Test 01116:  29%|██▉       | 149/512 [00:10<00:25, 14.35image/s]Test 01507:  29%|██▉       | 149/512 [00:10<00:25, 14.35image/s]Test 01354:  29%|██▉       | 150/512 [00:10<00:25, 14.35image/s]Test 01354:  29%|██▉       | 151/512 [00:10<00:25, 14.39image/s]Test 01165:  29%|██▉       | 151/512 [00:10<00:25, 14.39image/s]Test 01464:  30%|██▉       | 152/512 [00:10<00:25, 14.39image/s]Test 01464:  30%|██▉       | 153/512 [00:10<00:24, 14.43image/s]Test 01443:  30%|██▉       | 153/512 [00:10<00:24, 14.43image/s]Test 01075:  30%|███       | 154/512 [00:10<00:24, 14.43image/s]Test 01075:  30%|███       | 155/512 [00:10<00:25, 14.26image/s]Test 01345:  30%|███       | 155/512 [00:10<00:25, 14.26image/s]Test 01394:  30%|███       | 156/512 [00:10<00:24, 14.26image/s]Test 01394:  31%|███       | 157/512 [00:11<00:24, 14.32image/s]Test 01128:  31%|███       | 157/512 [00:11<00:24, 14.32image/s]Test 01071:  31%|███       | 158/512 [00:11<00:24, 14.32image/s]Test 01071:  31%|███       | 159/512 [00:11<00:24, 14.37image/s]Test 01277:  31%|███       | 159/512 [00:11<00:24, 14.37image/s]Test 01090:  31%|███▏      | 160/512 [00:11<00:24, 14.37image/s]Test 01090:  31%|███▏      | 161/512 [00:11<00:24, 14.40image/s]Test 01143:  31%|███▏      | 161/512 [00:11<00:24, 14.40image/s]Test 01057:  32%|███▏      | 162/512 [00:11<00:24, 14.40image/s]Test 01057:  32%|███▏      | 163/512 [00:11<00:24, 14.41image/s]Test 01256:  32%|███▏      | 163/512 [00:11<00:24, 14.41image/s]Test 01107:  32%|███▏      | 164/512 [00:11<00:24, 14.41image/s]Test 01107:  32%|███▏      | 165/512 [00:11<00:24, 14.44image/s]Test 01349:  32%|███▏      | 165/512 [00:11<00:24, 14.44image/s]Test 01284:  32%|███▏      | 166/512 [00:11<00:23, 14.44image/s]Test 01284:  33%|███▎      | 167/512 [00:11<00:23, 14.49image/s]Test 01251:  33%|███▎      | 167/512 [00:11<00:23, 14.49image/s]Test 01439:  33%|███▎      | 168/512 [00:11<00:23, 14.49image/s]Test 01439:  33%|███▎      | 169/512 [00:11<00:23, 14.41image/s]Test 01340:  33%|███▎      | 169/512 [00:11<00:23, 14.41image/s]Test 01194:  33%|███▎      | 170/512 [00:11<00:23, 14.41image/s]Test 01194:  33%|███▎      | 171/512 [00:12<00:23, 14.37image/s]Test 01051:  33%|███▎      | 171/512 [00:12<00:23, 14.37image/s]Test 01085:  34%|███▎      | 172/512 [00:12<00:23, 14.37image/s]Test 01085:  34%|███▍      | 173/512 [00:12<00:23, 14.31image/s]Test 01141:  34%|███▍      | 173/512 [00:12<00:23, 14.31image/s]Test 01282:  34%|███▍      | 174/512 [00:12<00:23, 14.31image/s]Test 01282:  34%|███▍      | 175/512 [00:12<00:23, 14.30image/s]Test 01433:  34%|███▍      | 175/512 [00:12<00:23, 14.30image/s]Test 01188:  34%|███▍      | 176/512 [00:12<00:23, 14.30image/s]Test 01188:  35%|███▍      | 177/512 [00:12<00:23, 14.38image/s]Test 01438:  35%|███▍      | 177/512 [00:12<00:23, 14.38image/s]Test 01187:  35%|███▍      | 178/512 [00:12<00:23, 14.38image/s]Test 01187:  35%|███▍      | 179/512 [00:12<00:23, 14.31image/s]Test 01275:  35%|███▍      | 179/512 [00:12<00:23, 14.31image/s]Test 01269:  35%|███▌      | 180/512 [00:12<00:23, 14.31image/s]Test 01269:  35%|███▌      | 181/512 [00:12<00:23, 14.37image/s]Test 01043:  35%|███▌      | 181/512 [00:12<00:23, 14.37image/s]Test 01058:  36%|███▌      | 182/512 [00:12<00:22, 14.37image/s]Test 01058:  36%|███▌      | 183/512 [00:12<00:23, 14.27image/s]Test 01077:  36%|███▌      | 183/512 [00:12<00:23, 14.27image/s]Test 01063:  36%|███▌      | 184/512 [00:12<00:22, 14.27image/s]Test 01063:  36%|███▌      | 185/512 [00:12<00:22, 14.31image/s]Test 01504:  36%|███▌      | 185/512 [00:12<00:22, 14.31image/s]Test 01376:  36%|███▋      | 186/512 [00:13<00:22, 14.31image/s]Test 01376:  37%|███▋      | 187/512 [00:13<00:22, 14.16image/s]Test 01163:  37%|███▋      | 187/512 [00:13<00:22, 14.16image/s]Test 01472:  37%|███▋      | 188/512 [00:13<00:22, 14.16image/s]Test 01472:  37%|███▋      | 189/512 [00:13<00:22, 14.26image/s]Test 01486:  37%|███▋      | 189/512 [00:13<00:22, 14.26image/s]Test 01326:  37%|███▋      | 190/512 [00:13<00:22, 14.26image/s]Test 01326:  37%|███▋      | 191/512 [00:13<00:22, 14.24image/s]Test 01259:  37%|███▋      | 191/512 [00:13<00:22, 14.24image/s]Test 01079:  38%|███▊      | 192/512 [00:13<00:22, 14.24image/s]Test 01079:  38%|███▊      | 193/512 [00:13<00:22, 14.23image/s]Test 01100:  38%|███▊      | 193/512 [00:13<00:22, 14.23image/s]Test 01314:  38%|███▊      | 194/512 [00:13<00:22, 14.23image/s]Test 01314:  38%|███▊      | 195/512 [00:13<00:22, 14.34image/s]Test 01234:  38%|███▊      | 195/512 [00:13<00:22, 14.34image/s]Test 01324:  38%|███▊      | 196/512 [00:13<00:22, 14.34image/s]Test 01324:  38%|███▊      | 197/512 [00:13<00:21, 14.32image/s]Test 01087:  38%|███▊      | 197/512 [00:13<00:21, 14.32image/s]Test 01150:  39%|███▊      | 198/512 [00:13<00:21, 14.32image/s]Test 01150:  39%|███▉      | 199/512 [00:13<00:21, 14.34image/s]Test 01243:  39%|███▉      | 199/512 [00:13<00:21, 14.34image/s]Test 01377:  39%|███▉      | 200/512 [00:14<00:21, 14.34image/s]Test 01377:  39%|███▉      | 201/512 [00:14<00:21, 14.24image/s]Test 01362:  39%|███▉      | 201/512 [00:14<00:21, 14.24image/s]Test 01474:  39%|███▉      | 202/512 [00:14<00:21, 14.24image/s]Test 01474:  40%|███▉      | 203/512 [00:14<00:21, 14.18image/s]Test 01036:  40%|███▉      | 203/512 [00:14<00:21, 14.18image/s]Test 01509:  40%|███▉      | 204/512 [00:14<00:21, 14.18image/s]Test 01509:  40%|████      | 205/512 [00:14<00:21, 14.26image/s]Test 01158:  40%|████      | 205/512 [00:14<00:21, 14.26image/s]Test 01182:  40%|████      | 206/512 [00:14<00:21, 14.26image/s]Test 01182:  40%|████      | 207/512 [00:14<00:21, 14.38image/s]Test 01358:  40%|████      | 207/512 [00:14<00:21, 14.38image/s]Test 01033:  41%|████      | 208/512 [00:14<00:21, 14.38image/s]Test 01033:  41%|████      | 209/512 [00:14<00:21, 14.43image/s]Test 01178:  41%|████      | 209/512 [00:14<00:21, 14.43image/s]Test 01401:  41%|████      | 210/512 [00:14<00:20, 14.43image/s]Test 01401:  41%|████      | 211/512 [00:14<00:20, 14.53image/s]Test 01186:  41%|████      | 211/512 [00:14<00:20, 14.53image/s]Test 01467:  41%|████▏     | 212/512 [00:14<00:20, 14.53image/s]Test 01467:  42%|████▏     | 213/512 [00:14<00:20, 14.50image/s]Test 01419:  42%|████▏     | 213/512 [00:14<00:20, 14.50image/s]Test 01236:  42%|████▏     | 214/512 [00:15<00:20, 14.50image/s]Test 01236:  42%|████▏     | 215/512 [00:15<00:20, 14.45image/s]Test 01207:  42%|████▏     | 215/512 [00:15<00:20, 14.45image/s]Test 01423:  42%|████▏     | 216/512 [00:15<00:20, 14.45image/s]Test 01423:  42%|████▏     | 217/512 [00:15<00:20, 14.22image/s]Test 01457:  42%|████▏     | 217/512 [00:15<00:20, 14.22image/s]Test 01368:  43%|████▎     | 218/512 [00:15<00:20, 14.22image/s]Test 01368:  43%|████▎     | 219/512 [00:15<00:20, 14.19image/s]Test 01315:  43%|████▎     | 219/512 [00:15<00:20, 14.19image/s]Test 01244:  43%|████▎     | 220/512 [00:15<00:20, 14.19image/s]Test 01244:  43%|████▎     | 221/512 [00:15<00:20, 14.23image/s]Test 01424:  43%|████▎     | 221/512 [00:15<00:20, 14.23image/s]Test 01123:  43%|████▎     | 222/512 [00:15<00:20, 14.23image/s]Test 01123:  44%|████▎     | 223/512 [00:15<00:20, 14.30image/s]Test 01019:  44%|████▎     | 223/512 [00:15<00:20, 14.30image/s]Test 01479:  44%|████▍     | 224/512 [00:15<00:20, 14.30image/s]Test 01479:  44%|████▍     | 225/512 [00:15<00:20, 14.27image/s]Test 01295:  44%|████▍     | 225/512 [00:15<00:20, 14.27image/s]Test 01148:  44%|████▍     | 226/512 [00:15<00:20, 14.27image/s]Test 01148:  44%|████▍     | 227/512 [00:15<00:19, 14.29image/s]Test 01114:  44%|████▍     | 227/512 [00:15<00:19, 14.29image/s]Test 01480:  45%|████▍     | 228/512 [00:15<00:19, 14.29image/s]Test 01480:  45%|████▍     | 229/512 [00:16<00:19, 14.32image/s]Test 01014:  45%|████▍     | 229/512 [00:16<00:19, 14.32image/s]Test 01343:  45%|████▍     | 230/512 [00:16<00:19, 14.32image/s]Test 01343:  45%|████▌     | 231/512 [00:16<00:19, 14.33image/s]Test 01434:  45%|████▌     | 231/512 [00:16<00:19, 14.33image/s]Test 01029:  45%|████▌     | 232/512 [00:16<00:19, 14.33image/s]Test 01029:  46%|████▌     | 233/512 [00:16<00:19, 14.28image/s]Test 01154:  46%|████▌     | 233/512 [00:16<00:19, 14.28image/s]Test 01133:  46%|████▌     | 234/512 [00:16<00:19, 14.28image/s]Test 01133:  46%|████▌     | 235/512 [00:16<00:19, 14.32image/s]Test 01316:  46%|████▌     | 235/512 [00:16<00:19, 14.32image/s]Test 01175:  46%|████▌     | 236/512 [00:16<00:19, 14.32image/s]Test 01175:  46%|████▋     | 237/512 [00:16<00:19, 14.38image/s]Test 01308:  46%|████▋     | 237/512 [00:16<00:19, 14.38image/s]Test 01059:  46%|████▋     | 238/512 [00:16<00:19, 14.38image/s]Test 01059:  47%|████▋     | 239/512 [00:16<00:19, 14.35image/s]Test 01235:  47%|████▋     | 239/512 [00:16<00:19, 14.35image/s]Test 01124:  47%|████▋     | 240/512 [00:16<00:18, 14.35image/s]Test 01124:  47%|████▋     | 241/512 [00:16<00:18, 14.28image/s]Test 01273:  47%|████▋     | 241/512 [00:16<00:18, 14.28image/s]Test 01500:  47%|████▋     | 242/512 [00:16<00:18, 14.28image/s]Test 01500:  47%|████▋     | 243/512 [00:17<00:18, 14.37image/s]Test 01105:  47%|████▋     | 243/512 [00:17<00:18, 14.37image/s]Test 01172:  48%|████▊     | 244/512 [00:17<00:18, 14.37image/s]Test 01172:  48%|████▊     | 245/512 [00:17<00:18, 14.34image/s]Test 01215:  48%|████▊     | 245/512 [00:17<00:18, 14.34image/s]Test 01471:  48%|████▊     | 246/512 [00:17<00:18, 14.34image/s]Test 01471:  48%|████▊     | 247/512 [00:17<00:18, 14.22image/s]Test 01156:  48%|████▊     | 247/512 [00:17<00:18, 14.22image/s]Test 01066:  48%|████▊     | 248/512 [00:17<00:18, 14.22image/s]Test 01066:  49%|████▊     | 249/512 [00:17<00:18, 14.07image/s]Test 01367:  49%|████▊     | 249/512 [00:17<00:18, 14.07image/s]Test 01052:  49%|████▉     | 250/512 [00:17<00:18, 14.07image/s]Test 01052:  49%|████▉     | 251/512 [00:17<00:18, 14.05image/s]Test 01487:  49%|████▉     | 251/512 [00:17<00:18, 14.05image/s]Test 01391:  49%|████▉     | 252/512 [00:17<00:18, 14.05image/s]Test 01391:  49%|████▉     | 253/512 [00:17<00:18, 14.11image/s]Test 01142:  49%|████▉     | 253/512 [00:17<00:18, 14.11image/s]Test 01420:  50%|████▉     | 254/512 [00:17<00:18, 14.11image/s]Test 01420:  50%|████▉     | 255/512 [00:17<00:18, 14.13image/s]Test 01323:  50%|████▉     | 255/512 [00:17<00:18, 14.13image/s]Test 01032:  50%|█████     | 256/512 [00:17<00:18, 14.13image/s]Test 01032:  50%|█████     | 257/512 [00:18<00:17, 14.20image/s]Test 01441:  50%|█████     | 257/512 [00:18<00:17, 14.20image/s]Test 01247:  50%|█████     | 258/512 [00:18<00:17, 14.20image/s]Test 01247:  51%|█████     | 259/512 [00:18<00:17, 14.30image/s]Test 01351:  51%|█████     | 259/512 [00:18<00:17, 14.30image/s]Test 01381:  51%|█████     | 260/512 [00:18<00:17, 14.30image/s]Test 01381:  51%|█████     | 261/512 [00:18<00:17, 14.28image/s]Test 01205:  51%|█████     | 261/512 [00:18<00:17, 14.28image/s]Test 01447:  51%|█████     | 262/512 [00:18<00:17, 14.28image/s]Test 01447:  51%|█████▏    | 263/512 [00:18<00:17, 14.29image/s]Test 01426:  51%|█████▏    | 263/512 [00:18<00:17, 14.29image/s]Test 01400:  52%|█████▏    | 264/512 [00:18<00:17, 14.29image/s]Test 01400:  52%|█████▏    | 265/512 [00:18<00:17, 14.27image/s]Test 01337:  52%|█████▏    | 265/512 [00:18<00:17, 14.27image/s]Test 01496:  52%|█████▏    | 266/512 [00:18<00:17, 14.27image/s]Test 01496:  52%|█████▏    | 267/512 [00:18<00:17, 14.26image/s]Test 01336:  52%|█████▏    | 267/512 [00:18<00:17, 14.26image/s]Test 01031:  52%|█████▏    | 268/512 [00:18<00:17, 14.26image/s]Test 01031:  53%|█████▎    | 269/512 [00:18<00:17, 14.29image/s]Test 01263:  53%|█████▎    | 269/512 [00:18<00:17, 14.29image/s]Test 01403:  53%|█████▎    | 270/512 [00:18<00:16, 14.29image/s]Test 01403:  53%|█████▎    | 271/512 [00:19<00:16, 14.32image/s]Test 01361:  53%|█████▎    | 271/512 [00:19<00:16, 14.32image/s]Test 01288:  53%|█████▎    | 272/512 [00:19<00:16, 14.32image/s]Test 01288:  53%|█████▎    | 273/512 [00:19<00:16, 14.33image/s]Test 01248:  53%|█████▎    | 273/512 [00:19<00:16, 14.33image/s]Test 01412:  54%|█████▎    | 274/512 [00:19<00:16, 14.33image/s]Test 01412:  54%|█████▎    | 275/512 [00:19<00:16, 14.30image/s]Test 01221:  54%|█████▎    | 275/512 [00:19<00:16, 14.30image/s]Test 01183:  54%|█████▍    | 276/512 [00:19<00:16, 14.30image/s]Test 01183:  54%|█████▍    | 277/512 [00:19<00:16, 14.28image/s]Test 01297:  54%|█████▍    | 277/512 [00:19<00:16, 14.28image/s]Test 01325:  54%|█████▍    | 278/512 [00:19<00:16, 14.28image/s]Test 01325:  54%|█████▍    | 279/512 [00:19<00:16, 14.32image/s]Test 01341:  54%|█████▍    | 279/512 [00:19<00:16, 14.32image/s]Test 01171:  55%|█████▍    | 280/512 [00:19<00:16, 14.32image/s]Test 01171:  55%|█████▍    | 281/512 [00:19<00:16, 14.32image/s]Test 01083:  55%|█████▍    | 281/512 [00:19<00:16, 14.32image/s]Test 01489:  55%|█████▌    | 282/512 [00:19<00:16, 14.32image/s]Test 01489:  55%|█████▌    | 283/512 [00:19<00:15, 14.40image/s]Test 01015:  55%|█████▌    | 283/512 [00:19<00:15, 14.40image/s]Test 01422:  55%|█████▌    | 284/512 [00:19<00:15, 14.40image/s]Test 01422:  56%|█████▌    | 285/512 [00:19<00:15, 14.45image/s]Test 01102:  56%|█████▌    | 285/512 [00:19<00:15, 14.45image/s]Test 01357:  56%|█████▌    | 286/512 [00:20<00:15, 14.45image/s]Test 01357:  56%|█████▌    | 287/512 [00:20<00:15, 14.45image/s]Test 01196:  56%|█████▌    | 287/512 [00:20<00:15, 14.45image/s]Test 01379:  56%|█████▋    | 288/512 [00:20<00:15, 14.45image/s]Test 01379:  56%|█████▋    | 289/512 [00:20<00:15, 14.50image/s]Test 01304:  56%|█████▋    | 289/512 [00:20<00:15, 14.50image/s]Test 01390:  57%|█████▋    | 290/512 [00:20<00:15, 14.50image/s]Test 01390:  57%|█████▋    | 291/512 [00:20<00:15, 14.53image/s]Test 01010:  57%|█████▋    | 291/512 [00:20<00:15, 14.53image/s]Test 01405:  57%|█████▋    | 292/512 [00:20<00:15, 14.53image/s]Test 01405:  57%|█████▋    | 293/512 [00:20<00:15, 14.35image/s]Test 01193:  57%|█████▋    | 293/512 [00:20<00:15, 14.35image/s]Test 01411:  57%|█████▋    | 294/512 [00:20<00:15, 14.35image/s]Test 01411:  58%|█████▊    | 295/512 [00:20<00:15, 14.42image/s]Test 01210:  58%|█████▊    | 295/512 [00:20<00:15, 14.42image/s]Test 01395:  58%|█████▊    | 296/512 [00:20<00:14, 14.42image/s]Test 01395:  58%|█████▊    | 297/512 [00:20<00:14, 14.39image/s]Test 01034:  58%|█████▊    | 297/512 [00:20<00:14, 14.39image/s]Test 01261:  58%|█████▊    | 298/512 [00:20<00:14, 14.39image/s]Test 01261:  58%|█████▊    | 299/512 [00:20<00:14, 14.28image/s]Test 01180:  58%|█████▊    | 299/512 [00:20<00:14, 14.28image/s]Test 01503:  59%|█████▊    | 300/512 [00:21<00:14, 14.28image/s]Test 01503:  59%|█████▉    | 301/512 [00:21<00:14, 14.28image/s]Test 01289:  59%|█████▉    | 301/512 [00:21<00:14, 14.28image/s]Test 01035:  59%|█████▉    | 302/512 [00:21<00:14, 14.28image/s]Test 01035:  59%|█████▉    | 303/512 [00:21<00:14, 14.31image/s]Test 01280:  59%|█████▉    | 303/512 [00:21<00:14, 14.31image/s]Test 01460:  59%|█████▉    | 304/512 [00:21<00:14, 14.31image/s]Test 01460:  60%|█████▉    | 305/512 [00:21<00:14, 14.29image/s]Test 01091:  60%|█████▉    | 305/512 [00:21<00:14, 14.29image/s]Test 01089:  60%|█████▉    | 306/512 [00:21<00:14, 14.29image/s]Test 01089:  60%|█████▉    | 307/512 [00:21<00:14, 14.31image/s]Test 01442:  60%|█████▉    | 307/512 [00:21<00:14, 14.31image/s]Test 01040:  60%|██████    | 308/512 [00:21<00:14, 14.31image/s]Test 01040:  60%|██████    | 309/512 [00:21<00:14, 14.18image/s]Test 01104:  60%|██████    | 309/512 [00:21<00:14, 14.18image/s]Test 01068:  61%|██████    | 310/512 [00:21<00:14, 14.18image/s]Test 01068:  61%|██████    | 311/512 [00:21<00:14, 14.16image/s]Test 01126:  61%|██████    | 311/512 [00:21<00:14, 14.16image/s]Test 01054:  61%|██████    | 312/512 [00:21<00:14, 14.16image/s]Test 01054:  61%|██████    | 313/512 [00:21<00:14, 14.13image/s]Test 01302:  61%|██████    | 313/512 [00:21<00:14, 14.13image/s]Test 01072:  61%|██████▏   | 314/512 [00:22<00:14, 14.13image/s]Test 01072:  62%|██████▏   | 315/512 [00:22<00:13, 14.10image/s]Test 01333:  62%|██████▏   | 315/512 [00:22<00:13, 14.10image/s]Test 01111:  62%|██████▏   | 316/512 [00:22<00:13, 14.10image/s]Test 01111:  62%|██████▏   | 317/512 [00:22<00:13, 14.09image/s]Test 01013:  62%|██████▏   | 317/512 [00:22<00:13, 14.09image/s]Test 01008:  62%|██████▏   | 318/512 [00:22<00:13, 14.09image/s]Test 01008:  62%|██████▏   | 319/512 [00:22<00:13, 14.02image/s]Test 01320:  62%|██████▏   | 319/512 [00:22<00:13, 14.02image/s]Test 01155:  62%|██████▎   | 320/512 [00:22<00:13, 14.02image/s]Test 01155:  63%|██████▎   | 321/512 [00:22<00:13, 14.07image/s]Test 01242:  63%|██████▎   | 321/512 [00:22<00:13, 14.07image/s]Test 01020:  63%|██████▎   | 322/512 [00:22<00:13, 14.07image/s]Test 01020:  63%|██████▎   | 323/512 [00:22<00:13, 14.02image/s]Test 01136:  63%|██████▎   | 323/512 [00:22<00:13, 14.02image/s]Test 01310:  63%|██████▎   | 324/512 [00:22<00:13, 14.02image/s]Test 01310:  63%|██████▎   | 325/512 [00:22<00:13, 14.13image/s]Test 01023:  63%|██████▎   | 325/512 [00:22<00:13, 14.13image/s]Test 01278:  64%|██████▎   | 326/512 [00:22<00:13, 14.13image/s]Test 01278:  64%|██████▍   | 327/512 [00:22<00:12, 14.29image/s]Test 01074:  64%|██████▍   | 327/512 [00:22<00:12, 14.29image/s]Test 01440:  64%|██████▍   | 328/512 [00:22<00:12, 14.29image/s]Test 01440:  64%|██████▍   | 329/512 [00:23<00:12, 14.23image/s]Test 01204:  64%|██████▍   | 329/512 [00:23<00:12, 14.23image/s]Test 01430:  64%|██████▍   | 330/512 [00:23<00:12, 14.23image/s]Test 01430:  65%|██████▍   | 331/512 [00:23<00:12, 14.32image/s]Test 01007:  65%|██████▍   | 331/512 [00:23<00:12, 14.32image/s]Test 01493:  65%|██████▍   | 332/512 [00:23<00:12, 14.32image/s]Test 01493:  65%|██████▌   | 333/512 [00:23<00:12, 14.41image/s]Test 01022:  65%|██████▌   | 333/512 [00:23<00:12, 14.41image/s]Test 01211:  65%|██████▌   | 334/512 [00:23<00:12, 14.41image/s]Test 01211:  65%|██████▌   | 335/512 [00:23<00:12, 14.46image/s]Test 01393:  65%|██████▌   | 335/512 [00:23<00:12, 14.46image/s]Test 01346:  66%|██████▌   | 336/512 [00:23<00:12, 14.46image/s]Test 01346:  66%|██████▌   | 337/512 [00:23<00:12, 14.41image/s]Test 01508:  66%|██████▌   | 337/512 [00:23<00:12, 14.41image/s]Test 01000:  66%|██████▌   | 338/512 [00:23<00:12, 14.41image/s]Test 01000:  66%|██████▌   | 339/512 [00:23<00:12, 13.93image/s]Test 01338:  66%|██████▌   | 339/512 [00:23<00:12, 13.93image/s]Test 01328:  66%|██████▋   | 340/512 [00:23<00:12, 13.93image/s]Test 01328:  67%|██████▋   | 341/512 [00:23<00:12, 13.96image/s]Test 01223:  67%|██████▋   | 341/512 [00:23<00:12, 13.96image/s]Test 01021:  67%|██████▋   | 342/512 [00:23<00:12, 13.96image/s]Test 01021:  67%|██████▋   | 343/512 [00:24<00:11, 14.10image/s]Test 01270:  67%|██████▋   | 343/512 [00:24<00:11, 14.10image/s]Test 01078:  67%|██████▋   | 344/512 [00:24<00:11, 14.10image/s]Test 01078:  67%|██████▋   | 345/512 [00:24<00:11, 14.12image/s]Test 01037:  67%|██████▋   | 345/512 [00:24<00:11, 14.12image/s]Test 01201:  68%|██████▊   | 346/512 [00:24<00:11, 14.12image/s]Test 01201:  68%|██████▊   | 347/512 [00:24<00:11, 14.19image/s]Test 01229:  68%|██████▊   | 347/512 [00:24<00:11, 14.19image/s]Test 01506:  68%|██████▊   | 348/512 [00:24<00:11, 14.19image/s]Test 01506:  68%|██████▊   | 349/512 [00:24<00:11, 14.19image/s]Test 01038:  68%|██████▊   | 349/512 [00:24<00:11, 14.19image/s]Test 01281:  68%|██████▊   | 350/512 [00:24<00:11, 14.19image/s]Test 01281:  69%|██████▊   | 351/512 [00:24<00:11, 14.22image/s]Test 01238:  69%|██████▊   | 351/512 [00:24<00:11, 14.22image/s]Test 01327:  69%|██████▉   | 352/512 [00:24<00:11, 14.22image/s]Test 01327:  69%|██████▉   | 353/512 [00:24<00:11, 14.05image/s]Test 01146:  69%|██████▉   | 353/512 [00:24<00:11, 14.05image/s]Test 01348:  69%|██████▉   | 354/512 [00:24<00:11, 14.05image/s]Test 01348:  69%|██████▉   | 355/512 [00:24<00:11, 13.93image/s]Test 01017:  69%|██████▉   | 355/512 [00:24<00:11, 13.93image/s]Test 01110:  70%|██████▉   | 356/512 [00:24<00:11, 13.93image/s]Test 01110:  70%|██████▉   | 357/512 [00:25<00:11, 14.02image/s]Test 01047:  70%|██████▉   | 357/512 [00:25<00:11, 14.02image/s]Test 01135:  70%|██████▉   | 358/512 [00:25<00:10, 14.02image/s]Test 01135:  70%|███████   | 359/512 [00:25<00:10, 14.11image/s]Test 01456:  70%|███████   | 359/512 [00:25<00:10, 14.11image/s]Test 01212:  70%|███████   | 360/512 [00:25<00:10, 14.11image/s]Test 01212:  71%|███████   | 361/512 [00:25<00:10, 14.23image/s]Test 01444:  71%|███████   | 361/512 [00:25<00:10, 14.23image/s]Test 01246:  71%|███████   | 362/512 [00:25<00:10, 14.23image/s]Test 01246:  71%|███████   | 363/512 [00:25<00:10, 14.20image/s]Test 01199:  71%|███████   | 363/512 [00:25<00:10, 14.20image/s]Test 01488:  71%|███████   | 364/512 [00:25<00:10, 14.20image/s]Test 01488:  71%|███████▏  | 365/512 [00:25<00:10, 14.33image/s]Test 01176:  71%|███████▏  | 365/512 [00:25<00:10, 14.33image/s]Test 01298:  71%|███████▏  | 366/512 [00:25<00:10, 14.33image/s]Test 01298:  72%|███████▏  | 367/512 [00:25<00:10, 14.37image/s]Test 01468:  72%|███████▏  | 367/512 [00:25<00:10, 14.37image/s]Test 01181:  72%|███████▏  | 368/512 [00:25<00:10, 14.37image/s]Test 01181:  72%|███████▏  | 369/512 [00:25<00:10, 14.20image/s]Test 01364:  72%|███████▏  | 369/512 [00:25<00:10, 14.20image/s]Test 01477:  72%|███████▏  | 370/512 [00:25<00:10, 14.20image/s]Test 01477:  72%|███████▏  | 371/512 [00:26<00:09, 14.31image/s]Test 01195:  72%|███████▏  | 371/512 [00:26<00:09, 14.31image/s]Test 01360:  73%|███████▎  | 372/512 [00:26<00:09, 14.31image/s]Test 01360:  73%|███████▎  | 373/512 [00:26<00:09, 14.44image/s]Test 01510:  73%|███████▎  | 373/512 [00:26<00:09, 14.44image/s]Test 01216:  73%|███████▎  | 374/512 [00:26<00:09, 14.44image/s]Test 01216:  73%|███████▎  | 375/512 [00:26<00:09, 14.41image/s]Test 01125:  73%|███████▎  | 375/512 [00:26<00:09, 14.41image/s]Test 01041:  73%|███████▎  | 376/512 [00:26<00:09, 14.41image/s]Test 01041:  74%|███████▎  | 377/512 [00:26<00:09, 14.45image/s]Test 01409:  74%|███████▎  | 377/512 [00:26<00:09, 14.45image/s]Test 01138:  74%|███████▍  | 378/512 [00:26<00:09, 14.45image/s]Test 01138:  74%|███████▍  | 379/512 [00:26<00:09, 14.49image/s]Test 01431:  74%|███████▍  | 379/512 [00:26<00:09, 14.49image/s]Test 01065:  74%|███████▍  | 380/512 [00:26<00:09, 14.49image/s]Test 01065:  74%|███████▍  | 381/512 [00:26<00:09, 14.51image/s]Test 01185:  74%|███████▍  | 381/512 [00:26<00:09, 14.51image/s]Test 01494:  75%|███████▍  | 382/512 [00:26<00:08, 14.51image/s]Test 01494:  75%|███████▍  | 383/512 [00:26<00:08, 14.49image/s]Test 01461:  75%|███████▍  | 383/512 [00:26<00:08, 14.49image/s]Test 01177:  75%|███████▌  | 384/512 [00:26<00:08, 14.49image/s]Test 01177:  75%|███████▌  | 385/512 [00:26<00:08, 14.22image/s]Test 01307:  75%|███████▌  | 385/512 [00:26<00:08, 14.22image/s]Test 01088:  75%|███████▌  | 386/512 [00:27<00:08, 14.22image/s]Test 01088:  76%|███████▌  | 387/512 [00:27<00:08, 14.31image/s]Test 01475:  76%|███████▌  | 387/512 [00:27<00:08, 14.31image/s]Test 01274:  76%|███████▌  | 388/512 [00:27<00:08, 14.31image/s]Test 01274:  76%|███████▌  | 389/512 [00:27<00:08, 14.38image/s]Test 01200:  76%|███████▌  | 389/512 [00:27<00:08, 14.38image/s]Test 01313:  76%|███████▌  | 390/512 [00:27<00:08, 14.38image/s]Test 01313:  76%|███████▋  | 391/512 [00:27<00:08, 14.42image/s]Test 01232:  76%|███████▋  | 391/512 [00:27<00:08, 14.42image/s]Test 01322:  77%|███████▋  | 392/512 [00:27<00:08, 14.42image/s]Test 01322:  77%|███████▋  | 393/512 [00:27<00:08, 14.49image/s]Test 01466:  77%|███████▋  | 393/512 [00:27<00:08, 14.49image/s]Test 01387:  77%|███████▋  | 394/512 [00:27<00:08, 14.49image/s]Test 01387:  77%|███████▋  | 395/512 [00:27<00:08, 14.54image/s]Test 01427:  77%|███████▋  | 395/512 [00:27<00:08, 14.54image/s]Test 01372:  77%|███████▋  | 396/512 [00:27<00:07, 14.54image/s]Test 01372:  78%|███████▊  | 397/512 [00:27<00:07, 14.60image/s]Test 01279:  78%|███████▊  | 397/512 [00:27<00:07, 14.60image/s]Test 01130:  78%|███████▊  | 398/512 [00:27<00:07, 14.60image/s]Test 01130:  78%|███████▊  | 399/512 [00:27<00:07, 14.47image/s]Test 01214:  78%|███████▊  | 399/512 [00:27<00:07, 14.47image/s]Test 01192:  78%|███████▊  | 400/512 [00:28<00:07, 14.47image/s]Test 01192:  78%|███████▊  | 401/512 [00:28<00:07, 14.37image/s]Test 01303:  78%|███████▊  | 401/512 [00:28<00:07, 14.37image/s]Test 01448:  79%|███████▊  | 402/512 [00:28<00:07, 14.37image/s]Test 01448:  79%|███████▊  | 403/512 [00:28<00:07, 14.37image/s]Test 01069:  79%|███████▊  | 403/512 [00:28<00:07, 14.37image/s]Test 01465:  79%|███████▉  | 404/512 [00:28<00:07, 14.37image/s]Test 01465:  79%|███████▉  | 405/512 [00:28<00:07, 14.15image/s]Test 01106:  79%|███████▉  | 405/512 [00:28<00:07, 14.15image/s]Test 01449:  79%|███████▉  | 406/512 [00:28<00:07, 14.15image/s]Test 01449:  79%|███████▉  | 407/512 [00:28<00:07, 14.26image/s]Test 01470:  79%|███████▉  | 407/512 [00:28<00:07, 14.26image/s]Test 01356:  80%|███████▉  | 408/512 [00:28<00:07, 14.26image/s]Test 01356:  80%|███████▉  | 409/512 [00:28<00:07, 14.24image/s]Test 01417:  80%|███████▉  | 409/512 [00:28<00:07, 14.24image/s]Test 01249:  80%|████████  | 410/512 [00:28<00:07, 14.24image/s]Test 01249:  80%|████████  | 411/512 [00:28<00:07, 14.18image/s]Test 01421:  80%|████████  | 411/512 [00:28<00:07, 14.18image/s]Test 01459:  80%|████████  | 412/512 [00:28<00:07, 14.18image/s]Test 01459:  81%|████████  | 413/512 [00:28<00:06, 14.27image/s]Test 01432:  81%|████████  | 413/512 [00:28<00:06, 14.27image/s]Test 01056:  81%|████████  | 414/512 [00:29<00:06, 14.27image/s]Test 01056:  81%|████████  | 415/512 [00:29<00:06, 14.17image/s]Test 01339:  81%|████████  | 415/512 [00:29<00:06, 14.17image/s]Test 01039:  81%|████████▏ | 416/512 [00:29<00:06, 14.17image/s]Test 01039:  81%|████████▏ | 417/512 [00:29<00:06, 14.18image/s]Test 01048:  81%|████████▏ | 417/512 [00:29<00:06, 14.18image/s]Test 01099:  82%|████████▏ | 418/512 [00:29<00:06, 14.18image/s]Test 01099:  82%|████████▏ | 419/512 [00:29<00:06, 14.21image/s]Test 01283:  82%|████████▏ | 419/512 [00:29<00:06, 14.21image/s]Test 01045:  82%|████████▏ | 420/512 [00:29<00:06, 14.21image/s]Test 01045:  82%|████████▏ | 421/512 [00:29<00:06, 14.31image/s]Test 01482:  82%|████████▏ | 421/512 [00:29<00:06, 14.31image/s]Test 01262:  82%|████████▏ | 422/512 [00:29<00:06, 14.31image/s]Test 01262:  83%|████████▎ | 423/512 [00:29<00:06, 14.30image/s]Test 01425:  83%|████████▎ | 423/512 [00:29<00:06, 14.30image/s]Test 01481:  83%|████████▎ | 424/512 [00:29<00:06, 14.30image/s]Test 01481:  83%|████████▎ | 425/512 [00:29<00:06, 14.29image/s]Test 01476:  83%|████████▎ | 425/512 [00:29<00:06, 14.29image/s]Test 01094:  83%|████████▎ | 426/512 [00:29<00:06, 14.29image/s]Test 01094:  83%|████████▎ | 427/512 [00:29<00:05, 14.24image/s]Test 01458:  83%|████████▎ | 427/512 [00:29<00:05, 14.24image/s]Test 01301:  84%|████████▎ | 428/512 [00:30<00:05, 14.24image/s]Test 01301:  84%|████████▍ | 429/512 [00:30<00:05, 14.32image/s]Test 01018:  84%|████████▍ | 429/512 [00:30<00:05, 14.32image/s]Test 01208:  84%|████████▍ | 430/512 [00:30<00:05, 14.32image/s]Test 01208:  84%|████████▍ | 431/512 [00:30<00:05, 14.42image/s]Test 01004:  84%|████████▍ | 431/512 [00:30<00:05, 14.42image/s]Test 01127:  84%|████████▍ | 432/512 [00:30<00:05, 14.42image/s]Test 01127:  85%|████████▍ | 433/512 [00:30<00:05, 14.44image/s]Test 01012:  85%|████████▍ | 433/512 [00:30<00:05, 14.44image/s]Test 01191:  85%|████████▍ | 434/512 [00:30<00:05, 14.44image/s]Test 01191:  85%|████████▍ | 435/512 [00:30<00:05, 14.51image/s]Test 01435:  85%|████████▍ | 435/512 [00:30<00:05, 14.51image/s]Test 01498:  85%|████████▌ | 436/512 [00:30<00:05, 14.51image/s]Test 01498:  85%|████████▌ | 437/512 [00:30<00:05, 14.52image/s]Test 01484:  85%|████████▌ | 437/512 [00:30<00:05, 14.52image/s]Test 01335:  86%|████████▌ | 438/512 [00:30<00:05, 14.52image/s]Test 01335:  86%|████████▌ | 439/512 [00:30<00:05, 14.47image/s]Test 01076:  86%|████████▌ | 439/512 [00:30<00:05, 14.47image/s]Test 01131:  86%|████████▌ | 440/512 [00:30<00:04, 14.47image/s]Test 01131:  86%|████████▌ | 441/512 [00:30<00:04, 14.39image/s]Test 01255:  86%|████████▌ | 441/512 [00:30<00:04, 14.39image/s]Test 01213:  86%|████████▋ | 442/512 [00:30<00:04, 14.39image/s]Test 01213:  87%|████████▋ | 443/512 [00:31<00:04, 14.29image/s]Test 01264:  87%|████████▋ | 443/512 [00:31<00:04, 14.29image/s]Test 01495:  87%|████████▋ | 444/512 [00:31<00:04, 14.29image/s]Test 01495:  87%|████████▋ | 445/512 [00:31<00:04, 14.16image/s]Test 01062:  87%|████████▋ | 445/512 [00:31<00:04, 14.16image/s]Test 01122:  87%|████████▋ | 446/512 [00:31<00:04, 14.16image/s]Test 01122:  87%|████████▋ | 447/512 [00:31<00:04, 14.16image/s]Test 01203:  87%|████████▋ | 447/512 [00:31<00:04, 14.16image/s]Test 01162:  88%|████████▊ | 448/512 [00:31<00:04, 14.16image/s]Test 01162:  88%|████████▊ | 449/512 [00:31<00:04, 14.12image/s]Test 01293:  88%|████████▊ | 449/512 [00:31<00:04, 14.12image/s]Test 01166:  88%|████████▊ | 450/512 [00:31<00:04, 14.12image/s]Test 01166:  88%|████████▊ | 451/512 [00:31<00:04, 14.28image/s]Test 01386:  88%|████████▊ | 451/512 [00:31<00:04, 14.28image/s]Test 01318:  88%|████████▊ | 452/512 [00:31<00:04, 14.28image/s]Test 01318:  88%|████████▊ | 453/512 [00:31<00:04, 14.38image/s]Test 01309:  88%|████████▊ | 453/512 [00:31<00:04, 14.38image/s]Test 01268:  89%|████████▊ | 454/512 [00:31<00:04, 14.38image/s]Test 01268:  89%|████████▉ | 455/512 [00:31<00:03, 14.39image/s]Test 01450:  89%|████████▉ | 455/512 [00:31<00:03, 14.39image/s]Test 01463:  89%|████████▉ | 456/512 [00:31<00:03, 14.39image/s]Test 01463:  89%|████████▉ | 457/512 [00:32<00:03, 14.30image/s]Test 01332:  89%|████████▉ | 457/512 [00:32<00:03, 14.30image/s]Test 01173:  89%|████████▉ | 458/512 [00:32<00:03, 14.30image/s]Test 01173:  90%|████████▉ | 459/512 [00:32<00:03, 14.18image/s]Test 01009:  90%|████████▉ | 459/512 [00:32<00:03, 14.18image/s]Test 01382:  90%|████████▉ | 460/512 [00:32<00:03, 14.18image/s]Test 01382:  90%|█████████ | 461/512 [00:32<00:03, 14.07image/s]Test 01317:  90%|█████████ | 461/512 [00:32<00:03, 14.07image/s]Test 01511:  90%|█████████ | 462/512 [00:32<00:03, 14.07image/s]Test 01511:  90%|█████████ | 463/512 [00:32<00:03, 14.07image/s]Test 01380:  90%|█████████ | 463/512 [00:32<00:03, 14.07image/s]Test 01311:  91%|█████████ | 464/512 [00:32<00:03, 14.07image/s]Test 01311:  91%|█████████ | 465/512 [00:32<00:03, 14.10image/s]Test 01250:  91%|█████████ | 465/512 [00:32<00:03, 14.10image/s]Test 01266:  91%|█████████ | 466/512 [00:32<00:03, 14.10image/s]Test 01266:  91%|█████████ | 467/512 [00:32<00:03, 14.11image/s]Test 01179:  91%|█████████ | 467/512 [00:32<00:03, 14.11image/s]Test 01406:  91%|█████████▏| 468/512 [00:32<00:03, 14.11image/s]Test 01406:  92%|█████████▏| 469/512 [00:32<00:03, 14.18image/s]Test 01228:  92%|█████████▏| 469/512 [00:32<00:03, 14.18image/s]Test 01103:  92%|█████████▏| 470/512 [00:32<00:02, 14.18image/s]Test 01103:  92%|█████████▏| 471/512 [00:33<00:02, 14.19image/s]Test 01093:  92%|█████████▏| 471/512 [00:33<00:02, 14.19image/s]Test 01374:  92%|█████████▏| 472/512 [00:33<00:02, 14.19image/s]Test 01374:  92%|█████████▏| 473/512 [00:33<00:02, 14.17image/s]Test 01446:  92%|█████████▏| 473/512 [00:33<00:02, 14.17image/s]Test 01276:  93%|█████████▎| 474/512 [00:33<00:02, 14.17image/s]Test 01276:  93%|█████████▎| 475/512 [00:33<00:02, 14.08image/s]Test 01413:  93%|█████████▎| 475/512 [00:33<00:02, 14.08image/s]Test 01080:  93%|█████████▎| 476/512 [00:33<00:02, 14.08image/s]Test 01080:  93%|█████████▎| 477/512 [00:33<00:02, 14.08image/s]Test 01147:  93%|█████████▎| 477/512 [00:33<00:02, 14.08image/s]Test 01388:  93%|█████████▎| 478/512 [00:33<00:02, 14.08image/s]Test 01388:  94%|█████████▎| 479/512 [00:33<00:02, 14.28image/s]Test 01501:  94%|█████████▎| 479/512 [00:33<00:02, 14.28image/s]Test 01064:  94%|█████████▍| 480/512 [00:33<00:02, 14.28image/s]Test 01064:  94%|█████████▍| 481/512 [00:33<00:02, 14.24image/s]Test 01222:  94%|█████████▍| 481/512 [00:33<00:02, 14.24image/s]Test 01086:  94%|█████████▍| 482/512 [00:33<00:02, 14.24image/s]Test 01086:  94%|█████████▍| 483/512 [00:34<00:02, 10.46image/s]Test 01265:  94%|█████████▍| 483/512 [00:34<00:02, 10.46image/s]Test 01453:  95%|█████████▍| 484/512 [00:34<00:02, 10.46image/s]Test 01453:  95%|█████████▍| 485/512 [00:34<00:02, 11.39image/s]Test 01237:  95%|█████████▍| 485/512 [00:34<00:02, 11.39image/s]Test 01369:  95%|█████████▍| 486/512 [00:34<00:02, 11.39image/s]Test 01369:  95%|█████████▌| 487/512 [00:34<00:02, 12.00image/s]Test 01385:  95%|█████████▌| 487/512 [00:34<00:02, 12.00image/s]Test 01499:  95%|█████████▌| 488/512 [00:34<00:02, 12.00image/s]Test 01499:  96%|█████████▌| 489/512 [00:34<00:01, 12.35image/s]Test 01115:  96%|█████████▌| 489/512 [00:34<00:01, 12.35image/s]Test 01469:  96%|█████████▌| 490/512 [00:34<00:01, 12.35image/s]Test 01469:  96%|█████████▌| 491/512 [00:34<00:01, 12.83image/s]Test 01170:  96%|█████████▌| 491/512 [00:34<00:01, 12.83image/s]Test 01353:  96%|█████████▌| 492/512 [00:34<00:01, 12.83image/s]Test 01353:  96%|█████████▋| 493/512 [00:34<00:01, 13.18image/s]Test 01397:  96%|█████████▋| 493/512 [00:34<00:01, 13.18image/s]Test 01184:  96%|█████████▋| 494/512 [00:34<00:01, 13.18image/s]Test 01184:  97%|█████████▋| 495/512 [00:34<00:01, 13.41image/s]Test 01429:  97%|█████████▋| 495/512 [00:34<00:01, 13.41image/s]Test 01365:  97%|█████████▋| 496/512 [00:34<00:01, 13.41image/s]Test 01365:  97%|█████████▋| 497/512 [00:35<00:01, 13.66image/s]Test 01101:  97%|█████████▋| 497/512 [00:35<00:01, 13.66image/s]Test 01491:  97%|█████████▋| 498/512 [00:35<00:01, 13.66image/s]Test 01491:  97%|█████████▋| 499/512 [00:35<00:00, 13.65image/s]Test 01169:  97%|█████████▋| 499/512 [00:35<00:00, 13.65image/s]Test 01292:  98%|█████████▊| 500/512 [00:35<00:00, 13.65image/s]Test 01292:  98%|█████████▊| 501/512 [00:35<00:00, 13.83image/s]Test 01042:  98%|█████████▊| 501/512 [00:35<00:00, 13.83image/s]Test 01253:  98%|█████████▊| 502/512 [00:35<00:00, 13.83image/s]Test 01253:  98%|█████████▊| 503/512 [00:35<00:00, 14.01image/s]Test 01347:  98%|█████████▊| 503/512 [00:35<00:00, 14.01image/s]Test 01001:  98%|█████████▊| 504/512 [00:35<00:00, 14.01image/s]Test 01001:  99%|█████████▊| 505/512 [00:35<00:00, 14.06image/s]Test 01109:  99%|█████████▊| 505/512 [00:35<00:00, 14.06image/s]Test 01197:  99%|█████████▉| 506/512 [00:35<00:00, 14.06image/s]Test 01197:  99%|█████████▉| 507/512 [00:35<00:00, 14.12image/s]Test 01028:  99%|█████████▉| 507/512 [00:35<00:00, 14.12image/s]Test 01132:  99%|█████████▉| 508/512 [00:35<00:00, 14.12image/s]Test 01132:  99%|█████████▉| 509/512 [00:35<00:00, 14.18image/s]Test 01084:  99%|█████████▉| 509/512 [00:35<00:00, 14.18image/s]Test 01046: 100%|█████████▉| 510/512 [00:35<00:00, 14.18image/s]Test 01046: 100%|█████████▉| 511/512 [00:36<00:00, 14.10image/s]Test 01209: 100%|█████████▉| 511/512 [00:36<00:00, 14.10image/s]Test 01164: 100%|██████████| 512/512 [00:36<00:00, 14.10image/s]Test 01164: 100%|██████████| 512/512 [00:36<00:00, 14.18image/s]
+2021-09-17 13:36:05,873 INFO: Validation validation
+	 # psnr: 6.3384
+
+2021-09-17 13:36:43,864 INFO: [train..][epoch:  5, iter:   5,100, lr:(2.000e-03,)] [eta: 0:16:56, time (data): 0.338 (0.002)] l_g_pix: 5.8676e-02 l_p_8: 5.0558e-01 l_p_16: 5.6750e-01 l_p_32: 5.9877e-01 l_p_64: 6.2074e-01 l_p_128: 6.2136e-01 l_p_256: 6.2732e-01 l_p_512: 6.2570e-01 l_g_percep: 1.0812e+01 l_g_style: 3.2070e+00 l_g_gan: 2.2030e-01 l_g_gan_left_eye: 7.2811e-01 l_g_gan_right_eye: 7.8401e-01 l_g_gan_mouth: 7.4366e-01 l_g_comp_style_loss: 5.1410e-02 l_identity: 8.8288e-01 l_d: 9.2572e-01 real_score: -2.1904e-01 fake_score: -2.0859e+00 l_d_left_eye: 1.2969e+00 l_d_right_eye: 1.2904e+00 l_d_mouth: 1.4060e+00 
+2021-09-17 13:37:18,070 INFO: [train..][epoch:  5, iter:   5,200, lr:(2.000e-03,)] [eta: 0:16:21, time (data): 0.340 (0.002)] l_g_pix: 4.0464e-02 l_p_8: 2.9423e-01 l_p_16: 3.2047e-01 l_p_32: 3.4890e-01 l_p_64: 3.5642e-01 l_p_128: 3.6041e-01 l_p_256: 3.6732e-01 l_p_512: 3.7224e-01 l_g_percep: 1.1760e+01 l_g_style: 4.3275e+00 l_g_gan: 3.3416e-01 l_g_gan_left_eye: 7.1082e-01 l_g_gan_right_eye: 7.7244e-01 l_g_gan_mouth: 6.9149e-01 l_g_comp_style_loss: 1.0659e-01 l_identity: 8.2521e-01 l_d: 6.2121e-01 real_score: 2.2900e-01 fake_score: -3.3055e+00 l_d_r1: 6.2425e-02 l_d_left_eye: 1.2977e+00 l_d_right_eye: 1.1652e+00 l_d_mouth: 1.3779e+00 
+2021-09-17 13:37:52,116 INFO: [train..][epoch:  5, iter:   5,300, lr:(2.000e-03,)] [eta: 0:15:45, time (data): 0.343 (0.002)] l_g_pix: 2.6184e-02 l_p_8: 2.1785e-01 l_p_16: 2.1009e-01 l_p_32: 2.3404e-01 l_p_64: 2.4067e-01 l_p_128: 2.5990e-01 l_p_256: 2.6845e-01 l_p_512: 2.7425e-01 l_g_percep: 1.1034e+01 l_g_style: 2.3939e+00 l_g_gan: 5.8335e-02 l_g_gan_left_eye: 8.1349e-01 l_g_gan_right_eye: 8.0179e-01 l_g_gan_mouth: 7.2949e-01 l_g_comp_style_loss: 6.0168e-02 l_identity: 1.0391e+00 l_d: 1.3008e+00 real_score: 4.7311e-01 fake_score: 2.3314e-01 l_d_left_eye: 1.3721e+00 l_d_right_eye: 1.2953e+00 l_d_mouth: 1.3049e+00 
+2021-09-17 13:38:26,003 INFO: [train..][epoch:  5, iter:   5,400, lr:(2.000e-03,)] [eta: 0:15:10, time (data): 0.341 (0.002)] l_g_pix: 3.6951e-02 l_p_8: 3.4867e-01 l_p_16: 3.8904e-01 l_p_32: 4.0744e-01 l_p_64: 4.0325e-01 l_p_128: 4.1363e-01 l_p_256: 4.0443e-01 l_p_512: 4.1668e-01 l_g_percep: 1.0575e+01 l_g_style: 2.3195e+00 l_g_gan: 2.7328e-01 l_g_gan_left_eye: 7.2758e-01 l_g_gan_right_eye: 7.7690e-01 l_g_gan_mouth: 7.0941e-01 l_g_comp_style_loss: 9.6544e-02 l_identity: 9.4434e-01 l_d: 6.0320e-01 real_score: 3.4380e-01 fake_score: -2.6655e+00 l_d_left_eye: 1.4165e+00 l_d_right_eye: 1.6556e+00 l_d_mouth: 1.4039e+00 
+2021-09-17 13:39:00,240 INFO: [train..][epoch:  5, iter:   5,500, lr:(2.000e-03,)] [eta: 0:14:34, time (data): 0.341 (0.002)] l_g_pix: 1.8228e-02 l_p_8: 2.4739e-01 l_p_16: 2.3705e-01 l_p_32: 2.3709e-01 l_p_64: 2.4929e-01 l_p_128: 2.5287e-01 l_p_256: 2.4216e-01 l_p_512: 2.5843e-01 l_g_percep: 1.2963e+01 l_g_style: 7.5571e+00 l_g_gan: 4.6614e-02 l_g_gan_left_eye: 7.0077e-01 l_g_gan_right_eye: 6.5217e-01 l_g_gan_mouth: 7.3619e-01 l_g_comp_style_loss: 5.1717e-02 l_identity: 8.7436e-01 l_d: 1.1704e+00 real_score: 1.6051e+00 fake_score: 5.2118e-01 l_d_left_eye: 1.3359e+00 l_d_right_eye: 1.4585e+00 l_d_mouth: 1.3347e+00 
+2021-09-17 13:39:34,481 INFO: [train..][epoch:  5, iter:   5,600, lr:(2.000e-03,)] [eta: 0:13:59, time (data): 0.342 (0.002)] l_g_pix: 4.7130e-02 l_p_8: 3.7951e-01 l_p_16: 4.2797e-01 l_p_32: 4.5447e-01 l_p_64: 4.5852e-01 l_p_128: 4.6160e-01 l_p_256: 4.6675e-01 l_p_512: 4.7456e-01 l_g_percep: 1.3630e+01 l_g_style: 6.9031e+00 l_g_gan: 6.6661e-02 l_g_gan_left_eye: 8.0945e-01 l_g_gan_right_eye: 7.8191e-01 l_g_gan_mouth: 6.8336e-01 l_g_comp_style_loss: 6.7158e-02 l_identity: 1.0347e+00 l_d: 1.2085e+00 real_score: 4.6330e-01 fake_score: 5.3805e-02 l_d_r1: 5.9774e-02 l_d_left_eye: 1.3164e+00 l_d_right_eye: 1.3427e+00 l_d_mouth: 1.4128e+00 
+2021-09-17 13:40:08,678 INFO: [train..][epoch:  5, iter:   5,700, lr:(2.000e-03,)] [eta: 0:13:24, time (data): 0.344 (0.002)] l_g_pix: 5.0377e-02 l_p_8: 3.6096e-01 l_p_16: 3.8886e-01 l_p_32: 4.0739e-01 l_p_64: 4.2597e-01 l_p_128: 4.3536e-01 l_p_256: 4.4246e-01 l_p_512: 4.3781e-01 l_g_percep: 1.1236e+01 l_g_style: 2.3735e+00 l_g_gan: 3.0431e-01 l_g_gan_left_eye: 7.0753e-01 l_g_gan_right_eye: 7.7436e-01 l_g_gan_mouth: 6.9688e-01 l_g_comp_style_loss: 1.8552e-02 l_identity: 8.6769e-01 l_d: 5.0868e-01 real_score: 5.3821e-01 fake_score: -2.9942e+00 l_d_left_eye: 1.3454e+00 l_d_right_eye: 1.3707e+00 l_d_mouth: 1.3796e+00 
+2021-09-17 13:40:42,582 INFO: [train..][epoch:  5, iter:   5,800, lr:(2.000e-03,)] [eta: 0:12:48, time (data): 0.341 (0.002)] l_g_pix: 9.5767e-02 l_p_8: 6.8535e-01 l_p_16: 6.9722e-01 l_p_32: 7.2035e-01 l_p_64: 7.2858e-01 l_p_128: 7.3715e-01 l_p_256: 7.5467e-01 l_p_512: 7.4972e-01 l_g_percep: 1.0751e+01 l_g_style: 3.0652e+00 l_g_gan: 2.9543e-01 l_g_gan_left_eye: 7.9601e-01 l_g_gan_right_eye: 8.3708e-01 l_g_gan_mouth: 7.1361e-01 l_g_comp_style_loss: 4.3332e-02 l_identity: 9.6269e-01 l_d: 7.6790e-01 real_score: -4.2020e-02 fake_score: -2.9008e+00 l_d_left_eye: 1.3705e+00 l_d_right_eye: 1.2442e+00 l_d_mouth: 1.3700e+00 
+2021-09-17 13:41:16,871 INFO: [train..][epoch:  5, iter:   5,900, lr:(2.000e-03,)] [eta: 0:12:13, time (data): 0.345 (0.002)] l_g_pix: 4.4395e-02 l_p_8: 3.1525e-01 l_p_16: 3.5986e-01 l_p_32: 3.7513e-01 l_p_64: 3.7688e-01 l_p_128: 3.8243e-01 l_p_256: 3.8778e-01 l_p_512: 3.8803e-01 l_g_percep: 1.0238e+01 l_g_style: 2.0176e+00 l_g_gan: 1.6033e-01 l_g_gan_left_eye: 6.7790e-01 l_g_gan_right_eye: 6.9041e-01 l_g_gan_mouth: 6.8757e-01 l_g_comp_style_loss: 4.1940e-02 l_identity: 9.4879e-01 l_d: 6.7803e-01 real_score: 5.5588e-01 fake_score: -1.3786e+00 l_d_left_eye: 1.3922e+00 l_d_right_eye: 1.3400e+00 l_d_mouth: 1.3759e+00 
+2021-09-17 13:41:50,765 INFO: [train..][epoch:  5, iter:   6,000, lr:(2.000e-03,)] [eta: 0:11:38, time (data): 0.341 (0.002)] l_g_pix: 4.2153e-02 l_p_8: 3.8967e-01 l_p_16: 4.1672e-01 l_p_32: 4.5289e-01 l_p_64: 4.5565e-01 l_p_128: 4.5402e-01 l_p_256: 4.5327e-01 l_p_512: 4.4784e-01 l_g_percep: 1.1543e+01 l_g_style: 3.6789e+00 l_g_gan: 3.9339e-02 l_g_gan_left_eye: 7.0282e-01 l_g_gan_right_eye: 6.8423e-01 l_g_gan_mouth: 7.1765e-01 l_g_comp_style_loss: 4.3203e-02 l_identity: 9.3890e-01 l_d: 1.3611e+00 real_score: 1.3149e+00 fake_score: 7.2983e-01 l_d_r1: 2.3119e-01 l_d_left_eye: 1.4052e+00 l_d_right_eye: 1.3781e+00 l_d_mouth: 1.3807e+00 
+2021-09-17 13:42:28,278 INFO: [train..][epoch:  6, iter:   6,100, lr:(2.000e-03,)] [eta: 0:11:04, time (data): 0.345 (0.002)] l_g_pix: 5.0532e-02 l_p_8: 5.6349e-01 l_p_16: 5.3281e-01 l_p_32: 5.3281e-01 l_p_64: 5.2460e-01 l_p_128: 5.6451e-01 l_p_256: 5.6294e-01 l_p_512: 5.5925e-01 l_g_percep: 1.4537e+01 l_g_style: 7.5344e+00 l_g_gan: 3.7362e-01 l_g_gan_left_eye: 7.3742e-01 l_g_gan_right_eye: 7.1477e-01 l_g_gan_mouth: 7.1673e-01 l_g_comp_style_loss: 3.2518e-02 l_identity: 7.8024e-01 l_d: 3.9289e-01 real_score: 8.0758e-01 fake_score: -3.7121e+00 l_d_left_eye: 1.3254e+00 l_d_right_eye: 1.4277e+00 l_d_mouth: 1.3792e+00 
+2021-09-17 13:43:02,289 INFO: [train..][epoch:  6, iter:   6,200, lr:(2.000e-03,)] [eta: 0:10:28, time (data): 0.342 (0.002)] l_g_pix: 3.9834e-02 l_p_8: 2.4266e-01 l_p_16: 2.7133e-01 l_p_32: 2.9073e-01 l_p_64: 3.1960e-01 l_p_128: 3.2702e-01 l_p_256: 3.2834e-01 l_p_512: 3.2501e-01 l_g_percep: 1.2688e+01 l_g_style: 4.9285e+00 l_g_gan: 2.2180e-01 l_g_gan_left_eye: 7.0583e-01 l_g_gan_right_eye: 7.2621e-01 l_g_gan_mouth: 7.1165e-01 l_g_comp_style_loss: 3.4761e-02 l_identity: 9.7937e-01 l_d: 6.6122e-01 real_score: 3.1974e-01 fake_score: -2.1028e+00 l_d_left_eye: 1.3620e+00 l_d_right_eye: 1.4308e+00 l_d_mouth: 1.4163e+00 
+2021-09-17 13:43:36,371 INFO: [train..][epoch:  6, iter:   6,300, lr:(2.000e-03,)] [eta: 0:09:53, time (data): 0.340 (0.002)] l_g_pix: 1.6158e-02 l_p_8: 2.3396e-01 l_p_16: 2.3460e-01 l_p_32: 2.2147e-01 l_p_64: 2.5221e-01 l_p_128: 2.4510e-01 l_p_256: 2.2765e-01 l_p_512: 2.3489e-01 l_g_percep: 1.0860e+01 l_g_style: 2.6965e+00 l_g_gan: 4.8982e-02 l_g_gan_left_eye: 6.0920e-01 l_g_gan_right_eye: 6.3464e-01 l_g_gan_mouth: 6.7978e-01 l_g_comp_style_loss: 5.5328e-02 l_identity: 5.9569e-01 l_d: 1.5453e+00 real_score: 2.0320e-01 fake_score: 4.5882e-01 l_d_left_eye: 1.4589e+00 l_d_right_eye: 1.3877e+00 l_d_mouth: 1.4133e+00 
+2021-09-17 13:44:10,734 INFO: [train..][epoch:  6, iter:   6,400, lr:(2.000e-03,)] [eta: 0:09:18, time (data): 0.342 (0.002)] l_g_pix: 3.9659e-02 l_p_8: 2.3796e-01 l_p_16: 2.6607e-01 l_p_32: 2.6536e-01 l_p_64: 2.7983e-01 l_p_128: 2.8369e-01 l_p_256: 2.8073e-01 l_p_512: 2.8224e-01 l_g_percep: 1.1781e+01 l_g_style: 2.6972e+00 l_g_gan: 1.7353e-01 l_g_gan_left_eye: 7.1965e-01 l_g_gan_right_eye: 8.3038e-01 l_g_gan_mouth: 6.7437e-01 l_g_comp_style_loss: 4.2621e-02 l_identity: 1.1621e+00 l_d: 4.6090e-01 real_score: 1.1845e+00 fake_score: -1.5413e+00 l_d_r1: 6.2195e-01 l_d_left_eye: 1.4202e+00 l_d_right_eye: 1.2674e+00 l_d_mouth: 1.3909e+00 
+2021-09-17 13:44:44,776 INFO: [train..][epoch:  6, iter:   6,500, lr:(2.000e-03,)] [eta: 0:08:43, time (data): 0.340 (0.002)] l_g_pix: 2.8037e-02 l_p_8: 2.1354e-01 l_p_16: 1.9887e-01 l_p_32: 2.0425e-01 l_p_64: 2.3207e-01 l_p_128: 2.4155e-01 l_p_256: 2.4719e-01 l_p_512: 2.5729e-01 l_g_percep: 1.3993e+01 l_g_style: 4.7637e+00 l_g_gan: 5.9354e-02 l_g_gan_left_eye: 7.0705e-01 l_g_gan_right_eye: 7.4187e-01 l_g_gan_mouth: 7.0078e-01 l_g_comp_style_loss: 5.2436e-02 l_identity: 9.1863e-01 l_d: 1.1374e+00 real_score: 9.2616e-01 fake_score: 2.1025e-01 l_d_left_eye: 1.3870e+00 l_d_right_eye: 1.2853e+00 l_d_mouth: 1.3443e+00 
+2021-09-17 13:45:18,875 INFO: [train..][epoch:  6, iter:   6,600, lr:(2.000e-03,)] [eta: 0:08:08, time (data): 0.341 (0.002)] l_g_pix: 3.6688e-02 l_p_8: 3.5137e-01 l_p_16: 3.9602e-01 l_p_32: 4.0398e-01 l_p_64: 4.0667e-01 l_p_128: 4.0042e-01 l_p_256: 3.9270e-01 l_p_512: 3.9601e-01 l_g_percep: 1.0056e+01 l_g_style: 2.6634e+00 l_g_gan: 7.5283e-02 l_g_gan_left_eye: 7.3621e-01 l_g_gan_right_eye: 7.1756e-01 l_g_gan_mouth: 6.8298e-01 l_g_comp_style_loss: 4.8477e-02 l_identity: 1.0723e+00 l_d: 9.7765e-01 real_score: 9.0114e-01 fake_score: -1.1601e-01 l_d_left_eye: 1.3362e+00 l_d_right_eye: 1.3948e+00 l_d_mouth: 1.4028e+00 
+2021-09-17 13:45:52,892 INFO: [train..][epoch:  6, iter:   6,700, lr:(2.000e-03,)] [eta: 0:07:33, time (data): 0.341 (0.002)] l_g_pix: 2.5483e-02 l_p_8: 3.8226e-01 l_p_16: 3.7546e-01 l_p_32: 3.9854e-01 l_p_64: 4.1567e-01 l_p_128: 4.0347e-01 l_p_256: 3.8546e-01 l_p_512: 3.8674e-01 l_g_percep: 1.1134e+01 l_g_style: 2.6835e+00 l_g_gan: 2.9432e-01 l_g_gan_left_eye: 7.1248e-01 l_g_gan_right_eye: 7.0451e-01 l_g_gan_mouth: 6.3605e-01 l_g_comp_style_loss: 3.6419e-02 l_identity: 1.0049e+00 l_d: 1.7374e+00 real_score: -1.4778e+00 fake_score: -2.8890e+00 l_d_left_eye: 1.3744e+00 l_d_right_eye: 1.2924e+00 l_d_mouth: 1.3828e+00 
+2021-09-17 13:46:26,825 INFO: [train..][epoch:  6, iter:   6,800, lr:(2.000e-03,)] [eta: 0:06:58, time (data): 0.340 (0.002)] l_g_pix: 7.4134e-02 l_p_8: 5.5117e-01 l_p_16: 5.7603e-01 l_p_32: 5.9389e-01 l_p_64: 6.0754e-01 l_p_128: 6.1884e-01 l_p_256: 6.2145e-01 l_p_512: 6.1714e-01 l_g_percep: 1.0567e+01 l_g_style: 2.2524e+00 l_g_gan: 4.8081e-01 l_g_gan_left_eye: 6.8538e-01 l_g_gan_right_eye: 7.3953e-01 l_g_gan_mouth: 6.5627e-01 l_g_comp_style_loss: 3.0959e-02 l_identity: 8.4055e-01 l_d: 3.8293e-01 real_score: 7.8834e-01 fake_score: -4.7999e+00 l_d_r1: 8.1292e-02 l_d_left_eye: 1.3008e+00 l_d_right_eye: 1.3993e+00 l_d_mouth: 1.4221e+00 
+2021-09-17 13:47:00,784 INFO: [train..][epoch:  6, iter:   6,900, lr:(2.000e-03,)] [eta: 0:06:23, time (data): 0.339 (0.002)] l_g_pix: 3.3351e-02 l_p_8: 2.6898e-01 l_p_16: 3.1677e-01 l_p_32: 3.2883e-01 l_p_64: 3.4165e-01 l_p_128: 3.3280e-01 l_p_256: 3.2775e-01 l_p_512: 3.2497e-01 l_g_percep: 1.0276e+01 l_g_style: 1.5582e+00 l_g_gan: 1.3803e-01 l_g_gan_left_eye: 8.0531e-01 l_g_gan_right_eye: 8.7631e-01 l_g_gan_mouth: 6.7490e-01 l_g_comp_style_loss: 4.2968e-02 l_identity: 1.0788e+00 l_d: 9.3568e-01 real_score: 9.6662e-02 fake_score: -1.0906e+00 l_d_left_eye: 1.3292e+00 l_d_right_eye: 1.2656e+00 l_d_mouth: 1.3718e+00 
+2021-09-17 13:47:35,001 INFO: [train..][epoch:  6, iter:   7,000, lr:(2.000e-03,)] [eta: 0:05:48, time (data): 0.341 (0.002)] l_g_pix: 2.8384e-02 l_p_8: 2.1306e-01 l_p_16: 2.3741e-01 l_p_32: 2.4468e-01 l_p_64: 2.5516e-01 l_p_128: 2.5795e-01 l_p_256: 2.6261e-01 l_p_512: 2.6506e-01 l_g_percep: 1.2766e+01 l_g_style: 3.3734e+00 l_g_gan: 1.6793e-01 l_g_gan_left_eye: 7.4616e-01 l_g_gan_right_eye: 7.0595e-01 l_g_gan_mouth: 7.4142e-01 l_g_comp_style_loss: 5.4129e-02 l_identity: 1.0253e+00 l_d: 4.6498e-01 real_score: 1.2205e+00 fake_score: -1.4729e+00 l_d_left_eye: 1.3237e+00 l_d_right_eye: 1.2911e+00 l_d_mouth: 1.3653e+00 
+2021-09-17 13:48:12,089 INFO: [train..][epoch:  7, iter:   7,100, lr:(2.000e-03,)] [eta: 0:05:13, time (data): 0.339 (0.002)] l_g_pix: 3.3491e-02 l_p_8: 2.2341e-01 l_p_16: 2.6442e-01 l_p_32: 2.7705e-01 l_p_64: 2.8062e-01 l_p_128: 2.9170e-01 l_p_256: 2.9316e-01 l_p_512: 2.9336e-01 l_g_percep: 1.1138e+01 l_g_style: 1.6788e+00 l_g_gan: 2.8298e-01 l_g_gan_left_eye: 6.6137e-01 l_g_gan_right_eye: 7.1680e-01 l_g_gan_mouth: 7.1469e-01 l_g_comp_style_loss: 3.6794e-02 l_identity: 1.1884e+00 l_d: 4.0506e-01 real_score: 8.8944e-01 fake_score: -2.7689e+00 l_d_left_eye: 1.3748e+00 l_d_right_eye: 1.3131e+00 l_d_mouth: 1.3594e+00 
+2021-09-17 13:48:46,180 INFO: [train..][epoch:  7, iter:   7,200, lr:(2.000e-03,)] [eta: 0:04:38, time (data): 0.340 (0.002)] l_g_pix: 5.3131e-02 l_p_8: 4.9112e-01 l_p_16: 5.2976e-01 l_p_32: 5.5110e-01 l_p_64: 5.6683e-01 l_p_128: 5.6058e-01 l_p_256: 5.5853e-01 l_p_512: 5.5115e-01 l_g_percep: 1.0262e+01 l_g_style: 2.1997e+00 l_g_gan: 3.1199e-01 l_g_gan_left_eye: 7.9106e-01 l_g_gan_right_eye: 8.5191e-01 l_g_gan_mouth: 6.9013e-01 l_g_comp_style_loss: 4.9679e-02 l_identity: 1.0076e+00 l_d: 1.0623e+00 real_score: -5.6831e-01 fake_score: -3.0747e+00 l_d_r1: 3.0844e-01 l_d_left_eye: 1.3825e+00 l_d_right_eye: 1.4610e+00 l_d_mouth: 1.4072e+00 
+2021-09-17 13:49:20,281 INFO: [train..][epoch:  7, iter:   7,300, lr:(2.000e-03,)] [eta: 0:04:03, time (data): 0.341 (0.002)] l_g_pix: 2.4083e-02 l_p_8: 1.8772e-01 l_p_16: 1.8276e-01 l_p_32: 2.0164e-01 l_p_64: 2.1700e-01 l_p_128: 2.2937e-01 l_p_256: 2.4009e-01 l_p_512: 2.4615e-01 l_g_percep: 1.4175e+01 l_g_style: 6.8144e+00 l_g_gan: 1.7363e-01 l_g_gan_left_eye: 6.7905e-01 l_g_gan_right_eye: 6.1298e-01 l_g_gan_mouth: 7.4508e-01 l_g_comp_style_loss: 7.8060e-02 l_identity: 8.9375e-01 l_d: 5.5793e-01 real_score: 8.2262e-01 fake_score: -1.5425e+00 l_d_left_eye: 1.4061e+00 l_d_right_eye: 1.4576e+00 l_d_mouth: 1.3925e+00 
+2021-09-17 13:49:54,408 INFO: [train..][epoch:  7, iter:   7,400, lr:(2.000e-03,)] [eta: 0:03:28, time (data): 0.341 (0.002)] l_g_pix: nan l_p_8: nan l_p_16: nan l_p_32: nan l_p_64: nan l_p_128: nan l_p_256: nan l_p_512: nan l_g_percep: 9.2630e+00 l_g_style: 6.4726e+00 l_g_gan: nan l_g_gan_left_eye: nan l_g_gan_right_eye: nan l_g_gan_mouth: nan l_g_comp_style_loss: nan l_identity: nan l_d: nan real_score: nan fake_score: nan l_d_left_eye: nan l_d_right_eye: nan l_d_mouth: nan 
+2021-09-17 13:50:27,968 INFO: [train..][epoch:  7, iter:   7,500, lr:(2.000e-03,)] [eta: 0:02:53, time (data): 0.336 (0.002)] l_g_pix: nan l_p_8: nan l_p_16: nan l_p_32: nan l_p_64: nan l_p_128: nan l_p_256: nan l_p_512: nan l_g_percep: 1.4107e+01 l_g_style: 1.0884e+01 l_g_gan: nan l_g_gan_left_eye: nan l_g_gan_right_eye: nan l_g_gan_mouth: nan l_g_comp_style_loss: nan l_identity: nan l_d: nan real_score: nan fake_score: nan l_d_left_eye: nan l_d_right_eye: nan l_d_mouth: nan 
+2021-09-17 13:51:01,794 INFO: [train..][epoch:  7, iter:   7,600, lr:(2.000e-03,)] [eta: 0:02:18, time (data): 0.337 (0.002)] l_g_pix: nan l_p_8: nan l_p_16: nan l_p_32: nan l_p_64: nan l_p_128: nan l_p_256: nan l_p_512: nan l_g_percep: 1.1500e+01 l_g_style: 8.1744e+00 l_g_gan: nan l_g_gan_left_eye: nan l_g_gan_right_eye: nan l_g_gan_mouth: nan l_g_comp_style_loss: nan l_identity: nan l_d: nan real_score: nan fake_score: nan l_d_r1: nan l_d_left_eye: nan l_d_right_eye: nan l_d_mouth: nan 
+2021-09-17 13:51:35,441 INFO: [train..][epoch:  7, iter:   7,700, lr:(2.000e-03,)] [eta: 0:01:44, time (data): 0.336 (0.002)] l_g_pix: nan l_p_8: nan l_p_16: nan l_p_32: nan l_p_64: nan l_p_128: nan l_p_256: nan l_p_512: nan l_g_percep: 1.6292e+01 l_g_style: 1.4796e+01 l_g_gan: nan l_g_gan_left_eye: nan l_g_gan_right_eye: nan l_g_gan_mouth: nan l_g_comp_style_loss: nan l_identity: nan l_d: nan real_score: nan fake_score: nan l_d_left_eye: nan l_d_right_eye: nan l_d_mouth: nan 
+2021-09-17 13:52:08,941 INFO: [train..][epoch:  7, iter:   7,800, lr:(2.000e-03,)] [eta: 0:01:09, time (data): 0.335 (0.002)] l_g_pix: nan l_p_8: nan l_p_16: nan l_p_32: nan l_p_64: nan l_p_128: nan l_p_256: nan l_p_512: nan l_g_percep: 9.5875e+00 l_g_style: 6.0287e+00 l_g_gan: nan l_g_gan_left_eye: nan l_g_gan_right_eye: nan l_g_gan_mouth: nan l_g_comp_style_loss: nan l_identity: nan l_d: nan real_score: nan fake_score: nan l_d_left_eye: nan l_d_right_eye: nan l_d_mouth: nan 
+2021-09-17 13:52:42,825 INFO: [train..][epoch:  7, iter:   7,900, lr:(2.000e-03,)] [eta: 0:00:34, time (data): 0.338 (0.002)] l_g_pix: nan l_p_8: nan l_p_16: nan l_p_32: nan l_p_64: nan l_p_128: nan l_p_256: nan l_p_512: nan l_g_percep: 1.4217e+01 l_g_style: 1.0649e+01 l_g_gan: nan l_g_gan_left_eye: nan l_g_gan_right_eye: nan l_g_gan_mouth: nan l_g_comp_style_loss: nan l_identity: nan l_d: nan real_score: nan fake_score: nan l_d_left_eye: nan l_d_right_eye: nan l_d_mouth: nan 
+2021-09-17 13:53:16,604 INFO: [train..][epoch:  7, iter:   8,000, lr:(2.000e-03,)] [eta: 0:00:00, time (data): 0.338 (0.002)] l_g_pix: nan l_p_8: nan l_p_16: nan l_p_32: nan l_p_64: nan l_p_128: nan l_p_256: nan l_p_512: nan l_g_percep: 1.2610e+01 l_g_style: 9.4358e+00 l_g_gan: nan l_g_gan_left_eye: nan l_g_gan_right_eye: nan l_g_gan_mouth: nan l_g_comp_style_loss: nan l_identity: nan l_d: nan real_score: nan fake_score: nan l_d_r1: nan l_d_left_eye: nan l_d_right_eye: nan l_d_mouth: nan 
+2021-09-17 13:53:20,000 INFO: End of training. Time consumed: 0:46:32
+2021-09-17 13:53:20,000 INFO: Save the latest model.
+  0%|          | 0/512 [00:00<?, ?image/s]Test 01206:   0%|          | 1/512 [00:00<00:37, 13.55image/s]Test 01206:   0%|          | 2/512 [00:00<00:35, 14.19image/s]Test 01454:   0%|          | 2/512 [00:00<00:35, 14.19image/s]Test 01245:   1%|          | 3/512 [00:00<00:35, 14.19image/s]Test 01245:   1%|          | 4/512 [00:00<00:35, 14.33image/s]Test 01455:   1%|          | 4/512 [00:00<00:35, 14.33image/s]Test 01252:   1%|          | 5/512 [00:00<00:35, 14.33image/s]Test 01252:   1%|          | 6/512 [00:00<00:34, 14.70image/s]Test 01306:   1%|          | 6/512 [00:00<00:34, 14.70image/s]Test 01030:   1%|▏         | 7/512 [00:00<00:34, 14.70image/s]Test 01030:   2%|▏         | 8/512 [00:00<00:33, 15.05image/s]Test 01082:   2%|▏         | 8/512 [00:00<00:33, 15.05image/s]Test 01108:   2%|▏         | 9/512 [00:00<00:33, 15.05image/s]Test 01108:   2%|▏         | 10/512 [00:00<00:33, 15.12image/s]Test 01473:   2%|▏         | 10/512 [00:00<00:33, 15.12image/s]Test 01231:   2%|▏         | 11/512 [00:00<00:33, 15.12image/s]Test 01231:   2%|▏         | 12/512 [00:00<00:32, 15.34image/s]Test 01060:   2%|▏         | 12/512 [00:00<00:32, 15.34image/s]Test 01378:   3%|▎         | 13/512 [00:00<00:32, 15.34image/s]Test 01378:   3%|▎         | 14/512 [00:00<00:32, 15.40image/s]Test 01145:   3%|▎         | 14/512 [00:00<00:32, 15.40image/s]Test 01220:   3%|▎         | 15/512 [00:00<00:32, 15.40image/s]Test 01220:   3%|▎         | 16/512 [00:01<00:32, 15.43image/s]Test 01267:   3%|▎         | 16/512 [00:01<00:32, 15.43image/s]Test 01485:   3%|▎         | 17/512 [00:01<00:32, 15.43image/s]Test 01485:   4%|▎         | 18/512 [00:01<00:31, 15.58image/s]Test 01189:   4%|▎         | 18/512 [00:01<00:31, 15.58image/s]Test 01149:   4%|▎         | 19/512 [00:01<00:31, 15.58image/s]Test 01149:   4%|▍         | 20/512 [00:01<00:31, 15.69image/s]Test 01240:   4%|▍         | 20/512 [00:01<00:31, 15.69image/s]Test 01299:   4%|▍         | 21/512 [00:01<00:31, 15.69image/s]Test 01299:   4%|▍         | 22/512 [00:01<00:31, 15.69image/s]Test 01168:   4%|▍         | 22/512 [00:01<00:31, 15.69image/s]Test 01272:   4%|▍         | 23/512 [00:01<00:31, 15.69image/s]Test 01272:   5%|▍         | 24/512 [00:01<00:31, 15.74image/s]Test 01257:   5%|▍         | 24/512 [00:01<00:31, 15.74image/s]Test 01418:   5%|▍         | 25/512 [00:01<00:30, 15.74image/s]Test 01418:   5%|▌         | 26/512 [00:01<00:31, 15.50image/s]Test 01300:   5%|▌         | 26/512 [00:01<00:31, 15.50image/s]Test 01097:   5%|▌         | 27/512 [00:01<00:31, 15.50image/s]Test 01097:   5%|▌         | 28/512 [00:01<00:30, 15.67image/s]Test 01451:   5%|▌         | 28/512 [00:01<00:30, 15.67image/s]Test 01050:   6%|▌         | 29/512 [00:01<00:30, 15.67image/s]Test 01050:   6%|▌         | 30/512 [00:01<00:30, 15.69image/s]Test 01160:   6%|▌         | 30/512 [00:01<00:30, 15.69image/s]Test 01497:   6%|▌         | 31/512 [00:02<00:30, 15.69image/s]Test 01497:   6%|▋         | 32/512 [00:02<00:30, 15.76image/s]Test 01241:   6%|▋         | 32/512 [00:02<00:30, 15.76image/s]Test 01492:   6%|▋         | 33/512 [00:02<00:30, 15.76image/s]Test 01492:   7%|▋         | 34/512 [00:02<00:30, 15.80image/s]Test 01157:   7%|▋         | 34/512 [00:02<00:30, 15.80image/s]Test 01113:   7%|▋         | 35/512 [00:02<00:30, 15.80image/s]Test 01113:   7%|▋         | 36/512 [00:02<00:29, 15.94image/s]Test 01414:   7%|▋         | 36/512 [00:02<00:29, 15.94image/s]Test 01478:   7%|▋         | 37/512 [00:02<00:29, 15.94image/s]Test 01478:   7%|▋         | 38/512 [00:02<00:29, 15.96image/s]Test 01095:   7%|▋         | 38/512 [00:02<00:29, 15.96image/s]Test 01011:   8%|▊         | 39/512 [00:02<00:29, 15.96image/s]Test 01011:   8%|▊         | 40/512 [00:02<00:29, 15.97image/s]Test 01225:   8%|▊         | 40/512 [00:02<00:29, 15.97image/s]Test 01026:   8%|▊         | 41/512 [00:02<00:29, 15.97image/s]Test 01026:   8%|▊         | 42/512 [00:02<00:29, 15.94image/s]Test 01144:   8%|▊         | 42/512 [00:02<00:29, 15.94image/s]Test 01363:   8%|▊         | 43/512 [00:02<00:29, 15.94image/s]Test 01363:   9%|▊         | 44/512 [00:02<00:29, 15.71image/s]Test 01286:   9%|▊         | 44/512 [00:02<00:29, 15.71image/s]Test 01399:   9%|▉         | 45/512 [00:02<00:29, 15.71image/s]Test 01399:   9%|▉         | 46/512 [00:02<00:29, 15.72image/s]Test 01140:   9%|▉         | 46/512 [00:02<00:29, 15.72image/s]Test 01505:   9%|▉         | 47/512 [00:03<00:29, 15.72image/s]Test 01505:   9%|▉         | 48/512 [00:03<00:29, 15.87image/s]Test 01452:   9%|▉         | 48/512 [00:03<00:29, 15.87image/s]Test 01152:  10%|▉         | 49/512 [00:03<00:29, 15.87image/s]Test 01152:  10%|▉         | 50/512 [00:03<00:29, 15.89image/s]Test 01190:  10%|▉         | 50/512 [00:03<00:29, 15.89image/s]Test 01389:  10%|▉         | 51/512 [00:03<00:29, 15.89image/s]Test 01389:  10%|█         | 52/512 [00:03<00:28, 15.94image/s]Test 01366:  10%|█         | 52/512 [00:03<00:28, 15.94image/s]Test 01027:  10%|█         | 53/512 [00:03<00:28, 15.94image/s]Test 01027:  11%|█         | 54/512 [00:03<00:28, 15.96image/s]Test 01312:  11%|█         | 54/512 [00:03<00:28, 15.96image/s]Test 01331:  11%|█         | 55/512 [00:03<00:28, 15.96image/s]Test 01331:  11%|█         | 56/512 [00:03<00:28, 16.02image/s]Test 01329:  11%|█         | 56/512 [00:03<00:28, 16.02image/s]Test 01342:  11%|█         | 57/512 [00:03<00:28, 16.02image/s]Test 01342:  11%|█▏        | 58/512 [00:03<00:28, 16.06image/s]Test 01239:  11%|█▏        | 58/512 [00:03<00:28, 16.06image/s]Test 01098:  12%|█▏        | 59/512 [00:03<00:28, 16.06image/s]Test 01098:  12%|█▏        | 60/512 [00:03<00:28, 15.87image/s]Test 01321:  12%|█▏        | 60/512 [00:03<00:28, 15.87image/s]Test 01224:  12%|█▏        | 61/512 [00:03<00:28, 15.87image/s]Test 01224:  12%|█▏        | 62/512 [00:03<00:28, 15.94image/s]Test 01049:  12%|█▏        | 62/512 [00:03<00:28, 15.94image/s]Test 01219:  12%|█▏        | 63/512 [00:04<00:28, 15.94image/s]Test 01219:  12%|█▎        | 64/512 [00:04<00:28, 15.92image/s]Test 01404:  12%|█▎        | 64/512 [00:04<00:28, 15.92image/s]Test 01290:  13%|█▎        | 65/512 [00:04<00:28, 15.92image/s]Test 01290:  13%|█▎        | 66/512 [00:04<00:28, 15.88image/s]Test 01016:  13%|█▎        | 66/512 [00:04<00:28, 15.88image/s]Test 01296:  13%|█▎        | 67/512 [00:04<00:28, 15.88image/s]Test 01296:  13%|█▎        | 68/512 [00:04<00:27, 15.88image/s]Test 01396:  13%|█▎        | 68/512 [00:04<00:27, 15.88image/s]Test 01067:  13%|█▎        | 69/512 [00:04<00:27, 15.88image/s]Test 01067:  14%|█▎        | 70/512 [00:04<00:27, 15.90image/s]Test 01462:  14%|█▎        | 70/512 [00:04<00:27, 15.90image/s]Test 01120:  14%|█▍        | 71/512 [00:04<00:27, 15.90image/s]Test 01120:  14%|█▍        | 72/512 [00:04<00:27, 15.91image/s]Test 01416:  14%|█▍        | 72/512 [00:04<00:27, 15.91image/s]Test 01003:  14%|█▍        | 73/512 [00:04<00:27, 15.91image/s]Test 01003:  14%|█▍        | 74/512 [00:04<00:27, 15.89image/s]Test 01118:  14%|█▍        | 74/512 [00:04<00:27, 15.89image/s]Test 01061:  15%|█▍        | 75/512 [00:04<00:27, 15.89image/s]Test 01061:  15%|█▍        | 76/512 [00:04<00:27, 15.87image/s]Test 01198:  15%|█▍        | 76/512 [00:04<00:27, 15.87image/s]Test 01024:  15%|█▌        | 77/512 [00:04<00:27, 15.87image/s]Test 01024:  15%|█▌        | 78/512 [00:04<00:27, 15.74image/s]Test 01070:  15%|█▌        | 78/512 [00:04<00:27, 15.74image/s]Test 01129:  15%|█▌        | 79/512 [00:05<00:27, 15.74image/s]Test 01129:  16%|█▌        | 80/512 [00:05<00:27, 15.80image/s]Test 01352:  16%|█▌        | 80/512 [00:05<00:27, 15.80image/s]Test 01117:  16%|█▌        | 81/512 [00:05<00:27, 15.80image/s]Test 01117:  16%|█▌        | 82/512 [00:05<00:27, 15.78image/s]Test 01134:  16%|█▌        | 82/512 [00:05<00:27, 15.78image/s]Test 01384:  16%|█▌        | 83/512 [00:05<00:27, 15.78image/s]Test 01384:  16%|█▋        | 84/512 [00:05<00:26, 15.86image/s]Test 01161:  16%|█▋        | 84/512 [00:05<00:26, 15.86image/s]Test 01319:  17%|█▋        | 85/512 [00:05<00:26, 15.86image/s]Test 01319:  17%|█▋        | 86/512 [00:05<00:26, 15.88image/s]Test 01437:  17%|█▋        | 86/512 [00:05<00:26, 15.88image/s]Test 01227:  17%|█▋        | 87/512 [00:05<00:26, 15.88image/s]Test 01227:  17%|█▋        | 88/512 [00:05<00:26, 15.93image/s]Test 01137:  17%|█▋        | 88/512 [00:05<00:26, 15.93image/s]Test 01081:  17%|█▋        | 89/512 [00:05<00:26, 15.93image/s]Test 01081:  18%|█▊        | 90/512 [00:05<00:26, 15.96image/s]Test 01408:  18%|█▊        | 90/512 [00:05<00:26, 15.96image/s]Test 01287:  18%|█▊        | 91/512 [00:05<00:26, 15.96image/s]Test 01287:  18%|█▊        | 92/512 [00:05<00:26, 15.97image/s]Test 01370:  18%|█▊        | 92/512 [00:05<00:26, 15.97image/s]Test 01383:  18%|█▊        | 93/512 [00:05<00:26, 15.97image/s]Test 01383:  18%|█▊        | 94/512 [00:05<00:26, 15.94image/s]Test 01096:  18%|█▊        | 94/512 [00:05<00:26, 15.94image/s]Test 01153:  19%|█▊        | 95/512 [00:06<00:26, 15.94image/s]Test 01153:  19%|█▉        | 96/512 [00:06<00:26, 15.92image/s]Test 01436:  19%|█▉        | 96/512 [00:06<00:26, 15.92image/s]Test 01392:  19%|█▉        | 97/512 [00:06<00:26, 15.92image/s]Test 01392:  19%|█▉        | 98/512 [00:06<00:26, 15.89image/s]Test 01398:  19%|█▉        | 98/512 [00:06<00:26, 15.89image/s]Test 01218:  19%|█▉        | 99/512 [00:06<00:25, 15.89image/s]Test 01218:  20%|█▉        | 100/512 [00:06<00:26, 15.82image/s]Test 01305:  20%|█▉        | 100/512 [00:06<00:26, 15.82image/s]Test 01410:  20%|█▉        | 101/512 [00:06<00:25, 15.82image/s]Test 01410:  20%|█▉        | 102/512 [00:06<00:25, 15.82image/s]Test 01202:  20%|█▉        | 102/512 [00:06<00:25, 15.82image/s]Test 01006:  20%|██        | 103/512 [00:06<00:25, 15.82image/s]Test 01006:  20%|██        | 104/512 [00:06<00:25, 15.84image/s]Test 01230:  20%|██        | 104/512 [00:06<00:25, 15.84image/s]Test 01330:  21%|██        | 105/512 [00:06<00:25, 15.84image/s]Test 01330:  21%|██        | 106/512 [00:06<00:25, 15.87image/s]Test 01174:  21%|██        | 106/512 [00:06<00:25, 15.87image/s]Test 01055:  21%|██        | 107/512 [00:06<00:25, 15.87image/s]Test 01055:  21%|██        | 108/512 [00:06<00:25, 15.87image/s]Test 01502:  21%|██        | 108/512 [00:06<00:25, 15.87image/s]Test 01415:  21%|██▏       | 109/512 [00:06<00:25, 15.87image/s]Test 01415:  21%|██▏       | 110/512 [00:06<00:25, 15.67image/s]Test 01294:  21%|██▏       | 110/512 [00:06<00:25, 15.67image/s]Test 01112:  22%|██▏       | 111/512 [00:07<00:25, 15.67image/s]Test 01112:  22%|██▏       | 112/512 [00:07<00:25, 15.49image/s]Test 01217:  22%|██▏       | 112/512 [00:07<00:25, 15.49image/s]Test 01167:  22%|██▏       | 113/512 [00:07<00:25, 15.49image/s]Test 01167:  22%|██▏       | 114/512 [00:07<00:25, 15.67image/s]Test 01490:  22%|██▏       | 114/512 [00:07<00:25, 15.67image/s]Test 01359:  22%|██▏       | 115/512 [00:07<00:25, 15.67image/s]Test 01359:  23%|██▎       | 116/512 [00:07<00:25, 15.75image/s]Test 01044:  23%|██▎       | 116/512 [00:07<00:25, 15.75image/s]Test 01092:  23%|██▎       | 117/512 [00:07<00:25, 15.75image/s]Test 01092:  23%|██▎       | 118/512 [00:07<00:25, 15.73image/s]Test 01005:  23%|██▎       | 118/512 [00:07<00:25, 15.73image/s]Test 01355:  23%|██▎       | 119/512 [00:07<00:24, 15.73image/s]Test 01355:  23%|██▎       | 120/512 [00:07<00:28, 13.81image/s]Test 01258:  23%|██▎       | 120/512 [00:07<00:28, 13.81image/s]Test 01344:  24%|██▎       | 121/512 [00:07<00:28, 13.81image/s]Test 01344:  24%|██▍       | 122/512 [00:07<00:27, 14.33image/s]Test 01350:  24%|██▍       | 122/512 [00:07<00:27, 14.33image/s]Test 01053:  24%|██▍       | 123/512 [00:07<00:27, 14.33image/s]Test 01053:  24%|██▍       | 124/512 [00:07<00:26, 14.69image/s]Test 01233:  24%|██▍       | 124/512 [00:07<00:26, 14.69image/s]Test 01254:  24%|██▍       | 125/512 [00:07<00:26, 14.69image/s]Test 01254:  25%|██▍       | 126/512 [00:08<00:25, 14.98image/s]Test 01291:  25%|██▍       | 126/512 [00:08<00:25, 14.98image/s]Test 01407:  25%|██▍       | 127/512 [00:08<00:25, 14.98image/s]Test 01407:  25%|██▌       | 128/512 [00:08<00:25, 15.15image/s]Test 01151:  25%|██▌       | 128/512 [00:08<00:25, 15.15image/s]Test 01445:  25%|██▌       | 129/512 [00:08<00:25, 15.15image/s]Test 01445:  25%|██▌       | 130/512 [00:08<00:25, 15.23image/s]Test 01402:  25%|██▌       | 130/512 [00:08<00:25, 15.23image/s]Test 01226:  26%|██▌       | 131/512 [00:08<00:25, 15.23image/s]Test 01226:  26%|██▌       | 132/512 [00:08<00:24, 15.44image/s]Test 01375:  26%|██▌       | 132/512 [00:08<00:24, 15.44image/s]Test 01121:  26%|██▌       | 133/512 [00:08<00:24, 15.44image/s]Test 01121:  26%|██▌       | 134/512 [00:08<00:24, 15.44image/s]Test 01139:  26%|██▌       | 134/512 [00:08<00:24, 15.44image/s]Test 01002:  26%|██▋       | 135/512 [00:08<00:24, 15.44image/s]Test 01002:  27%|██▋       | 136/512 [00:08<00:24, 15.50image/s]Test 01073:  27%|██▋       | 136/512 [00:08<00:24, 15.50image/s]Test 01159:  27%|██▋       | 137/512 [00:08<00:24, 15.50image/s]Test 01159:  27%|██▋       | 138/512 [00:08<00:23, 15.65image/s]Test 01371:  27%|██▋       | 138/512 [00:08<00:23, 15.65image/s]Test 01025:  27%|██▋       | 139/512 [00:08<00:23, 15.65image/s]Test 01025:  27%|██▋       | 140/512 [00:08<00:23, 15.72image/s]Test 01119:  27%|██▋       | 140/512 [00:08<00:23, 15.72image/s]Test 01334:  28%|██▊       | 141/512 [00:09<00:23, 15.72image/s]Test 01334:  28%|██▊       | 142/512 [00:09<00:23, 15.75image/s]Test 01373:  28%|██▊       | 142/512 [00:09<00:23, 15.75image/s]Test 01483:  28%|██▊       | 143/512 [00:09<00:23, 15.75image/s]Test 01483:  28%|██▊       | 144/512 [00:09<00:23, 15.78image/s]Test 01285:  28%|██▊       | 144/512 [00:09<00:23, 15.78image/s]Test 01271:  28%|██▊       | 145/512 [00:09<00:23, 15.78image/s]Test 01271:  29%|██▊       | 146/512 [00:09<00:23, 15.89image/s]Test 01428:  29%|██▊       | 146/512 [00:09<00:23, 15.89image/s]Test 01260:  29%|██▊       | 147/512 [00:09<00:22, 15.89image/s]Test 01260:  29%|██▉       | 148/512 [00:09<00:22, 15.88image/s]Test 01116:  29%|██▉       | 148/512 [00:09<00:22, 15.88image/s]Test 01507:  29%|██▉       | 149/512 [00:09<00:22, 15.88image/s]Test 01507:  29%|██▉       | 150/512 [00:09<00:22, 15.92image/s]Test 01354:  29%|██▉       | 150/512 [00:09<00:22, 15.92image/s]Test 01165:  29%|██▉       | 151/512 [00:09<00:22, 15.92image/s]Test 01165:  30%|██▉       | 152/512 [00:09<00:22, 15.97image/s]Test 01464:  30%|██▉       | 152/512 [00:09<00:22, 15.97image/s]Test 01443:  30%|██▉       | 153/512 [00:09<00:22, 15.97image/s]Test 01443:  30%|███       | 154/512 [00:09<00:22, 15.97image/s]Test 01075:  30%|███       | 154/512 [00:09<00:22, 15.97image/s]Test 01345:  30%|███       | 155/512 [00:09<00:22, 15.97image/s]Test 01345:  30%|███       | 156/512 [00:09<00:22, 15.94image/s]Test 01394:  30%|███       | 156/512 [00:09<00:22, 15.94image/s]Test 01128:  31%|███       | 157/512 [00:10<00:22, 15.94image/s]Test 01128:  31%|███       | 158/512 [00:10<00:22, 15.99image/s]Test 01071:  31%|███       | 158/512 [00:10<00:22, 15.99image/s]Test 01277:  31%|███       | 159/512 [00:10<00:22, 15.99image/s]Test 01277:  31%|███▏      | 160/512 [00:10<00:22, 15.81image/s]Test 01090:  31%|███▏      | 160/512 [00:10<00:22, 15.81image/s]Test 01143:  31%|███▏      | 161/512 [00:10<00:22, 15.81image/s]Test 01143:  32%|███▏      | 162/512 [00:10<00:22, 15.84image/s]Test 01057:  32%|███▏      | 162/512 [00:10<00:22, 15.84image/s]Test 01256:  32%|███▏      | 163/512 [00:10<00:22, 15.84image/s]Test 01256:  32%|███▏      | 164/512 [00:10<00:21, 15.86image/s]Test 01107:  32%|███▏      | 164/512 [00:10<00:21, 15.86image/s]Test 01349:  32%|███▏      | 165/512 [00:10<00:21, 15.86image/s]Test 01349:  32%|███▏      | 166/512 [00:10<00:21, 15.87image/s]Test 01284:  32%|███▏      | 166/512 [00:10<00:21, 15.87image/s]Test 01251:  33%|███▎      | 167/512 [00:10<00:21, 15.87image/s]Test 01251:  33%|███▎      | 168/512 [00:10<00:21, 15.79image/s]Test 01439:  33%|███▎      | 168/512 [00:10<00:21, 15.79image/s]Test 01340:  33%|███▎      | 169/512 [00:10<00:21, 15.79image/s]Test 01340:  33%|███▎      | 170/512 [00:10<00:21, 15.87image/s]Test 01194:  33%|███▎      | 170/512 [00:10<00:21, 15.87image/s]Test 01051:  33%|███▎      | 171/512 [00:10<00:21, 15.87image/s]Test 01051:  34%|███▎      | 172/512 [00:10<00:21, 15.92image/s]Test 01085:  34%|███▎      | 172/512 [00:10<00:21, 15.92image/s]Test 01141:  34%|███▍      | 173/512 [00:11<00:21, 15.92image/s]Test 01141:  34%|███▍      | 174/512 [00:11<00:21, 15.98image/s]Test 01282:  34%|███▍      | 174/512 [00:11<00:21, 15.98image/s]Test 01433:  34%|███▍      | 175/512 [00:11<00:21, 15.98image/s]Test 01433:  34%|███▍      | 176/512 [00:11<00:21, 15.82image/s]Test 01188:  34%|███▍      | 176/512 [00:11<00:21, 15.82image/s]Test 01438:  35%|███▍      | 177/512 [00:11<00:21, 15.82image/s]Test 01438:  35%|███▍      | 178/512 [00:11<00:21, 15.61image/s]Test 01187:  35%|███▍      | 178/512 [00:11<00:21, 15.61image/s]Test 01275:  35%|███▍      | 179/512 [00:11<00:21, 15.61image/s]Test 01275:  35%|███▌      | 180/512 [00:11<00:21, 15.63image/s]Test 01269:  35%|███▌      | 180/512 [00:11<00:21, 15.63image/s]Test 01043:  35%|███▌      | 181/512 [00:11<00:21, 15.63image/s]Test 01043:  36%|███▌      | 182/512 [00:11<00:20, 15.74image/s]Test 01058:  36%|███▌      | 182/512 [00:11<00:20, 15.74image/s]Test 01077:  36%|███▌      | 183/512 [00:11<00:20, 15.74image/s]Test 01077:  36%|███▌      | 184/512 [00:11<00:20, 15.71image/s]Test 01063:  36%|███▌      | 184/512 [00:11<00:20, 15.71image/s]Test 01504:  36%|███▌      | 185/512 [00:11<00:20, 15.71image/s]Test 01504:  36%|███▋      | 186/512 [00:11<00:21, 15.50image/s]Test 01376:  36%|███▋      | 186/512 [00:11<00:21, 15.50image/s]Test 01163:  37%|███▋      | 187/512 [00:11<00:20, 15.50image/s]Test 01163:  37%|███▋      | 188/512 [00:11<00:20, 15.68image/s]Test 01472:  37%|███▋      | 188/512 [00:11<00:20, 15.68image/s]Test 01486:  37%|███▋      | 189/512 [00:12<00:20, 15.68image/s]Test 01486:  37%|███▋      | 190/512 [00:12<00:20, 15.78image/s]Test 01326:  37%|███▋      | 190/512 [00:12<00:20, 15.78image/s]Test 01259:  37%|███▋      | 191/512 [00:12<00:20, 15.78image/s]Test 01259:  38%|███▊      | 192/512 [00:12<00:20, 15.75image/s]Test 01079:  38%|███▊      | 192/512 [00:12<00:20, 15.75image/s]Test 01100:  38%|███▊      | 193/512 [00:12<00:20, 15.75image/s]Test 01100:  38%|███▊      | 194/512 [00:12<00:20, 15.68image/s]Test 01314:  38%|███▊      | 194/512 [00:12<00:20, 15.68image/s]Test 01234:  38%|███▊      | 195/512 [00:12<00:20, 15.68image/s]Test 01234:  38%|███▊      | 196/512 [00:12<00:19, 15.83image/s]Test 01324:  38%|███▊      | 196/512 [00:12<00:19, 15.83image/s]Test 01087:  38%|███▊      | 197/512 [00:12<00:19, 15.83image/s]Test 01087:  39%|███▊      | 198/512 [00:12<00:19, 15.88image/s]Test 01150:  39%|███▊      | 198/512 [00:12<00:19, 15.88image/s]Test 01243:  39%|███▉      | 199/512 [00:12<00:19, 15.88image/s]Test 01243:  39%|███▉      | 200/512 [00:12<00:19, 15.96image/s]Test 01377:  39%|███▉      | 200/512 [00:12<00:19, 15.96image/s]Test 01362:  39%|███▉      | 201/512 [00:12<00:19, 15.96image/s]Test 01362:  39%|███▉      | 202/512 [00:12<00:19, 15.89image/s]Test 01474:  39%|███▉      | 202/512 [00:12<00:19, 15.89image/s]Test 01036:  40%|███▉      | 203/512 [00:12<00:19, 15.89image/s]Test 01036:  40%|███▉      | 204/512 [00:12<00:19, 15.90image/s]Test 01509:  40%|███▉      | 204/512 [00:12<00:19, 15.90image/s]Test 01158:  40%|████      | 205/512 [00:13<00:19, 15.90image/s]Test 01158:  40%|████      | 206/512 [00:13<00:19, 15.95image/s]Test 01182:  40%|████      | 206/512 [00:13<00:19, 15.95image/s]Test 01358:  40%|████      | 207/512 [00:13<00:19, 15.95image/s]Test 01358:  41%|████      | 208/512 [00:13<00:18, 16.03image/s]Test 01033:  41%|████      | 208/512 [00:13<00:18, 16.03image/s]Test 01178:  41%|████      | 209/512 [00:13<00:18, 16.03image/s]Test 01178:  41%|████      | 210/512 [00:13<00:18, 16.04image/s]Test 01401:  41%|████      | 210/512 [00:13<00:18, 16.04image/s]Test 01186:  41%|████      | 211/512 [00:13<00:18, 16.04image/s]Test 01186:  41%|████▏     | 212/512 [00:13<00:18, 16.09image/s]Test 01467:  41%|████▏     | 212/512 [00:13<00:18, 16.09image/s]Test 01419:  42%|████▏     | 213/512 [00:13<00:18, 16.09image/s]Test 01419:  42%|████▏     | 214/512 [00:13<00:18, 16.01image/s]Test 01236:  42%|████▏     | 214/512 [00:13<00:18, 16.01image/s]Test 01207:  42%|████▏     | 215/512 [00:13<00:18, 16.01image/s]Test 01207:  42%|████▏     | 216/512 [00:13<00:18, 15.93image/s]Test 01423:  42%|████▏     | 216/512 [00:13<00:18, 15.93image/s]Test 01457:  42%|████▏     | 217/512 [00:13<00:18, 15.93image/s]Test 01457:  43%|████▎     | 218/512 [00:13<00:18, 15.89image/s]Test 01368:  43%|████▎     | 218/512 [00:13<00:18, 15.89image/s]Test 01315:  43%|████▎     | 219/512 [00:13<00:18, 15.89image/s]Test 01315:  43%|████▎     | 220/512 [00:13<00:18, 15.84image/s]Test 01244:  43%|████▎     | 220/512 [00:13<00:18, 15.84image/s]Test 01424:  43%|████▎     | 221/512 [00:14<00:18, 15.84image/s]Test 01424:  43%|████▎     | 222/512 [00:14<00:18, 15.75image/s]Test 01123:  43%|████▎     | 222/512 [00:14<00:18, 15.75image/s]Test 01019:  44%|████▎     | 223/512 [00:14<00:18, 15.75image/s]Test 01019:  44%|████▍     | 224/512 [00:14<00:18, 15.81image/s]Test 01479:  44%|████▍     | 224/512 [00:14<00:18, 15.81image/s]Test 01295:  44%|████▍     | 225/512 [00:14<00:18, 15.81image/s]Test 01295:  44%|████▍     | 226/512 [00:14<00:18, 15.77image/s]Test 01148:  44%|████▍     | 226/512 [00:14<00:18, 15.77image/s]Test 01114:  44%|████▍     | 227/512 [00:14<00:18, 15.77image/s]Test 01114:  45%|████▍     | 228/512 [00:14<00:18, 15.49image/s]Test 01480:  45%|████▍     | 228/512 [00:14<00:18, 15.49image/s]Test 01014:  45%|████▍     | 229/512 [00:14<00:18, 15.49image/s]Test 01014:  45%|████▍     | 230/512 [00:14<00:17, 15.72image/s]Test 01343:  45%|████▍     | 230/512 [00:14<00:17, 15.72image/s]Test 01434:  45%|████▌     | 231/512 [00:14<00:17, 15.72image/s]Test 01434:  45%|████▌     | 232/512 [00:14<00:17, 15.80image/s]Test 01029:  45%|████▌     | 232/512 [00:14<00:17, 15.80image/s]Test 01154:  46%|████▌     | 233/512 [00:14<00:17, 15.80image/s]Test 01154:  46%|████▌     | 234/512 [00:14<00:17, 15.80image/s]Test 01133:  46%|████▌     | 234/512 [00:14<00:17, 15.80image/s]Test 01316:  46%|████▌     | 235/512 [00:14<00:17, 15.80image/s]Test 01316:  46%|████▌     | 236/512 [00:15<00:17, 15.86image/s]Test 01175:  46%|████▌     | 236/512 [00:15<00:17, 15.86image/s]Test 01308:  46%|████▋     | 237/512 [00:15<00:17, 15.86image/s]Test 01308:  46%|████▋     | 238/512 [00:15<00:17, 15.86image/s]Test 01059:  46%|████▋     | 238/512 [00:15<00:17, 15.86image/s]Test 01235:  47%|████▋     | 239/512 [00:15<00:17, 15.86image/s]Test 01235:  47%|████▋     | 240/512 [00:15<00:17, 15.87image/s]Test 01124:  47%|████▋     | 240/512 [00:15<00:17, 15.87image/s]Test 01273:  47%|████▋     | 241/512 [00:15<00:17, 15.87image/s]Test 01273:  47%|████▋     | 242/512 [00:15<00:16, 15.89image/s]Test 01500:  47%|████▋     | 242/512 [00:15<00:16, 15.89image/s]Test 01105:  47%|████▋     | 243/512 [00:15<00:16, 15.89image/s]Test 01105:  48%|████▊     | 244/512 [00:15<00:17, 15.73image/s]Test 01172:  48%|████▊     | 244/512 [00:15<00:17, 15.73image/s]Test 01215:  48%|████▊     | 245/512 [00:15<00:16, 15.73image/s]Test 01215:  48%|████▊     | 246/512 [00:15<00:16, 15.71image/s]Test 01471:  48%|████▊     | 246/512 [00:15<00:16, 15.71image/s]Test 01156:  48%|████▊     | 247/512 [00:15<00:16, 15.71image/s]Test 01156:  48%|████▊     | 248/512 [00:15<00:16, 15.75image/s]Test 01066:  48%|████▊     | 248/512 [00:15<00:16, 15.75image/s]Test 01367:  49%|████▊     | 249/512 [00:15<00:16, 15.75image/s]Test 01367:  49%|████▉     | 250/512 [00:15<00:16, 15.75image/s]Test 01052:  49%|████▉     | 250/512 [00:15<00:16, 15.75image/s]Test 01487:  49%|████▉     | 251/512 [00:15<00:16, 15.75image/s]Test 01487:  49%|████▉     | 252/512 [00:16<00:16, 15.78image/s]Test 01391:  49%|████▉     | 252/512 [00:16<00:16, 15.78image/s]Test 01142:  49%|████▉     | 253/512 [00:16<00:16, 15.78image/s]Test 01142:  50%|████▉     | 254/512 [00:16<00:16, 15.76image/s]Test 01420:  50%|████▉     | 254/512 [00:16<00:16, 15.76image/s]Test 01323:  50%|████▉     | 255/512 [00:16<00:16, 15.76image/s]Test 01323:  50%|█████     | 256/512 [00:16<00:16, 15.79image/s]Test 01032:  50%|█████     | 256/512 [00:16<00:16, 15.79image/s]Test 01441:  50%|█████     | 257/512 [00:16<00:16, 15.79image/s]Test 01441:  50%|█████     | 258/512 [00:16<00:16, 15.86image/s]Test 01247:  50%|█████     | 258/512 [00:16<00:16, 15.86image/s]Test 01351:  51%|█████     | 259/512 [00:16<00:15, 15.86image/s]Test 01351:  51%|█████     | 260/512 [00:16<00:15, 15.87image/s]Test 01381:  51%|█████     | 260/512 [00:16<00:15, 15.87image/s]Test 01205:  51%|█████     | 261/512 [00:16<00:15, 15.87image/s]Test 01205:  51%|█████     | 262/512 [00:16<00:15, 15.82image/s]Test 01447:  51%|█████     | 262/512 [00:16<00:15, 15.82image/s]Test 01426:  51%|█████▏    | 263/512 [00:16<00:15, 15.82image/s]Test 01426:  52%|█████▏    | 264/512 [00:16<00:15, 15.75image/s]Test 01400:  52%|█████▏    | 264/512 [00:16<00:15, 15.75image/s]Test 01337:  52%|█████▏    | 265/512 [00:16<00:15, 15.75image/s]Test 01337:  52%|█████▏    | 266/512 [00:16<00:15, 15.82image/s]Test 01496:  52%|█████▏    | 266/512 [00:16<00:15, 15.82image/s]Test 01336:  52%|█████▏    | 267/512 [00:16<00:15, 15.82image/s]Test 01336:  52%|█████▏    | 268/512 [00:17<00:15, 15.81image/s]Test 01031:  52%|█████▏    | 268/512 [00:17<00:15, 15.81image/s]Test 01263:  53%|█████▎    | 269/512 [00:17<00:15, 15.81image/s]Test 01263:  53%|█████▎    | 270/512 [00:17<00:15, 15.73image/s]Test 01403:  53%|█████▎    | 270/512 [00:17<00:15, 15.73image/s]Test 01361:  53%|█████▎    | 271/512 [00:17<00:15, 15.73image/s]Test 01361:  53%|█████▎    | 272/512 [00:17<00:15, 15.80image/s]Test 01288:  53%|█████▎    | 272/512 [00:17<00:15, 15.80image/s]Test 01248:  53%|█████▎    | 273/512 [00:17<00:15, 15.80image/s]Test 01248:  54%|█████▎    | 274/512 [00:17<00:15, 15.68image/s]Test 01412:  54%|█████▎    | 274/512 [00:17<00:15, 15.68image/s]Test 01221:  54%|█████▎    | 275/512 [00:17<00:15, 15.68image/s]Test 01221:  54%|█████▍    | 276/512 [00:17<00:14, 15.82image/s]Test 01183:  54%|█████▍    | 276/512 [00:17<00:14, 15.82image/s]Test 01297:  54%|█████▍    | 277/512 [00:17<00:14, 15.82image/s]Test 01297:  54%|█████▍    | 278/512 [00:17<00:14, 15.66image/s]Test 01325:  54%|█████▍    | 278/512 [00:17<00:14, 15.66image/s]Test 01341:  54%|█████▍    | 279/512 [00:17<00:14, 15.66image/s]Test 01341:  55%|█████▍    | 280/512 [00:17<00:14, 15.70image/s]Test 01171:  55%|█████▍    | 280/512 [00:17<00:14, 15.70image/s]Test 01083:  55%|█████▍    | 281/512 [00:17<00:14, 15.70image/s]Test 01083:  55%|█████▌    | 282/512 [00:17<00:14, 15.77image/s]Test 01489:  55%|█████▌    | 282/512 [00:17<00:14, 15.77image/s]Test 01015:  55%|█████▌    | 283/512 [00:17<00:14, 15.77image/s]Test 01015:  55%|█████▌    | 284/512 [00:18<00:14, 15.86image/s]Test 01422:  55%|█████▌    | 284/512 [00:18<00:14, 15.86image/s]Test 01102:  56%|█████▌    | 285/512 [00:18<00:14, 15.86image/s]Test 01102:  56%|█████▌    | 286/512 [00:18<00:14, 15.95image/s]Test 01357:  56%|█████▌    | 286/512 [00:18<00:14, 15.95image/s]Test 01196:  56%|█████▌    | 287/512 [00:18<00:14, 15.95image/s]Test 01196:  56%|█████▋    | 288/512 [00:18<00:14, 15.98image/s]Test 01379:  56%|█████▋    | 288/512 [00:18<00:14, 15.98image/s]Test 01304:  56%|█████▋    | 289/512 [00:18<00:13, 15.98image/s]Test 01304:  57%|█████▋    | 290/512 [00:18<00:13, 16.08image/s]Test 01390:  57%|█████▋    | 290/512 [00:18<00:13, 16.08image/s]Test 01010:  57%|█████▋    | 291/512 [00:18<00:13, 16.08image/s]Test 01010:  57%|█████▋    | 292/512 [00:18<00:13, 16.17image/s]Test 01405:  57%|█████▋    | 292/512 [00:18<00:13, 16.17image/s]Test 01193:  57%|█████▋    | 293/512 [00:18<00:13, 16.17image/s]Test 01193:  57%|█████▋    | 294/512 [00:18<00:13, 16.18image/s]Test 01411:  57%|█████▋    | 294/512 [00:18<00:13, 16.18image/s]Test 01210:  58%|█████▊    | 295/512 [00:18<00:13, 16.18image/s]Test 01210:  58%|█████▊    | 296/512 [00:18<00:13, 16.06image/s]Test 01395:  58%|█████▊    | 296/512 [00:18<00:13, 16.06image/s]Test 01034:  58%|█████▊    | 297/512 [00:18<00:13, 16.06image/s]Test 01034:  58%|█████▊    | 298/512 [00:18<00:13, 16.09image/s]Test 01261:  58%|█████▊    | 298/512 [00:18<00:13, 16.09image/s]Test 01180:  58%|█████▊    | 299/512 [00:18<00:13, 16.09image/s]Test 01180:  59%|█████▊    | 300/512 [00:19<00:13, 15.93image/s]Test 01503:  59%|█████▊    | 300/512 [00:19<00:13, 15.93image/s]Test 01289:  59%|█████▉    | 301/512 [00:19<00:13, 15.93image/s]Test 01289:  59%|█████▉    | 302/512 [00:19<00:13, 15.93image/s]Test 01035:  59%|█████▉    | 302/512 [00:19<00:13, 15.93image/s]Test 01280:  59%|█████▉    | 303/512 [00:19<00:13, 15.93image/s]Test 01280:  59%|█████▉    | 304/512 [00:19<00:13, 15.97image/s]Test 01460:  59%|█████▉    | 304/512 [00:19<00:13, 15.97image/s]Test 01091:  60%|█████▉    | 305/512 [00:19<00:12, 15.97image/s]Test 01091:  60%|█████▉    | 306/512 [00:19<00:12, 15.97image/s]Test 01089:  60%|█████▉    | 306/512 [00:19<00:12, 15.97image/s]Test 01442:  60%|█████▉    | 307/512 [00:19<00:12, 15.97image/s]Test 01442:  60%|██████    | 308/512 [00:19<00:12, 15.99image/s]Test 01040:  60%|██████    | 308/512 [00:19<00:12, 15.99image/s]Test 01104:  60%|██████    | 309/512 [00:19<00:12, 15.99image/s]Test 01104:  61%|██████    | 310/512 [00:19<00:12, 15.94image/s]Test 01068:  61%|██████    | 310/512 [00:19<00:12, 15.94image/s]Test 01126:  61%|██████    | 311/512 [00:19<00:12, 15.94image/s]Test 01126:  61%|██████    | 312/512 [00:19<00:12, 15.83image/s]Test 01054:  61%|██████    | 312/512 [00:19<00:12, 15.83image/s]Test 01302:  61%|██████    | 313/512 [00:19<00:12, 15.83image/s]Test 01302:  61%|██████▏   | 314/512 [00:19<00:12, 15.77image/s]Test 01072:  61%|██████▏   | 314/512 [00:19<00:12, 15.77image/s]Test 01333:  62%|██████▏   | 315/512 [00:19<00:12, 15.77image/s]Test 01333:  62%|██████▏   | 316/512 [00:20<00:12, 15.83image/s]Test 01111:  62%|██████▏   | 316/512 [00:20<00:12, 15.83image/s]Test 01013:  62%|██████▏   | 317/512 [00:20<00:12, 15.83image/s]Test 01013:  62%|██████▏   | 318/512 [00:20<00:12, 15.86image/s]Test 01008:  62%|██████▏   | 318/512 [00:20<00:12, 15.86image/s]Test 01320:  62%|██████▏   | 319/512 [00:20<00:12, 15.86image/s]Test 01320:  62%|██████▎   | 320/512 [00:20<00:12, 15.76image/s]Test 01155:  62%|██████▎   | 320/512 [00:20<00:12, 15.76image/s]Test 01242:  63%|██████▎   | 321/512 [00:20<00:12, 15.76image/s]Test 01242:  63%|██████▎   | 322/512 [00:20<00:11, 15.85image/s]Test 01020:  63%|██████▎   | 322/512 [00:20<00:11, 15.85image/s]Test 01136:  63%|██████▎   | 323/512 [00:20<00:11, 15.85image/s]Test 01136:  63%|██████▎   | 324/512 [00:20<00:11, 15.76image/s]Test 01310:  63%|██████▎   | 324/512 [00:20<00:11, 15.76image/s]Test 01023:  63%|██████▎   | 325/512 [00:20<00:11, 15.76image/s]Test 01023:  64%|██████▎   | 326/512 [00:20<00:11, 15.83image/s]Test 01278:  64%|██████▎   | 326/512 [00:20<00:11, 15.83image/s]Test 01074:  64%|██████▍   | 327/512 [00:20<00:11, 15.83image/s]Test 01074:  64%|██████▍   | 328/512 [00:20<00:11, 15.46image/s]Test 01440:  64%|██████▍   | 328/512 [00:20<00:11, 15.46image/s]Test 01204:  64%|██████▍   | 329/512 [00:20<00:11, 15.46image/s]Test 01204:  64%|██████▍   | 330/512 [00:20<00:11, 15.33image/s]Test 01430:  64%|██████▍   | 330/512 [00:20<00:11, 15.33image/s]Test 01007:  65%|██████▍   | 331/512 [00:21<00:11, 15.33image/s]Test 01007:  65%|██████▍   | 332/512 [00:21<00:11, 15.52image/s]Test 01493:  65%|██████▍   | 332/512 [00:21<00:11, 15.52image/s]Test 01022:  65%|██████▌   | 333/512 [00:21<00:11, 15.52image/s]Test 01022:  65%|██████▌   | 334/512 [00:21<00:11, 15.56image/s]Test 01211:  65%|██████▌   | 334/512 [00:21<00:11, 15.56image/s]Test 01393:  65%|██████▌   | 335/512 [00:21<00:11, 15.56image/s]Test 01393:  66%|██████▌   | 336/512 [00:21<00:11, 15.61image/s]Test 01346:  66%|██████▌   | 336/512 [00:21<00:11, 15.61image/s]Test 01508:  66%|██████▌   | 337/512 [00:21<00:11, 15.61image/s]Test 01508:  66%|██████▌   | 338/512 [00:21<00:11, 15.69image/s]Test 01000:  66%|██████▌   | 338/512 [00:21<00:11, 15.69image/s]Test 01338:  66%|██████▌   | 339/512 [00:21<00:11, 15.69image/s]Test 01338:  66%|██████▋   | 340/512 [00:21<00:10, 15.83image/s]Test 01328:  66%|██████▋   | 340/512 [00:21<00:10, 15.83image/s]Test 01223:  67%|██████▋   | 341/512 [00:21<00:10, 15.83image/s]Test 01223:  67%|██████▋   | 342/512 [00:21<00:10, 15.85image/s]Test 01021:  67%|██████▋   | 342/512 [00:21<00:10, 15.85image/s]Test 01270:  67%|██████▋   | 343/512 [00:21<00:10, 15.85image/s]Test 01270:  67%|██████▋   | 344/512 [00:21<00:10, 15.78image/s]Test 01078:  67%|██████▋   | 344/512 [00:21<00:10, 15.78image/s]Test 01037:  67%|██████▋   | 345/512 [00:21<00:10, 15.78image/s]Test 01037:  68%|██████▊   | 346/512 [00:21<00:10, 15.80image/s]Test 01201:  68%|██████▊   | 346/512 [00:21<00:10, 15.80image/s]Test 01229:  68%|██████▊   | 347/512 [00:22<00:10, 15.80image/s]Test 01229:  68%|██████▊   | 348/512 [00:22<00:10, 15.89image/s]Test 01506:  68%|██████▊   | 348/512 [00:22<00:10, 15.89image/s]Test 01038:  68%|██████▊   | 349/512 [00:22<00:10, 15.89image/s]Test 01038:  68%|██████▊   | 350/512 [00:22<00:10, 15.78image/s]Test 01281:  68%|██████▊   | 350/512 [00:22<00:10, 15.78image/s]Test 01238:  69%|██████▊   | 351/512 [00:22<00:10, 15.78image/s]Test 01238:  69%|██████▉   | 352/512 [00:22<00:10, 15.79image/s]Test 01327:  69%|██████▉   | 352/512 [00:22<00:10, 15.79image/s]Test 01146:  69%|██████▉   | 353/512 [00:22<00:10, 15.79image/s]Test 01146:  69%|██████▉   | 354/512 [00:22<00:10, 15.77image/s]Test 01348:  69%|██████▉   | 354/512 [00:22<00:10, 15.77image/s]Test 01017:  69%|██████▉   | 355/512 [00:22<00:09, 15.77image/s]Test 01017:  70%|██████▉   | 356/512 [00:22<00:09, 15.74image/s]Test 01110:  70%|██████▉   | 356/512 [00:22<00:09, 15.74image/s]Test 01047:  70%|██████▉   | 357/512 [00:22<00:09, 15.74image/s]Test 01047:  70%|██████▉   | 358/512 [00:22<00:09, 15.75image/s]Test 01135:  70%|██████▉   | 358/512 [00:22<00:09, 15.75image/s]Test 01456:  70%|███████   | 359/512 [00:22<00:09, 15.75image/s]Test 01456:  70%|███████   | 360/512 [00:22<00:09, 15.88image/s]Test 01212:  70%|███████   | 360/512 [00:22<00:09, 15.88image/s]Test 01444:  71%|███████   | 361/512 [00:22<00:09, 15.88image/s]Test 01444:  71%|███████   | 362/512 [00:22<00:09, 15.53image/s]Test 01246:  71%|███████   | 362/512 [00:22<00:09, 15.53image/s]Test 01199:  71%|███████   | 363/512 [00:23<00:09, 15.53image/s]Test 01199:  71%|███████   | 364/512 [00:23<00:09, 15.56image/s]Test 01488:  71%|███████   | 364/512 [00:23<00:09, 15.56image/s]Test 01176:  71%|███████▏  | 365/512 [00:23<00:09, 15.56image/s]Test 01176:  71%|███████▏  | 366/512 [00:23<00:09, 15.73image/s]Test 01298:  71%|███████▏  | 366/512 [00:23<00:09, 15.73image/s]Test 01468:  72%|███████▏  | 367/512 [00:23<00:09, 15.73image/s]Test 01468:  72%|███████▏  | 368/512 [00:23<00:09, 15.81image/s]Test 01181:  72%|███████▏  | 368/512 [00:23<00:09, 15.81image/s]Test 01364:  72%|███████▏  | 369/512 [00:23<00:09, 15.81image/s]Test 01364:  72%|███████▏  | 370/512 [00:23<00:08, 15.81image/s]Test 01477:  72%|███████▏  | 370/512 [00:23<00:08, 15.81image/s]Test 01195:  72%|███████▏  | 371/512 [00:23<00:08, 15.81image/s]Test 01195:  73%|███████▎  | 372/512 [00:23<00:08, 15.88image/s]Test 01360:  73%|███████▎  | 372/512 [00:23<00:08, 15.88image/s]Test 01510:  73%|███████▎  | 373/512 [00:23<00:08, 15.88image/s]Test 01510:  73%|███████▎  | 374/512 [00:23<00:08, 15.98image/s]Test 01216:  73%|███████▎  | 374/512 [00:23<00:08, 15.98image/s]Test 01125:  73%|███████▎  | 375/512 [00:23<00:08, 15.98image/s]Test 01125:  73%|███████▎  | 376/512 [00:23<00:08, 15.93image/s]Test 01041:  73%|███████▎  | 376/512 [00:23<00:08, 15.93image/s]Test 01409:  74%|███████▎  | 377/512 [00:23<00:08, 15.93image/s]Test 01409:  74%|███████▍  | 378/512 [00:23<00:08, 15.91image/s]Test 01138:  74%|███████▍  | 378/512 [00:23<00:08, 15.91image/s]Test 01431:  74%|███████▍  | 379/512 [00:24<00:08, 15.91image/s]Test 01431:  74%|███████▍  | 380/512 [00:24<00:08, 15.67image/s]Test 01065:  74%|███████▍  | 380/512 [00:24<00:08, 15.67image/s]Test 01185:  74%|███████▍  | 381/512 [00:24<00:08, 15.67image/s]Test 01185:  75%|███████▍  | 382/512 [00:24<00:08, 15.82image/s]Test 01494:  75%|███████▍  | 382/512 [00:24<00:08, 15.82image/s]Test 01461:  75%|███████▍  | 383/512 [00:24<00:08, 15.82image/s]Test 01461:  75%|███████▌  | 384/512 [00:24<00:08, 15.83image/s]Test 01177:  75%|███████▌  | 384/512 [00:24<00:08, 15.83image/s]Test 01307:  75%|███████▌  | 385/512 [00:24<00:08, 15.83image/s]Test 01307:  75%|███████▌  | 386/512 [00:24<00:07, 15.85image/s]Test 01088:  75%|███████▌  | 386/512 [00:24<00:07, 15.85image/s]Test 01475:  76%|███████▌  | 387/512 [00:24<00:07, 15.85image/s]Test 01475:  76%|███████▌  | 388/512 [00:24<00:07, 15.85image/s]Test 01274:  76%|███████▌  | 388/512 [00:24<00:07, 15.85image/s]Test 01200:  76%|███████▌  | 389/512 [00:24<00:07, 15.85image/s]Test 01200:  76%|███████▌  | 390/512 [00:24<00:07, 15.83image/s]Test 01313:  76%|███████▌  | 390/512 [00:24<00:07, 15.83image/s]Test 01232:  76%|███████▋  | 391/512 [00:24<00:07, 15.83image/s]Test 01232:  77%|███████▋  | 392/512 [00:24<00:07, 15.93image/s]Test 01322:  77%|███████▋  | 392/512 [00:24<00:07, 15.93image/s]Test 01466:  77%|███████▋  | 393/512 [00:24<00:07, 15.93image/s]Test 01466:  77%|███████▋  | 394/512 [00:25<00:07, 15.98image/s]Test 01387:  77%|███████▋  | 394/512 [00:25<00:07, 15.98image/s]Test 01427:  77%|███████▋  | 395/512 [00:25<00:07, 15.98image/s]Test 01427:  77%|███████▋  | 396/512 [00:25<00:07, 15.80image/s]Test 01372:  77%|███████▋  | 396/512 [00:25<00:07, 15.80image/s]Test 01279:  78%|███████▊  | 397/512 [00:25<00:07, 15.80image/s]Test 01279:  78%|███████▊  | 398/512 [00:25<00:07, 15.10image/s]Test 01130:  78%|███████▊  | 398/512 [00:25<00:07, 15.10image/s]Test 01214:  78%|███████▊  | 399/512 [00:25<00:07, 15.10image/s]Test 01214:  78%|███████▊  | 400/512 [00:25<00:07, 15.39image/s]Test 01192:  78%|███████▊  | 400/512 [00:25<00:07, 15.39image/s]Test 01303:  78%|███████▊  | 401/512 [00:25<00:07, 15.39image/s]Test 01303:  79%|███████▊  | 402/512 [00:25<00:07, 15.46image/s]Test 01448:  79%|███████▊  | 402/512 [00:25<00:07, 15.46image/s]Test 01069:  79%|███████▊  | 403/512 [00:25<00:07, 15.46image/s]Test 01069:  79%|███████▉  | 404/512 [00:25<00:06, 15.58image/s]Test 01465:  79%|███████▉  | 404/512 [00:25<00:06, 15.58image/s]Test 01106:  79%|███████▉  | 405/512 [00:25<00:06, 15.58image/s]Test 01106:  79%|███████▉  | 406/512 [00:25<00:06, 15.67image/s]Test 01449:  79%|███████▉  | 406/512 [00:25<00:06, 15.67image/s]Test 01470:  79%|███████▉  | 407/512 [00:25<00:06, 15.67image/s]Test 01470:  80%|███████▉  | 408/512 [00:25<00:06, 15.66image/s]Test 01356:  80%|███████▉  | 408/512 [00:25<00:06, 15.66image/s]Test 01417:  80%|███████▉  | 409/512 [00:25<00:06, 15.66image/s]Test 01417:  80%|████████  | 410/512 [00:26<00:06, 15.66image/s]Test 01249:  80%|████████  | 410/512 [00:26<00:06, 15.66image/s]Test 01421:  80%|████████  | 411/512 [00:26<00:06, 15.66image/s]Test 01421:  80%|████████  | 412/512 [00:26<00:06, 15.66image/s]Test 01459:  80%|████████  | 412/512 [00:26<00:06, 15.66image/s]Test 01432:  81%|████████  | 413/512 [00:26<00:06, 15.66image/s]Test 01432:  81%|████████  | 414/512 [00:26<00:06, 15.63image/s]Test 01056:  81%|████████  | 414/512 [00:26<00:06, 15.63image/s]Test 01339:  81%|████████  | 415/512 [00:26<00:06, 15.63image/s]Test 01339:  81%|████████▏ | 416/512 [00:26<00:06, 15.72image/s]Test 01039:  81%|████████▏ | 416/512 [00:26<00:06, 15.72image/s]Test 01048:  81%|████████▏ | 417/512 [00:26<00:06, 15.72image/s]Test 01048:  82%|████████▏ | 418/512 [00:26<00:05, 15.68image/s]Test 01099:  82%|████████▏ | 418/512 [00:26<00:05, 15.68image/s]Test 01283:  82%|████████▏ | 419/512 [00:26<00:05, 15.68image/s]Test 01283:  82%|████████▏ | 420/512 [00:26<00:05, 15.71image/s]Test 01045:  82%|████████▏ | 420/512 [00:26<00:05, 15.71image/s]Test 01482:  82%|████████▏ | 421/512 [00:26<00:05, 15.71image/s]Test 01482:  82%|████████▏ | 422/512 [00:26<00:05, 15.72image/s]Test 01262:  82%|████████▏ | 422/512 [00:26<00:05, 15.72image/s]Test 01425:  83%|████████▎ | 423/512 [00:26<00:05, 15.72image/s]Test 01425:  83%|████████▎ | 424/512 [00:26<00:05, 15.56image/s]Test 01481:  83%|████████▎ | 424/512 [00:26<00:05, 15.56image/s]Test 01476:  83%|████████▎ | 425/512 [00:26<00:05, 15.56image/s]Test 01476:  83%|████████▎ | 426/512 [00:27<00:05, 15.63image/s]Test 01094:  83%|████████▎ | 426/512 [00:27<00:05, 15.63image/s]Test 01458:  83%|████████▎ | 427/512 [00:27<00:05, 15.63image/s]Test 01458:  84%|████████▎ | 428/512 [00:27<00:05, 15.79image/s]Test 01301:  84%|████████▎ | 428/512 [00:27<00:05, 15.79image/s]Test 01018:  84%|████████▍ | 429/512 [00:27<00:05, 15.79image/s]Test 01018:  84%|████████▍ | 430/512 [00:27<00:05, 15.66image/s]Test 01208:  84%|████████▍ | 430/512 [00:27<00:05, 15.66image/s]Test 01004:  84%|████████▍ | 431/512 [00:27<00:05, 15.66image/s]Test 01004:  84%|████████▍ | 432/512 [00:27<00:05, 15.82image/s]Test 01127:  84%|████████▍ | 432/512 [00:27<00:05, 15.82image/s]Test 01012:  85%|████████▍ | 433/512 [00:27<00:04, 15.82image/s]Test 01012:  85%|████████▍ | 434/512 [00:27<00:04, 15.91image/s]Test 01191:  85%|████████▍ | 434/512 [00:27<00:04, 15.91image/s]Test 01435:  85%|████████▍ | 435/512 [00:27<00:04, 15.91image/s]Test 01435:  85%|████████▌ | 436/512 [00:27<00:04, 15.92image/s]Test 01498:  85%|████████▌ | 436/512 [00:27<00:04, 15.92image/s]Test 01484:  85%|████████▌ | 437/512 [00:27<00:04, 15.92image/s]Test 01484:  86%|████████▌ | 438/512 [00:27<00:04, 15.93image/s]Test 01335:  86%|████████▌ | 438/512 [00:27<00:04, 15.93image/s]Test 01076:  86%|████████▌ | 439/512 [00:27<00:04, 15.93image/s]Test 01076:  86%|████████▌ | 440/512 [00:27<00:04, 15.80image/s]Test 01131:  86%|████████▌ | 440/512 [00:27<00:04, 15.80image/s]Test 01255:  86%|████████▌ | 441/512 [00:28<00:04, 15.80image/s]Test 01255:  86%|████████▋ | 442/512 [00:28<00:04, 15.75image/s]Test 01213:  86%|████████▋ | 442/512 [00:28<00:04, 15.75image/s]Test 01264:  87%|████████▋ | 443/512 [00:28<00:04, 15.75image/s]Test 01264:  87%|████████▋ | 444/512 [00:28<00:04, 15.78image/s]Test 01495:  87%|████████▋ | 444/512 [00:28<00:04, 15.78image/s]Test 01062:  87%|████████▋ | 445/512 [00:28<00:04, 15.78image/s]Test 01062:  87%|████████▋ | 446/512 [00:28<00:04, 15.64image/s]Test 01122:  87%|████████▋ | 446/512 [00:28<00:04, 15.64image/s]Test 01203:  87%|████████▋ | 447/512 [00:28<00:04, 15.64image/s]Test 01203:  88%|████████▊ | 448/512 [00:28<00:04, 15.67image/s]Test 01162:  88%|████████▊ | 448/512 [00:28<00:04, 15.67image/s]Test 01293:  88%|████████▊ | 449/512 [00:28<00:04, 15.67image/s]Test 01293:  88%|████████▊ | 450/512 [00:28<00:03, 15.84image/s]Test 01166:  88%|████████▊ | 450/512 [00:28<00:03, 15.84image/s]Test 01386:  88%|████████▊ | 451/512 [00:28<00:03, 15.84image/s]Test 01386:  88%|████████▊ | 452/512 [00:28<00:03, 15.85image/s]Test 01318:  88%|████████▊ | 452/512 [00:28<00:03, 15.85image/s]Test 01309:  88%|████████▊ | 453/512 [00:28<00:03, 15.85image/s]Test 01309:  89%|████████▊ | 454/512 [00:28<00:03, 16.02image/s]Test 01268:  89%|████████▊ | 454/512 [00:28<00:03, 16.02image/s]Test 01450:  89%|████████▉ | 455/512 [00:28<00:03, 16.02image/s]Test 01450:  89%|████████▉ | 456/512 [00:28<00:03, 15.98image/s]Test 01463:  89%|████████▉ | 456/512 [00:28<00:03, 15.98image/s]Test 01332:  89%|████████▉ | 457/512 [00:29<00:03, 15.98image/s]Test 01332:  89%|████████▉ | 458/512 [00:29<00:03, 15.91image/s]Test 01173:  89%|████████▉ | 458/512 [00:29<00:03, 15.91image/s]Test 01009:  90%|████████▉ | 459/512 [00:29<00:03, 15.91image/s]Test 01009:  90%|████████▉ | 460/512 [00:29<00:03, 15.94image/s]Test 01382:  90%|████████▉ | 460/512 [00:29<00:03, 15.94image/s]Test 01317:  90%|█████████ | 461/512 [00:29<00:03, 15.94image/s]Test 01317:  90%|█████████ | 462/512 [00:29<00:03, 15.96image/s]Test 01511:  90%|█████████ | 462/512 [00:29<00:03, 15.96image/s]Test 01380:  90%|█████████ | 463/512 [00:29<00:03, 15.96image/s]Test 01380:  91%|█████████ | 464/512 [00:29<00:03, 15.86image/s]Test 01311:  91%|█████████ | 464/512 [00:29<00:03, 15.86image/s]Test 01250:  91%|█████████ | 465/512 [00:29<00:02, 15.86image/s]Test 01250:  91%|█████████ | 466/512 [00:29<00:02, 15.75image/s]Test 01266:  91%|█████████ | 466/512 [00:29<00:02, 15.75image/s]Test 01179:  91%|█████████ | 467/512 [00:29<00:02, 15.75image/s]Test 01179:  91%|█████████▏| 468/512 [00:29<00:02, 15.69image/s]Test 01406:  91%|█████████▏| 468/512 [00:29<00:02, 15.69image/s]Test 01228:  92%|█████████▏| 469/512 [00:29<00:02, 15.69image/s]Test 01228:  92%|█████████▏| 470/512 [00:29<00:02, 15.71image/s]Test 01103:  92%|█████████▏| 470/512 [00:29<00:02, 15.71image/s]Test 01093:  92%|█████████▏| 471/512 [00:29<00:02, 15.71image/s]Test 01093:  92%|█████████▏| 472/512 [00:29<00:02, 15.67image/s]Test 01374:  92%|█████████▏| 472/512 [00:29<00:02, 15.67image/s]Test 01446:  92%|█████████▏| 473/512 [00:30<00:02, 15.67image/s]Test 01446:  93%|█████████▎| 474/512 [00:30<00:02, 15.70image/s]Test 01276:  93%|█████████▎| 474/512 [00:30<00:02, 15.70image/s]Test 01413:  93%|█████████▎| 475/512 [00:30<00:02, 15.70image/s]Test 01413:  93%|█████████▎| 476/512 [00:30<00:02, 15.73image/s]Test 01080:  93%|█████████▎| 476/512 [00:30<00:02, 15.73image/s]Test 01147:  93%|█████████▎| 477/512 [00:30<00:02, 15.73image/s]Test 01147:  93%|█████████▎| 478/512 [00:30<00:02, 15.83image/s]Test 01388:  93%|█████████▎| 478/512 [00:30<00:02, 15.83image/s]Test 01501:  94%|█████████▎| 479/512 [00:30<00:02, 15.83image/s]Test 01501:  94%|█████████▍| 480/512 [00:30<00:02, 15.71image/s]Test 01064:  94%|█████████▍| 480/512 [00:30<00:02, 15.71image/s]Test 01222:  94%|█████████▍| 481/512 [00:30<00:01, 15.71image/s]Test 01222:  94%|█████████▍| 482/512 [00:30<00:01, 15.71image/s]Test 01086:  94%|█████████▍| 482/512 [00:30<00:01, 15.71image/s]Test 01265:  94%|█████████▍| 483/512 [00:30<00:01, 15.71image/s]Test 01265:  95%|█████████▍| 484/512 [00:30<00:01, 15.82image/s]Test 01453:  95%|█████████▍| 484/512 [00:30<00:01, 15.82image/s]Test 01237:  95%|█████████▍| 485/512 [00:30<00:01, 15.82image/s]Test 01237:  95%|█████████▍| 486/512 [00:30<00:01, 15.89image/s]Test 01369:  95%|█████████▍| 486/512 [00:30<00:01, 15.89image/s]Test 01385:  95%|█████████▌| 487/512 [00:30<00:01, 15.89image/s]Test 01385:  95%|█████████▌| 488/512 [00:30<00:01, 15.74image/s]Test 01499:  95%|█████████▌| 488/512 [00:30<00:01, 15.74image/s]Test 01115:  96%|█████████▌| 489/512 [00:31<00:01, 15.74image/s]Test 01115:  96%|█████████▌| 490/512 [00:31<00:01, 15.70image/s]Test 01469:  96%|█████████▌| 490/512 [00:31<00:01, 15.70image/s]Test 01170:  96%|█████████▌| 491/512 [00:31<00:01, 15.70image/s]Test 01170:  96%|█████████▌| 492/512 [00:31<00:01, 15.63image/s]Test 01353:  96%|█████████▌| 492/512 [00:31<00:01, 15.63image/s]Test 01397:  96%|█████████▋| 493/512 [00:31<00:01, 15.63image/s]Test 01397:  96%|█████████▋| 494/512 [00:31<00:01, 15.57image/s]Test 01184:  96%|█████████▋| 494/512 [00:31<00:01, 15.57image/s]Test 01429:  97%|█████████▋| 495/512 [00:31<00:01, 15.57image/s]Test 01429:  97%|█████████▋| 496/512 [00:31<00:01, 15.46image/s]Test 01365:  97%|█████████▋| 496/512 [00:31<00:01, 15.46image/s]Test 01101:  97%|█████████▋| 497/512 [00:31<00:00, 15.46image/s]Test 01101:  97%|█████████▋| 498/512 [00:31<00:00, 15.22image/s]Test 01491:  97%|█████████▋| 498/512 [00:31<00:00, 15.22image/s]Test 01169:  97%|█████████▋| 499/512 [00:31<00:00, 15.22image/s]Test 01169:  98%|█████████▊| 500/512 [00:31<00:00, 15.48image/s]Test 01292:  98%|█████████▊| 500/512 [00:31<00:00, 15.48image/s]Test 01042:  98%|█████████▊| 501/512 [00:31<00:00, 15.48image/s]Test 01042:  98%|█████████▊| 502/512 [00:31<00:00, 15.70image/s]Test 01253:  98%|█████████▊| 502/512 [00:31<00:00, 15.70image/s]Test 01347:  98%|█████████▊| 503/512 [00:31<00:00, 15.70image/s]Test 01347:  98%|█████████▊| 504/512 [00:32<00:00, 15.88image/s]Test 01001:  98%|█████████▊| 504/512 [00:32<00:00, 15.88image/s]Test 01109:  99%|█████████▊| 505/512 [00:32<00:00, 15.88image/s]Test 01109:  99%|█████████▉| 506/512 [00:32<00:00, 16.01image/s]Test 01197:  99%|█████████▉| 506/512 [00:32<00:00, 16.01image/s]Test 01028:  99%|█████████▉| 507/512 [00:32<00:00, 16.01image/s]Test 01028:  99%|█████████▉| 508/512 [00:32<00:00, 16.07image/s]Test 01132:  99%|█████████▉| 508/512 [00:32<00:00, 16.07image/s]Test 01084:  99%|█████████▉| 509/512 [00:32<00:00, 16.07image/s]Test 01084: 100%|█████████▉| 510/512 [00:32<00:00, 16.02image/s]Test 01046: 100%|█████████▉| 510/512 [00:32<00:00, 16.02image/s]Test 01209: 100%|█████████▉| 511/512 [00:32<00:00, 16.02image/s]Test 01209: 100%|██████████| 512/512 [00:32<00:00, 15.98image/s]Test 01164: 100%|██████████| 512/512 [00:32<00:00, 15.98image/s]Test 01164: 100%|██████████| 512/512 [00:32<00:00, 15.75image/s]
+2021-09-17 13:53:53,381 INFO: Validation validation
+	 # psnr: inf
+

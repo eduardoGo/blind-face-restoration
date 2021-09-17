@@ -2,3 +2,5 @@ datasets/ffhq/00000/*
 datasets/ffhq/01000/*
 datasets/ffhq/validation/*
 experiments/*
+.eggs/**
+**__py

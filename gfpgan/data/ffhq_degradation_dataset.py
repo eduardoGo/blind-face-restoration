@@ -22,9 +22,10 @@ class FFHQDegradationDataset(data.Dataset):
 
         # ========================= Textures ==============================
 
+        path_textures = "/home/egs1@laccan.net/dip/blind-face-restoration/gfpgan/data/textures/"
         self.textures = []
-        for filename in os.listdir("textures/"):
-            img = cv2.imread(osp.join("textures/",filename))
+        for filename in os.listdir(path_textures):
+            img = cv2.imread(osp.join(path_textures,filename))
             if img is not None:
                 self.textures.append(img)
 
@@ -204,10 +205,10 @@ class FFHQDegradationDataset(data.Dataset):
             texture = cv2.flip(texture, 1)
 
         #alpha ~ U(-1, 1)
-        alpha = 2 * np.random.rand() - 1 
+        alpha = 0.4 * np.random.rand() - 0.2 
 
         # img_lq = img_lq + alpha * texture
-        img_lq = cv2.addWeighted(img_lq, 1, texture, alpha, 0)
+        img_lq = cv2.addWeighted(img_lq, 1, texture, alpha, 0, dtype=cv2.CV_32F)
 
         # ======================== Textures ===============================
 

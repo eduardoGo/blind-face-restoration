@@ -51,7 +51,7 @@ datasets:
     dataset_enlarge_ratio: 1
     prefetch_mode: ~
 
-   val:
+  val:
     # Please modify accordingly to use your own validation
     # Or comment the val block if do not need validation during training
     name: validation
@@ -62,7 +62,7 @@ datasets:
       type: disk
     mean: [0.5, 0.5, 0.5]
     std: [0.5, 0.5, 0.5]
-  #  scale: 1
+    scale: 1
 
 # network structures
 network_g:
@@ -132,7 +132,7 @@ train:
     milestones: [600000, 700000]
     gamma: 0.5
 
-  total_iter: 800000
+  total_iter: 8000
   warmup_iter: -1  # no warm up
 
   # losses
