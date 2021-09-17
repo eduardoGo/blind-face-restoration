@@ -141,8 +141,8 @@ for index in range(len(paths)):
     if (np.random.rand() < 0.5):
         texture = cv2.flip(texture, 1)
 
-    #alpha ~ U(-1, 1)
-    alpha = 2 * np.random.rand() - 1 
+    #alpha ~ U(-0.5, -0.5)
+    alpha = np.random.rand() - 0.5 
     
     # img_lq = img_lq + alpha * texture
     img_lq = cv2.addWeighted(img_lq, 1, texture, alpha, 0, dtype=cv2.CV_32F)
