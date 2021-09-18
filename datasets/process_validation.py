@@ -153,11 +153,11 @@ for index in range(len(paths)):
     img_lq = cv2.resize(img_lq, (w, h), interpolation=cv2.INTER_LINEAR)
     
     # random color jitter (only fihape(or lq)
-    if (np.random.uniform() < 0):#0.3):
+    if (np.random.uniform() < 0.3):#0.3):
         img_lq = color_jitter(img_lq, 20)
 
     # random to gray (only for lq)
-    if np.random.uniform() < 1.1:
+    if np.random.uniform() < 0.1:
         img_lq = cv2.cvtColor(img_lq, cv2.COLOR_BGR2GRAY)
         img_lq = np.tile(img_lq[:, :, None], [1, 1, 3])
         #if self.opt.get('gt_gray'):
@@ -168,7 +168,7 @@ for index in range(len(paths)):
     img_gt, img_lq = img2tensor([img_gt, img_lq], bgr2rgb=True, float32=True)
 
     # random color jitter (pytorch version) (only for lq)
-    if (np.random.uniform() < 0):#0.3):
+    if (np.random.uniform() < 0.3):#0.3):
         brightness =  (0.5, 1.5)
         contrast = (0.5, 1.5)
         saturation = (0, 1.5)
