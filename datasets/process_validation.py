@@ -118,7 +118,7 @@ for index in range(len(paths)):
         texture = cv2.flip(texture, 1)
 
     #alpha ~ U(-0.5, -0.5)
-    alpha = 0.4*np.random.rand() - 0.2 
+    alpha = 2*np.random.rand() - 1 
     print(img_gt)
     print("tex",texture)   
     # img_lq = img_lq + alpha * texture
