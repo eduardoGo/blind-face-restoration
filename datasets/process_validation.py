@@ -77,24 +77,7 @@ def color_jitter_pt(img, brightness, contrast, saturation, hue):
                 img = adjust_hue(img, hue_factor)
         return img
 
-file_client = FileClient('disk')
-
-for index in range(len(paths)):
-
-    # load gt image
-    gt_path = paths[index]
-    print("GT PATH:", gt_path)
-    img_bytes = file_client.get(gt_path)
-    img_gt = imfrombytes(img_bytes, float32=True)
-
-    # random horizontal flip
-    img_gt, status = augment(img_gt, hflip=True, rotation=False, return_status=True)
-    h, w, _ = img_gt.shape
-
-
-    # locations = self.get_component_coordinates(index, status)
-    # loc_left_eye, loc_right_eye, loc_mouth = locations
-
+def applyTextures(textures,num_textures,img_gt):
     # ======================== Textures ===============================
 
     texture = textures[ np.random.randint(num_textures) ]
@@ -119,13 +102,31 @@ for index in range(len(paths)):
 
     #alpha ~ U(-0.5, -0.5)
     alpha = 2*np.random.rand() - 1 
-    print(img_gt)
-    print("tex",texture)   
+
     # img_lq = img_lq + alpha * texture
     img_lq = cv2.addWeighted(img_gt, 1, texture, alpha, 0, dtype=cv2.CV_32F)
-    print("result",img_lq)
+    return img_lq
     # ======================== Textures ===============================
 
+file_client = FileClient('disk')
+
+for index in range(len(paths)):
+
+    # load gt image
+    gt_path = paths[index]
+    print("GT PATH:", gt_path)
+    img_bytes = file_client.get(gt_path)
+    img_gt = imfrombytes(img_bytes, float32=True)
+
+    # random horizontal flip
+    img_gt, status = augment(img_gt, hflip=True, rotation=False, return_status=True)
+    h, w, _ = img_gt.shape
+
+
+    # locations = self.get_component_coordinates(index, status)
+    # loc_left_eye, loc_right_eye, loc_mouth = locations
+
+    img_lq = applyTextures(textures,num_textures,img_gt)
 
     # ------------------------ generate degradation ------------------------ #
     # blur
