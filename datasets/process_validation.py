@@ -170,7 +170,7 @@ for index in range(len(paths)):
     img_gt, img_lq = img2tensor([img_gt, img_lq], bgr2rgb=True, float32=True)
 
     # random color jitter (pytorch version) (only for lq)
-    if (np.random.uniform() < 0.3):#0.3):
+    if (np.random.uniform() < 0):#0.3):
         brightness =  (0.5, 1.5)
         contrast = (0.5, 1.5)
         saturation = (0, 1.5)
