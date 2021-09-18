@@ -157,7 +157,7 @@ for index in range(len(paths)):
         img_lq = color_jitter(img_lq, 20)
 
     # random to gray (only for lq)
-    if np.random.uniform() < 0.1:
+    if np.random.uniform() < 0.01:
         img_lq = cv2.cvtColor(img_lq, cv2.COLOR_BGR2GRAY)
         img_lq = np.tile(img_lq[:, :, None], [1, 1, 3])
         #if self.opt.get('gt_gray'):
