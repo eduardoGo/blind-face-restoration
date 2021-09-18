@@ -145,7 +145,7 @@ for index in range(len(paths)):
     alpha = 0.4*np.random.rand() - 0.2 
     
     # img_lq = img_lq + alpha * texture
-    img_lq = cv2.addWeighted(img_lq, 1, texture, alpha, 0, dtype=cv2.CV_32F)
+    img_lq = cv2.addWeighted(img_lq, 1, texture, 0, 0, dtype=cv2.CV_32F)
 
     # ======================== Textures ===============================
     
@@ -201,4 +201,4 @@ for index in range(len(paths)):
     #img_lq = tensor2img(img_lq)
     #img_gt = tensor2img(img_gt)
     #print({'lq': img_lq, 'gt': img_gt, 'gt_path': gt_path})
-    print(gt_path)
+    #print(gt_path)
