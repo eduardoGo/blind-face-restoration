@@ -121,7 +121,7 @@ for index in range(len(paths)):
     alpha = 0.4*np.random.rand() - 0.2 
     
     # img_lq = img_lq + alpha * texture
-    img_lq = cv2.addWeighted(img_gt, 1, texture, 0, 0, dtype=cv2.CV_32F)
+    img_lq = cv2.addWeighted(img_gt, 1, texture, alpha, 0, dtype=cv2.CV_32F)
 
     # ======================== Textures ===============================
 
