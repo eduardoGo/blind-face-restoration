@@ -126,7 +126,7 @@ for index in range(len(paths)):
     # locations = self.get_component_coordinates(index, status)
     # loc_left_eye, loc_right_eye, loc_mouth = locations
 
-    img_lq = applyTextures(textures,num_textures,img_gt)
+    #img_lq = applyTextures(textures,num_textures,img_gt)
 
     # ------------------------ generate degradation ------------------------ #
     # blur
@@ -137,7 +137,7 @@ for index in range(len(paths)):
         [0.1, 10],
          [0.1, 10], [-math.pi, math.pi],
         noise_range=None)
-    img_lq = cv2.filter2D(img_lq, -1, kernel)
+    img_lq = cv2.filter2D(img_gt, -1, kernel)
     downsample_range =  [0.8, 8]
     # downsample
     scale = np.random.uniform(downsample_range[0], downsample_range[1])
@@ -152,6 +152,8 @@ for index in range(len(paths)):
     # resize to original size
     img_lq = cv2.resize(img_lq, (w, h), interpolation=cv2.INTER_LINEAR)
     
+    img_lq = applyTextures(textures,num_textures,img_lq)
+
     # random color jitter (only fihape(or lq)
     if (np.random.uniform() < 0.3):#0.3):
         img_lq = color_jitter(img_lq, 20)
