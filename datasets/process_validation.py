@@ -102,10 +102,10 @@ for index in range(len(paths)):
     if( np.random.rand() >= 0.25):
         texture = cv2.rotate(texture, np.random.randint(3))
 
-    x_start = np.random.randint(texture.shape[0] - img_lq.shape[0])
-    x_end = x_start + img_lq.shape[0]
-    y_start = np.random.randint(texture.shape[1] - img_lq.shape[1])
-    y_end = y_start + img_lq.shape[1]
+    x_start = np.random.randint(texture.shape[0] - img_gt.shape[0])
+    x_end = x_start + img_gt.shape[0]
+    y_start = np.random.randint(texture.shape[1] - img_gt.shape[1])
+    y_end = y_start + img_gt.shape[1]
 
     texture = texture[x_start:x_end, y_start:y_end, :]
 
