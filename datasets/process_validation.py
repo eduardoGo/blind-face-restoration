@@ -95,30 +95,6 @@ for index in range(len(paths)):
     # locations = self.get_component_coordinates(index, status)
     # loc_left_eye, loc_right_eye, loc_mouth = locations
 
-    # ------------------------ generate lq image ------------------------ #
-    # blur
-    kernel = degradations.random_mixed_kernels(
-        ['iso', 'aniso'],
-        [0.5, 0.5],
-        41,
-        [0.1, 10],
-         [0.1, 10], [-math.pi, math.pi],
-        noise_range=None)
-    img_lq = cv2.filter2D(img_gt, -1, kernel)
-    downsample_range =  [0.8, 8]
-    # downsample
-    scale = np.random.uniform(downsample_range[0], downsample_range[1])
-    img_lq = cv2.resize(img_lq, (int(w // scale), int(h // scale)), interpolation=cv2.INTER_LINEAR)
-    # noise
-    #if self.noise_range is not None:
-    img_lq = degradations.random_add_gaussian_noise(img_lq, [0, 20])
-    # jpeg compression
-    #if self.jpeg_range is not None:
-    img_lq = degradations.random_add_jpg_compression(img_lq, [60, 100])
-
-    # resize to original size
-    img_lq = cv2.resize(img_lq, (w, h), interpolation=cv2.INTER_LINEAR)
-    
     # ======================== Textures ===============================
 
     texture = textures[ np.random.randint(num_textures) ]
@@ -145,9 +121,34 @@ for index in range(len(paths)):
     alpha = 0.4*np.random.rand() - 0.2 
     
     # img_lq = img_lq + alpha * texture
-    img_lq = cv2.addWeighted(img_lq, 1, texture, 0, 0, dtype=cv2.CV_32F)
+    img_lq = cv2.addWeighted(img_gt, 1, texture, 0, 0, dtype=cv2.CV_32F)
 
     # ======================== Textures ===============================
+
+
+    # ------------------------ generate degradation ------------------------ #
+    # blur
+    kernel = degradations.random_mixed_kernels(
+        ['iso', 'aniso'],
+        [0.5, 0.5],
+        41,
+        [0.1, 10],
+         [0.1, 10], [-math.pi, math.pi],
+        noise_range=None)
+    img_lq = cv2.filter2D(img_lq, -1, kernel)
+    downsample_range =  [0.8, 8]
+    # downsample
+    scale = np.random.uniform(downsample_range[0], downsample_range[1])
+    img_lq = cv2.resize(img_lq, (int(w // scale), int(h // scale)), interpolation=cv2.INTER_LINEAR)
+    # noise
+    #if self.noise_range is not None:
+    img_lq = degradations.random_add_gaussian_noise(img_lq, [0, 20])
+    # jpeg compression
+    #if self.jpeg_range is not None:
+    img_lq = degradations.random_add_jpg_compression(img_lq, [60, 100])
+
+    # resize to original size
+    img_lq = cv2.resize(img_lq, (w, h), interpolation=cv2.INTER_LINEAR)
     
     # random color jitter (only fihape(or lq)
     if (np.random.uniform() < 0):#0.3):
