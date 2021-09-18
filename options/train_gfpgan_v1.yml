@@ -29,9 +29,9 @@ datasets:
     jpeg_range: [60, 100]
 
     # color jitter and gray
-    color_jitter_prob: 0.3
+    color_jitter_prob: 0.0
     color_jitter_shift: 20
-    color_jitter_pt_prob: 0.3
+    color_jitter_pt_prob: 0.0
     gray_prob: 0.01
 
     # If you do not want colorization, please set

@@ -142,6 +142,37 @@ class FFHQDegradationDataset(data.Dataset):
             locations.append(loc)
         return locations
 
+    def applyTextures(textures,num_textures,img):
+        # ======================== Textures ===============================
+
+        texture = textures[ np.random.randint(num_textures) ]
+        texture = texture.astype(np.float32) / 255.
+        if( np.random.rand() >= 0.25):
+            texture = cv2.rotate(texture, np.random.randint(3))
+
+        x_start = np.random.randint(texture.shape[0] - img.shape[0])
+        x_end = x_start + img.shape[0]
+        y_start = np.random.randint(texture.shape[1] - img.shape[1])
+        y_end = y_start + img.shape[1]
+
+        texture = texture[x_start:x_end, y_start:y_end, :]
+
+        #Vertical flip
+        if (np.random.rand() < 0.5):
+            texture = cv2.flip(texture, 0)
+
+        #Horizontal flip
+        if (np.random.rand() < 0.5):
+            texture = cv2.flip(texture, 1)
+
+        #alpha ~ U(-0.5, -0.5)
+        alpha = 2*np.random.rand() - 1 
+
+        # img_lq = img_lq + alpha * texture
+        img_lq = cv2.addWeighted(img, 1, texture, alpha, 0, dtype=cv2.CV_32F)
+        return img_lq
+        # ======================== Textures ===============================
+
     def __getitem__(self, index):
         if self.file_client is None:
             self.file_client = FileClient(self.io_backend_opt.pop('type'), **self.io_backend_opt)
@@ -183,32 +214,8 @@ class FFHQDegradationDataset(data.Dataset):
         img_lq = cv2.resize(img_lq, (w, h), interpolation=cv2.INTER_LINEAR)
 
         # ======================== Textures ===============================
-
-        texture = self.textures[ np.random.randint(self.num_textures) ]
         
-        if( np.random.rand() >= 0.25):
-            texture = cv2.rotate(texture, np.random.randint(3))
-
-        x_start = np.random.randint(texture.shape[0] - img_lq.shape[0])
-        x_end = x_start + img_lq.shape[0]
-        y_start = np.random.randint(texture.shape[1] - img_lq.shape[1])
-        y_end = y_start + img_lq.shape[1]
-
-        texture = texture[x_start:x_end, y_start:y_end, :]
-
-        #Vertical flip
-        if (np.random.rand() < 0.5):
-            texture = cv2.flip(texture, 0)
-
-        #Horizontal flip
-        if (np.random.rand() < 0.5):
-            texture = cv2.flip(texture, 1)
-
-        #alpha ~ U(-1, 1)
-        alpha = 0.4 * np.random.rand() - 0.2 
-
-        # img_lq = img_lq + alpha * texture
-        img_lq = cv2.addWeighted(img_lq, 1, texture, alpha, 0, dtype=cv2.CV_32F)
+        img_lq = self.applyTextures(self.textures,self.num_textures,img_lq)
 
         # ======================== Textures ===============================
 
