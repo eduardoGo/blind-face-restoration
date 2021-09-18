@@ -148,13 +148,13 @@ for index in range(len(paths)):
     img_lq = cv2.addWeighted(img_lq, 1, texture, alpha, 0, dtype=cv2.CV_32F)
 
     # ======================== Textures ===============================
-
+    
     # random color jitter (only fihape(or lq)
-    if (np.random.uniform() < 0.3):
+    if (np.random.uniform() < 0):#0.3):
         img_lq = color_jitter(img_lq, 20)
 
     # random to gray (only for lq)
-    if np.random.uniform() < 0.01:
+    if np.random.uniform() < 1.1:
         img_lq = cv2.cvtColor(img_lq, cv2.COLOR_BGR2GRAY)
         img_lq = np.tile(img_lq[:, :, None], [1, 1, 3])
         #if self.opt.get('gt_gray'):
@@ -165,7 +165,7 @@ for index in range(len(paths)):
     img_gt, img_lq = img2tensor([img_gt, img_lq], bgr2rgb=True, float32=True)
 
     # random color jitter (pytorch version) (only for lq)
-    if (np.random.uniform() < 0.3):
+    if (np.random.uniform() < 0):#0.3):
         brightness =  (0.5, 1.5)
         contrast = (0.5, 1.5)
         saturation = (0, 1.5)
@@ -196,8 +196,9 @@ for index in range(len(paths)):
 
     path_validation_input = gt_path.replace('validation','validation_input')
     path_validation_output = gt_path.replace('validation','validation_output')
-    cv2.imwrite(path_validation_output,img_lq)
-    cv2.imwrite(path_validation_input,img_gt)
+    cv2.imwrite(path_validation_output,img_gt)
+    cv2.imwrite(path_validation_input,img_lq)
     #img_lq = tensor2img(img_lq)
     #img_gt = tensor2img(img_gt)
-    print({'lq': img_lq, 'gt': img_gt, 'gt_path': gt_path})
+    #print({'lq': img_lq, 'gt': img_gt, 'gt_path': gt_path})
+    print(gt_path)
