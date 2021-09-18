@@ -36,3 +36,8 @@ Below we have one example of the final degradation
 
 ![image](https://user-images.githubusercontent.com/26190178/133897936-80e64843-db39-47ff-9f11-7c6cf76fc217.png)
 
+# Results
+
+We adapt the original codelab to run with our final model :)
+
+[Colab Demo](https://colab.research.google.com/drive/1TcB67AEAY3OkDKIaPfJIdkVO2WxWG51K) for GFPGAN <a href="https://colab.research.google.com/drive/1TcB67AEAY3OkDKIaPfJIdkVO2WxWG51K"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="google colab logo"></a>
