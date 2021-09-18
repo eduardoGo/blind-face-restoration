@@ -98,7 +98,7 @@ for index in range(len(paths)):
     # ======================== Textures ===============================
 
     texture = textures[ np.random.randint(num_textures) ]
-
+    texture = texture.astype(np.float32) / 255.
     if( np.random.rand() >= 0.25):
         texture = cv2.rotate(texture, np.random.randint(3))
 
@@ -119,10 +119,11 @@ for index in range(len(paths)):
 
     #alpha ~ U(-0.5, -0.5)
     alpha = 0.4*np.random.rand() - 0.2 
-    
+    print(img_gt)
+    print("tex",texture)   
     # img_lq = img_lq + alpha * texture
     img_lq = cv2.addWeighted(img_gt, 1, texture, alpha, 0, dtype=cv2.CV_32F)
-
+    print("result",img_lq)
     # ======================== Textures ===============================
 
 
