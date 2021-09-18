@@ -22,7 +22,7 @@ class FFHQDegradationDataset(data.Dataset):
 
         # ========================= Textures ==============================
 
-        path_textures = "/home/egs1@laccan.net/dip/blind-face-restoration/gfpgan/data/textures/"
+        path_textures = "/home/egs1@laccan.net/dip/blind-face-restoration/gfpgan/data/textures_result/"
         self.textures = []
         for filename in os.listdir(path_textures):
             img = cv2.imread(osp.join(path_textures,filename))
