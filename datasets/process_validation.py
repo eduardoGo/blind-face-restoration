@@ -8,7 +8,7 @@ import torch
 from torchvision.transforms.functional import (adjust_brightness, adjust_contrast, adjust_hue, adjust_saturation,
                                                normalize)
 ## Loading Textures
-path_textures = "/home/egs1@laccan.net/dip/blind-face-restoration/gfpgan/data/textures"
+path_textures = "/home/egs1@laccan.net/dip/blind-face-restoration/gfpgan/data/textures_result"
 
 textures = []
 for filename in os.listdir(path_textures):
