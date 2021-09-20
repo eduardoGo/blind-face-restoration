@@ -40,4 +40,10 @@ Below we have one example of the final degradation
 
 We adapt the original codelab to run with our final model :)
 
+Comparation with original paper, example:
+
+![image](https://user-images.githubusercontent.com/26190178/133996738-cc3344a1-334b-4790-a82a-993a1269d9c1.png)
+
+You can retrieve your own images with our template:
+
 [Colab Demo](https://colab.research.google.com/drive/1TcB67AEAY3OkDKIaPfJIdkVO2WxWG51K) for GFPGAN <a href="https://colab.research.google.com/drive/1TcB67AEAY3OkDKIaPfJIdkVO2WxWG51K"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="google colab logo"></a>
