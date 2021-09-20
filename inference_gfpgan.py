@@ -15,7 +15,7 @@ def main():
     parser.add_argument('--upscale', type=int, default=2)
     parser.add_argument('--arch', type=str, default='clean')
     parser.add_argument('--channel', type=int, default=2)
-    parser.add_argument('--model_path', type=str, default='experiments/pretrained_models/GFPGANCleanv1-NoCE-C2.pth')
+    parser.add_argument('--model_path', type=str, default='experiments/pretrained_models/net_g_10000.pth')
     parser.add_argument('--bg_upsampler', type=str, default='realesrgan')
     parser.add_argument('--bg_tile', type=int, default=400)
     parser.add_argument('--test_path', type=str, default='inputs/whole_imgs')
